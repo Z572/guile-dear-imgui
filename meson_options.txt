@@ -1,0 +1,2 @@
+option('guile-extension-dir', type : 'string',
+       description : 'guile extension dir')
