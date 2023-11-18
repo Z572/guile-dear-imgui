@@ -22,6 +22,7 @@
  (gnu packages wm)
  (gnu packages gdb)
  (gnu packages toolkits)
+ (gnu packages sdl)
  (gnu packages freedesktop))
 
 (define %srcdir
@@ -38,7 +39,7 @@
     (native-inputs
      (list pkg-config
            guile-3.0-latest))
-    (inputs (list guile-3.0-latest imgui schmutz boost))
+    (inputs (list guile-3.0-latest imgui sdl2))
     (synopsis "")
     (description "")
     (home-page "")

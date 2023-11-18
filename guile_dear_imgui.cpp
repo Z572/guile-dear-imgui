@@ -8,6 +8,9 @@
 #include <string>
 #include <iostream>
 
+#include <backends/imgui_impl_sdl2.h>
+#include <backends/imgui_impl_opengl3.h>
+
 namespace guile {
   class value {
   public:
@@ -95,6 +98,7 @@ namespace guile {
 extern "C" {
 
   void init_imgui() {
+    IMGUI_CHECKVERSION();
     scm_c_define_gsubr("imgui:begin", 1, 0, 0, (scm_t_subr)guile::func);
 }
 }

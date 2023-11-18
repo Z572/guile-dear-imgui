@@ -27,6 +27,7 @@ dearimgui_sp = subproject('imgui', default_options: imgui_options)
 dearimgui_dep = dearimgui_sp.get_variable('imgui_dep')
 
 # schmutz=dependency('Schmutz')
+sdl2_dep=dependency('sdl2')
 guile_dep=dependency('guile-3.0')
 # lib_args+=guile3.get_variable(pkgconfig : 'CFLAGS')
 custom_guile_xd=get_option('guile-extension-dir')
@@ -35,10 +36,18 @@ if custom_guile_xd == ''
 else
   guile_extension_dir = custom_guile_xd
 endif
+
 shlib = shared_module('guile_dear_imgui', 'guile_dear_imgui.cpp',
   install : true,
   cpp_args : lib_args,
-  dependencies : [guile_dep,dearimgui_dep],
+  dependencies : [guile_dep,dearimgui_dep,sdl2_dep],
+  install_dir : guile_extension_dir
+)
+shlib2 = executable('guile_dear_imgui_sdl2', 'guile_dear_imgui_sdl2.cpp',
+  install : true,
+  cpp_args : lib_args,
+  link_with : shlib,
+  dependencies : [guile_dep,dearimgui_dep,sdl2_dep],
   install_dir : guile_extension_dir
 )
 
