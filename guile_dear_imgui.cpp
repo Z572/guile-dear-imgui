@@ -264,6 +264,22 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TextLinkOpenURL(label, url);
     return SCM_UNSPECIFIED;
   }
+  value Indent(value indent_w) {
+    if (indent_w.boundp())
+      ImGui::Indent(indent_w);
+    else {
+      ImGui::Indent();
+    }
+    return SCM_UNSPECIFIED;
+  }
+  value Unindent(value indent_w) {
+    if (indent_w.boundp())
+      ImGui::Unindent(indent_w);
+    else {
+      ImGui::Unindent();
+    }
+    return SCM_UNSPECIFIED;
+  }
   value OpenPopup(value id) {
     if (scm_to_bool(scm_string_p(id)))
       ImGui::OpenPopup(scm_to_locale_string(id));
@@ -415,6 +431,8 @@ extern "C" {
     scm_c_define_gsubr("imgui:render", 0, 0, 0, (scm_t_subr)im::Render);
     scm_c_define_gsubr("imgui:new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
     scm_c_define_gsubr("imgui:text", 1, 0, 0, (scm_t_subr)im::text);
+    scm_c_define_gsubr("imgui:indent", 0, 1, 0, (scm_t_subr)im::Indent);
+    scm_c_define_gsubr("imgui:unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
     scm_c_define_gsubr("imgui:checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
     scm_c_define_gsubr("imgui:input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
     scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);

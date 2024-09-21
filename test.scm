@@ -110,11 +110,13 @@
       (imgui:selectable "2" #f)
       (when (imgui:selectable "3" popup-select-1)
         (set! popup-select-1 (not popup-select-1))))
+    (imgui:indent)
     (imgui:text "hello")
 
     (imgui:sameline)
     (imgui:bullet)
     (imgui:text (imgui:get-version))
+    (imgui:unindent)
     (group
      (let ((cliceed state (imgui:checkbox "check heerer!" checkbox-checked?))
            (cliceed-i state2 (imgui:input-int "input int:" input-n 1 100)))
