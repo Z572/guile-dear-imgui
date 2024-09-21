@@ -404,85 +404,85 @@ extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
-    scm_c_define_gsubr("imgui:begin-window", 1, 0, 0, (scm_t_subr)im::Begin);
-    scm_c_define_gsubr("imgui:end-window", 0, 0, 0, (scm_t_subr)im::End);
-    scm_c_define_gsubr("imgui:begin-main-menu-bar", 0, 0, 0,
+    scm_c_define_gsubr("begin-window", 1, 0, 0, (scm_t_subr)im::Begin);
+    scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
+    scm_c_define_gsubr("begin-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::BeginMainMenuBar);
 
-    scm_c_define_gsubr("imgui:begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
-    scm_c_define_gsubr("imgui:end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);
+    scm_c_define_gsubr("begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
+    scm_c_define_gsubr("end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);
 
-    scm_c_define_gsubr("imgui:begin-menu", 2, 0, 0, (scm_t_subr)im::BeginMenu);
-    scm_c_define_gsubr("imgui:end-menu", 0, 0, 0, (scm_t_subr)im::EndMenu);
+    scm_c_define_gsubr("begin-menu", 2, 0, 0, (scm_t_subr)im::BeginMenu);
+    scm_c_define_gsubr("end-menu", 0, 0, 0, (scm_t_subr)im::EndMenu);
 
-    scm_c_define_gsubr("imgui:end-main-menu-bar", 0, 0, 0,
+    scm_c_define_gsubr("end-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::EndMainMenuBar);
-    scm_c_define_gsubr("imgui:begin-tooltip", 0, 0, 0,
+    scm_c_define_gsubr("begin-tooltip", 0, 0, 0,
                        (scm_t_subr)im::BeginTooltip);
-    scm_c_define_gsubr("imgui:begin-item-tooltip", 0, 0, 0,
+    scm_c_define_gsubr("begin-item-tooltip", 0, 0, 0,
                        (scm_t_subr)im::BeginItemTooltip);
-    scm_c_define_gsubr("imgui:end-tooltip", 0, 0, 0,
+    scm_c_define_gsubr("end-tooltip", 0, 0, 0,
                        (scm_t_subr)im::EndTooltip);
-    scm_c_define_gsubr("imgui:menu-item", 4, 0, 0,
+    scm_c_define_gsubr("menu-item", 4, 0, 0,
                        (scm_t_subr)im::MenuItem);
-    scm_c_define_gsubr("imgui:set-next-window-size", 2, 0, 0,
+    scm_c_define_gsubr("set-next-window-size", 2, 0, 0,
                        (scm_t_subr)im::SetNextWindowSize);
-    scm_c_define_gsubr("imgui:set-next-window-pos", 5, 0, 0, (scm_t_subr)im::SetNextWindowPos);
-    scm_c_define_gsubr("imgui:render", 0, 0, 0, (scm_t_subr)im::Render);
-    scm_c_define_gsubr("imgui:new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
-    scm_c_define_gsubr("imgui:text", 1, 0, 0, (scm_t_subr)im::text);
-    scm_c_define_gsubr("imgui:indent", 0, 1, 0, (scm_t_subr)im::Indent);
-    scm_c_define_gsubr("imgui:unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
-    scm_c_define_gsubr("imgui:checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
-    scm_c_define_gsubr("imgui:input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
-    scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
-    scm_c_define_gsubr("imgui:textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
-    scm_c_define_gsubr("imgui:sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
-    scm_c_define_gsubr("imgui:open-popup", 1, 0, 0, (scm_t_subr)im::OpenPopup);
-    scm_c_define_gsubr("imgui:begin-popup", 1, 0, 0, (scm_t_subr)im::BeginPopup);
-    scm_c_define_gsubr("imgui:begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);
-    scm_c_define_gsubr("imgui:end-popup", 0, 0, 0, (scm_t_subr)im::EndPopup);
+    scm_c_define_gsubr("set-next-window-pos", 5, 0, 0, (scm_t_subr)im::SetNextWindowPos);
+    scm_c_define_gsubr("render", 0, 0, 0, (scm_t_subr)im::Render);
+    scm_c_define_gsubr("new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
+    scm_c_define_gsubr("text", 1, 0, 0, (scm_t_subr)im::text);
+    scm_c_define_gsubr("indent", 0, 1, 0, (scm_t_subr)im::Indent);
+    scm_c_define_gsubr("unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
+    scm_c_define_gsubr("checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
+    scm_c_define_gsubr("input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
+    scm_c_define_gsubr("textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
+    scm_c_define_gsubr("textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
+    scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
+    scm_c_define_gsubr("open-popup", 1, 0, 0, (scm_t_subr)im::OpenPopup);
+    scm_c_define_gsubr("begin-popup", 1, 0, 0, (scm_t_subr)im::BeginPopup);
+    scm_c_define_gsubr("begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);
+    scm_c_define_gsubr("end-popup", 0, 0, 0, (scm_t_subr)im::EndPopup);
 
 
-    scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
-    scm_c_define_gsubr("imgui:spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
-    scm_c_define_gsubr("imgui:newline", 0, 0, 0, (scm_t_subr)im::NewLine);
-    scm_c_define_gsubr("imgui:bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
-    scm_c_define_gsubr("imgui:button", 1, 0, 0, (scm_t_subr)im::Button);
-    scm_c_define_gsubr("imgui:small-button", 1, 0, 0, (scm_t_subr)im::SmallButton);
-    scm_c_define_gsubr("imgui:selectable", 2, 0, 0, (scm_t_subr)im::Selectable);
-    scm_c_define_gsubr("imgui:create-context", 0, 0, 0,
+    scm_c_define_gsubr("separator", 0, 0, 0, (scm_t_subr)im::Separator);
+    scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
+    scm_c_define_gsubr("newline", 0, 0, 0, (scm_t_subr)im::NewLine);
+    scm_c_define_gsubr("bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
+    scm_c_define_gsubr("button", 1, 0, 0, (scm_t_subr)im::Button);
+    scm_c_define_gsubr("small-button", 1, 0, 0, (scm_t_subr)im::SmallButton);
+    scm_c_define_gsubr("selectable", 2, 0, 0, (scm_t_subr)im::Selectable);
+    scm_c_define_gsubr("create-context", 0, 0, 0,
                        (scm_t_subr)im::create_context);
-    scm_c_define_gsubr("imgui:destroy-context", 0, 1, 0,
+    scm_c_define_gsubr("destroy-context", 0, 1, 0,
                        (scm_t_subr)im::destroy_context);
-    scm_c_define_gsubr("imgui:get-io", 0, 0, 0, (scm_t_subr)im::getio);
-    scm_c_define_gsubr("imgui:get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);
-    scm_c_define_gsubr("imgui:style-scaleallsizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
-    scm_c_define_gsubr("imgui:get-version", 0, 0, 0, (scm_t_subr)im::GetVersion);
-    scm_c_define_gsubr("imgui:setup-font", 1, 0, 0, (scm_t_subr)im::setup_font);
-    scm_c_define_gsubr("imgui:set-io-display-size", 2, 0, 0,
+    scm_c_define_gsubr("get-io", 0, 0, 0, (scm_t_subr)im::getio);
+    scm_c_define_gsubr("get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);
+    scm_c_define_gsubr("style-scaleallsizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
+    scm_c_define_gsubr("get-version", 0, 0, 0, (scm_t_subr)im::GetVersion);
+    scm_c_define_gsubr("setup-font", 1, 0, 0, (scm_t_subr)im::setup_font);
+    scm_c_define_gsubr("set-io-display-size", 2, 0, 0,
                        (scm_t_subr)im::set_io_display_size);
-    scm_c_define_gsubr("imgui:io-display-size", 1, 0, 0,
+    scm_c_define_gsubr("io-display-size", 1, 0, 0,
                        (scm_t_subr)im::io_display_size);
-    scm_c_define_gsubr("imgui:vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
-    //    scm_c_define_gsubr("imgui:vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
-    scm_c_define_gsubr("imgui:impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);
-    scm_c_define_gsubr("imgui:impl:sdl2:init-vulkan", 0, 0, 0,
+    scm_c_define_gsubr("vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
+    //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
+    scm_c_define_gsubr("impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);
+    scm_c_define_gsubr("impl:sdl2:init-vulkan", 0, 0, 0,
                        (scm_t_subr)im::impl::sdl2::InitForVulkan);
-    scm_c_define_gsubr("imgui:impl:sdl2:init-opengl", 2, 0, 0,
+    scm_c_define_gsubr("impl:sdl2:init-opengl", 2, 0, 0,
                        (scm_t_subr)im::impl::sdl2::InitForOpenGl);
 
-    scm_c_define_gsubr("imgui:impl:sdl2:shutdown", 0, 0, 0,
+    scm_c_define_gsubr("impl:sdl2:shutdown", 0, 0, 0,
                        (scm_t_subr)im::impl::sdl2::Shutdown);
-    scm_c_define_gsubr("imgui:impl:sdl2:process-event", 1, 0, 0,
+    scm_c_define_gsubr("impl:sdl2:process-event", 1, 0, 0,
                        (scm_t_subr)im::impl::sdl2::ProcessEvent);
-    scm_c_define_gsubr("imgui:impl:opengl3:shutdown", 0, 0, 0,
+    scm_c_define_gsubr("impl:opengl3:shutdown", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::Shutdown);
-    scm_c_define_gsubr("imgui:impl:sdl2:new-frame", 0, 0, 0,
+    scm_c_define_gsubr("impl:sdl2:new-frame", 0, 0, 0,
                        (scm_t_subr)im::impl::sdl2::NewFrame);
-    scm_c_define_gsubr("imgui:impl:opengl3:new-frame", 0, 0, 0,
+    scm_c_define_gsubr("impl:opengl3:new-frame", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::NewFrame);
-    scm_c_define_gsubr("imgui:impl:opengl3:render-draw-data", 0, 0, 0,
+    scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::RenderDrawData);
 
 
