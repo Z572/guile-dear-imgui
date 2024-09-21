@@ -42,9 +42,9 @@
 (define sdl-event-ptr (ffi:bytevector->pointer %sdl-event))
 
 (define-syntax-rule (with-window name body ...)
-  (begin (when (imgui:begin name)
+  (begin (when (imgui:begin-window name)
            body ...)
-         (imgui:end)))
+         (imgui:end-window)))
 
 (define-syntax-rule (group body ...)
   (begin (imgui:begin-group)

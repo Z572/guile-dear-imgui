@@ -404,8 +404,8 @@ extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
-    scm_c_define_gsubr("imgui:begin", 1, 0, 0, (scm_t_subr)im::Begin);
-    scm_c_define_gsubr("imgui:end", 0, 0, 0, (scm_t_subr)im::End);
+    scm_c_define_gsubr("imgui:begin-window", 1, 0, 0, (scm_t_subr)im::Begin);
+    scm_c_define_gsubr("imgui:end-window", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("imgui:begin-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::BeginMainMenuBar);
 
