@@ -41,10 +41,15 @@
 (define %sdl-event ((@@ (sdl2 events) make-sdl-event)))
 (define sdl-event-ptr (ffi:bytevector->pointer %sdl-event))
 
-(define-syntax-rule (begin-window name body ...)
+(define-syntax-rule (with-window name body ...)
   (begin (when (imgui:begin name)
            body ...)
          (imgui:end)))
+
+(define-syntax-rule (group body ...)
+  (begin (imgui:begin-group)
+         body  ...
+         (imgui:end-group)))
 
 (define-syntax-rule (imgui:tooltip body ...)
   (when (imgui:begin-tooltip)
@@ -54,6 +59,10 @@
   (when (imgui:begin-menu label act)
     body ...
     (imgui:end-menu)))
+(define-syntax-rule (with-popup (label) body ...)
+  (when (imgui:begin-popup label)
+    body ...
+    (imgui:end-popup)))
 (define-syntax-rule (imgui:item-tooltip body ...)
   (when (imgui:begin-item-tooltip)
     body ...
@@ -61,6 +70,7 @@
 
 (define checkbox-checked? #f)
 (define input-n 0)
+(define popup-select-1 #f)
 (while (not done?)
   (let loop ((event (bind:sdl-poll-event sdl-event-ptr)))
     ;; (when event (pk 'event event))
@@ -94,24 +104,29 @@
       (set! done? #t))
     (imgui:end-main-menu-bar))
 
-  (begin-window "aba"
+  (with-window "aba"
+    (with-popup ("a-popup")
+      (imgui:text "select1")
+      (imgui:selectable "2" #f)
+      (when (imgui:selectable "3" popup-select-1)
+        (set! popup-select-1 (not popup-select-1))))
     (imgui:text "hello")
 
     (imgui:sameline)
     (imgui:bullet)
     (imgui:text (imgui:get-version))
-    (imgui:begin-group)
-    (let ((cliceed state (imgui:checkbox "check heerer!" checkbox-checked?))
-          (cliceed-i state2 (imgui:input-int "input int:" input-n 1 100)))
-      (imgui:button "hello:")
-      (when cliceed
-        (set! checkbox-checked? state))
-      (when cliceed-i
-        (set! input-n state2))
-      (when checkbox-checked?
-        (imgui:sameline 0 50)
-        (imgui:text "world")))
-    (imgui:end-group)
+    (group
+     (let ((cliceed state (imgui:checkbox "check heerer!" checkbox-checked?))
+           (cliceed-i state2 (imgui:input-int "input int:" input-n 1 100)))
+       (when (imgui:button "hello:")
+         (imgui:open-popup "a-popup"))
+       (when cliceed
+         (set! checkbox-checked? state))
+       (when cliceed-i
+         (set! input-n state2))
+       (when checkbox-checked?
+         (imgui:sameline 0 50)
+         (imgui:text "world"))))
     (imgui:small-button ">")
     (imgui:sameline)
     (imgui:selectable "h" #f)
@@ -141,6 +156,7 @@
 (sdl-quit)
 
 ;; Local Variables:
-;; eval: (put 'begin-window 'scheme-indent-function 1)
+;; eval: (put 'with-window 'scheme-indent-function 1)
 ;; eval: (put 'with-menu 'scheme-indent-function 1)
+;; eval: (put 'with-popup 'scheme-indent-function 1)
 ;; End:

@@ -1,4 +1,5 @@
 #include "SDL_video.h"
+#include <climits>
 #include <cstdint>
 #include <exception>
 #include <guile_dear_imgui.hpp>
@@ -263,6 +264,26 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TextLinkOpenURL(label, url);
     return SCM_UNSPECIFIED;
   }
+  value OpenPopup(value id) {
+    if (scm_to_bool(scm_string_p(id)))
+      ImGui::OpenPopup(scm_to_locale_string(id));
+    else
+      ImGui::OpenPopup(scm_to_unsigned_integer(id,0,INT_MAX));
+    return SCM_UNSPECIFIED;
+  }
+  value BeginPopup(value label) { return ImGui::BeginPopup(label); }
+  value BeginPopupModal(value label,value p_open) {
+    bool open=p_open;
+    auto ret=ImGui::BeginPopupModal(label,&open);
+    return scm_values_2(value(ret), value(open));
+  }
+
+
+  value EndPopup() {
+    ImGui::EndPopup();
+    return SCM_UNSPECIFIED;
+  }
+
   value Checkbox(value label,value state) {
     bool v=state;
     auto ret=ImGui::Checkbox(label,&v);
@@ -399,6 +420,12 @@ extern "C" {
     scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("imgui:textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
     scm_c_define_gsubr("imgui:sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
+    scm_c_define_gsubr("imgui:open-popup", 1, 0, 0, (scm_t_subr)im::OpenPopup);
+    scm_c_define_gsubr("imgui:begin-popup", 1, 0, 0, (scm_t_subr)im::BeginPopup);
+    scm_c_define_gsubr("imgui:begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);
+    scm_c_define_gsubr("imgui:end-popup", 0, 0, 0, (scm_t_subr)im::EndPopup);
+
+
     scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("imgui:spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
     scm_c_define_gsubr("imgui:newline", 0, 0, 0, (scm_t_subr)im::NewLine);
