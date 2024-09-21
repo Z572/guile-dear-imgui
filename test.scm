@@ -23,6 +23,7 @@
 (set-gl-attribute! 'depth-size 24)
 (set-gl-attribute! 'stencil-size 8)
 (define s-window (make-window #:opengl? #t
+                              #:resizable? #t
                               #:title "demo"
                               #:high-dpi? #t))
 (define s-context (make-gl-context s-window))
@@ -45,6 +46,11 @@
   (begin (when (begin-window name)
            body ...)
          (end-window)))
+
+(define-syntax-rule (with-list-box (name x y) body ...)
+  (when (begin-list-box name x y)
+    body ...
+    (end-list-box)))
 
 (define-syntax-rule (group body ...)
   (begin (begin-group)
@@ -110,6 +116,10 @@
       (selectable "2" #f)
       (when (selectable "3" popup-select-1)
         (set! popup-select-1 (not popup-select-1))))
+    (with-list-box ("select" 50 1000)
+      (selectable "2" #f)
+      (selectable "2" #f)
+      (selectable "2" #f))
     (indent)
     (text "hello")
 
@@ -161,4 +171,5 @@
 ;; eval: (put 'with-window 'scheme-indent-function 1)
 ;; eval: (put 'with-menu 'scheme-indent-function 1)
 ;; eval: (put 'with-popup 'scheme-indent-function 1)
+;; eval: (put 'with-list-box 'scheme-indent-function 1)
 ;; End:
