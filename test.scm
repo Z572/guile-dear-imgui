@@ -54,6 +54,7 @@
     (imgui:end-tooltip)))
 
 (define checkbox-checked? #f)
+(define input-n 0)
 (while (not done?)
   (let loop ((event (bind:sdl-poll-event sdl-event-ptr)))
     ;; (when event (pk 'event event))
@@ -87,11 +88,13 @@
     (imgui:sameline)
     (imgui:text (imgui:get-version))
     (imgui:begin-group)
-    (let ((cliceed state (imgui:checkbox "check heerer!" checkbox-checked?)))
+    (let ((cliceed state (imgui:checkbox "check heerer!" checkbox-checked?))
+          (cliceed-i state2 (imgui:input-int "input int:" input-n 1 100)))
       (imgui:button "hello:")
       (when cliceed
-        (set! checkbox-checked? state)
-        )
+        (set! checkbox-checked? state))
+      (when cliceed-i
+        (set! input-n state2))
       (when checkbox-checked?
         (imgui:sameline)
         (imgui:text "world")))

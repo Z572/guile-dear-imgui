@@ -259,6 +259,13 @@ value set_io_config_flags(value io,value flag) {
                         value(v));
   }
 
+  value InputInt(value label,value v,value step, value step_fast) {
+    int val=v;
+    auto ret=ImGui::InputInt(label,&val,step,step_fast);
+    return scm_values_2(value(ret),
+                        value(val));
+  }
+
   value SameLine() {
     ImGui::SameLine();
     return SCM_UNSPECIFIED;
@@ -359,6 +366,7 @@ extern "C" {
     scm_c_define_gsubr("imgui:new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
     scm_c_define_gsubr("imgui:text", 1, 0, 0, (scm_t_subr)im::text);
     scm_c_define_gsubr("imgui:checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
+    scm_c_define_gsubr("imgui:input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
     scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("imgui:sameline", 0, 0, 0, (scm_t_subr)im::SameLine);
     scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
