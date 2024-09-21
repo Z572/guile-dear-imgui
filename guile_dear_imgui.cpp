@@ -274,6 +274,10 @@ value set_io_config_flags(value io,value flag) {
     ImGui::NewLine();
     return SCM_UNSPECIFIED;
   }
+  value Bullet() {
+    ImGui::Bullet();
+    return SCM_UNSPECIFIED;
+  }
   value Button(value label) {
     return ImGui::Button(label);
   }
@@ -372,6 +376,7 @@ extern "C" {
     scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("imgui:spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
     scm_c_define_gsubr("imgui:newline", 0, 0, 0, (scm_t_subr)im::NewLine);
+    scm_c_define_gsubr("imgui:bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
     scm_c_define_gsubr("imgui:button", 1, 0, 0, (scm_t_subr)im::Button);
     scm_c_define_gsubr("imgui:create-context", 0, 0, 0,
                        (scm_t_subr)im::create_context);

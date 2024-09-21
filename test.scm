@@ -32,8 +32,9 @@
 ;;   (lambda (window)
 ;;     (call-with-renderer (make-renderer window) draw)))
 
-(imgui:impl:sdl2:init-opengl ((@@ (sdl2 video) unwrap-window) s-window)
-                             ((@@ (sdl2 video) unwrap-gl-context) s-context))
+(imgui:impl:sdl2:init-opengl
+ ((@@ (sdl2 video) unwrap-window) s-window)
+ ((@@ (sdl2 video) unwrap-gl-context) s-context))
 (imgui:impl:opengl3:init)
 (define done? #f)
 
@@ -44,6 +45,7 @@
   (begin (when (imgui:begin name)
            body ...)
          (imgui:end)))
+
 (define-syntax-rule (imgui:tooltip body ...)
   (when (imgui:begin-tooltip)
     body ...
@@ -86,6 +88,7 @@
     (imgui:text "hello")
 
     (imgui:sameline)
+    (imgui:bullet)
     (imgui:text (imgui:get-version))
     (imgui:begin-group)
     (let ((cliceed state (imgui:checkbox "check heerer!" checkbox-checked?))
@@ -101,9 +104,7 @@
     (imgui:end-group)
     (when checkbox-checked?
       (imgui:item-tooltip
-       (imgui:text "tooltip"))
-      )
-
+       (imgui:text "tooltip")))
 
     (when (imgui:textlink "https//a不过")
       (pk 'clock)
