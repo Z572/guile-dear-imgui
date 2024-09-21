@@ -41,6 +41,7 @@ namespace guile {
     value(std::string str) { value_ = scm_from_locale_string(str.c_str()); };
     SCM get() const {return value_;};
     bool unboundp() const {return SCM_UNBNDP(value_);};
+    bool boundp() const {return !unboundp();};
     operator SCM () const {return value_;}
     operator int32_t () const {return scm_to_int32(value_);}
     operator int16_t() const { return scm_to_int16(value_); }
@@ -268,8 +269,14 @@ value set_io_config_flags(value io,value flag) {
                         value(val));
   }
 
-  value SameLine() {
-    ImGui::SameLine();
+  value SameLine(value x,value s) {
+
+    float offset_from_start_x = 0.0f, spacing = -1.0f;
+    if (x.boundp())
+      offset_from_start_x=x;
+    if (s.boundp())
+      spacing=s;
+    ImGui::SameLine(offset_from_start_x,spacing);
     return SCM_UNSPECIFIED;
   }
   value NewLine() {
@@ -375,7 +382,7 @@ extern "C" {
     scm_c_define_gsubr("imgui:input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
     scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("imgui:textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
-    scm_c_define_gsubr("imgui:sameline", 0, 0, 0, (scm_t_subr)im::SameLine);
+    scm_c_define_gsubr("imgui:sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
     scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("imgui:spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
     scm_c_define_gsubr("imgui:newline", 0, 0, 0, (scm_t_subr)im::NewLine);

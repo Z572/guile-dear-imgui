@@ -99,7 +99,7 @@
       (when cliceed-i
         (set! input-n state2))
       (when checkbox-checked?
-        (imgui:sameline)
+        (imgui:sameline 0 50)
         (imgui:text "world")))
     (imgui:end-group)
     (when checkbox-checked?
