@@ -288,6 +288,7 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
   value Button(value label) { return ImGui::Button(label); }
+  value SmallButton(value label) { return ImGui::SmallButton(label); }
   value Selectable(value label, value selected) {
     bool selectedp = selected;
     auto ret=ImGui::Selectable(label, &selectedp);
@@ -392,6 +393,7 @@ extern "C" {
     scm_c_define_gsubr("imgui:newline", 0, 0, 0, (scm_t_subr)im::NewLine);
     scm_c_define_gsubr("imgui:bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
     scm_c_define_gsubr("imgui:button", 1, 0, 0, (scm_t_subr)im::Button);
+    scm_c_define_gsubr("imgui:small-button", 1, 0, 0, (scm_t_subr)im::SmallButton);
     scm_c_define_gsubr("imgui:selectable", 2, 0, 0, (scm_t_subr)im::Selectable);
     scm_c_define_gsubr("imgui:create-context", 0, 0, 0,
                        (scm_t_subr)im::create_context);
