@@ -26,7 +26,11 @@
                               #:title "demo"
                               #:high-dpi? #t))
 (define s-context (make-gl-context s-window))
+                                        ;(gl-context-make-current! s-window s-context)
 (set-gl-swap-interval! 'vsync)
+;; (call-with-window (make-window)
+;;   (lambda (window)
+;;     (call-with-renderer (make-renderer window) draw)))
 
 (imgui:impl:sdl2:init-opengl
  ((@@ (sdl2 video) unwrap-window) s-window)
@@ -68,22 +72,25 @@
 (define input-n 0)
 (define popup-select-1 #f)
 (while (not done?)
-  (let loop ((e (bind:sdl-poll-event sdl-event-ptr)))
+  (let loop ((event (bind:sdl-poll-event sdl-event-ptr)))
+    ;; (when event (pk 'event event))
+    ;; (when event
+    ;;   (when (or (quit-event? event) (window-closed-event? event))
+    ;;     (set! done? #t))
+    ;;   (loop (poll-event))
+    ;;   )
     (imgui:impl:sdl2:process-event sdl-event-ptr)
-    (SDL_PeepEvents sdl-event-ptr)
-    (let ((event (poll-event)))
-      (when event
-        (pk 'event event)
-        (when (or (quit-event? event) (window-closed-event? event))
-          (set! done? #t))
-        (loop (bind:sdl-poll-event sdl-event-ptr)))))
+    (unless (= 1 event)
+      (loop (bind:sdl-poll-event sdl-event-ptr))))
   (imgui:impl:opengl3:new-frame)
   (imgui:impl:sdl2:new-frame)
   (imgui:new-frame)
   (let ((n (imgui:io-display-size io)))
     (imgui:set-next-window-size
      (car n)
-     (cdr n)))
+     (cdr n)
+     ;; 1000 200
+     ))
   (imgui:set-next-window-pos 0 0 0 0 0)
   (when (and checkbox-checked?
              (imgui:begin-main-menu-bar))

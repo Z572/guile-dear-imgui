@@ -1,5 +1,4 @@
 #include "SDL_video.h"
-#include "SDL_events.h"
 #include <climits>
 #include <cstdint>
 #include <exception>
@@ -401,15 +400,10 @@ value set_io_config_flags(value io,value flag) {
 /*   scm_c_define_gsubr(name.c_str(), 1, 0, 0, (scm_t_subr)fn); */
 /* } */
 
-SCM sdl_push_event(guile::value event) {
-  auto out=SDL_PushEvent(static_cast<SDL_Event*>(scm_to_pointer(event)));
-  return guile::value(out);
-};
 extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
-    scm_c_define_gsubr("SDL_PeepEvents", 1, 0, 0, (scm_t_subr)sdl_push_event);
     scm_c_define_gsubr("imgui:begin", 1, 0, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("imgui:end", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("imgui:begin-main-menu-bar", 0, 0, 0,
