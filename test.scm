@@ -109,6 +109,7 @@
     (when (imgui:textlink "https//a不过")
       (pk 'clock)
       (set! done? #t))
+    (imgui:textlink-open-url "author" "https://github.com/z572")
     (imgui:separator)
     (imgui:newline))
 

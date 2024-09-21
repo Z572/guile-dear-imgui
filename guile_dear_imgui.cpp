@@ -249,8 +249,10 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TextUnformatted(str);
     return SCM_UNSPECIFIED;
   }
-  value TextLink(value label) {
-    return ImGui::TextLink(label);
+  value TextLink(value label) { return ImGui::TextLink(label); }
+  value TextLinkOpenURL(value label,value url) {
+    ImGui::TextLinkOpenURL(label, url);
+    return SCM_UNSPECIFIED;
   }
   value Checkbox(value label,value state) {
     bool v=state;
@@ -372,6 +374,7 @@ extern "C" {
     scm_c_define_gsubr("imgui:checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
     scm_c_define_gsubr("imgui:input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
     scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
+    scm_c_define_gsubr("imgui:textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
     scm_c_define_gsubr("imgui:sameline", 0, 0, 0, (scm_t_subr)im::SameLine);
     scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("imgui:spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
