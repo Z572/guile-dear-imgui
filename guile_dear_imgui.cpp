@@ -1,6 +1,11 @@
+#include "SDL_video.h"
 #include <cstdint>
+#include <exception>
 #include <guile_dear_imgui.hpp>
 #include <imgui.h>
+#include <imgui/backends/imgui_impl_sdl2.h>
+#include <imgui/backends/imgui_impl_opengl2.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 #include <libguile.h>
 #include <functional>
 #include <memory>
@@ -8,8 +13,13 @@
 #include <string>
 #include <iostream>
 
-#include <backends/imgui_impl_sdl2.h>
-#include <backends/imgui_impl_opengl3.h>
+#include <typeinfo>
+
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <SDL_opengles2.h>
+#else
+#include <SDL_opengl.h>
+#endif
 
 namespace guile {
   class value {
@@ -17,15 +27,20 @@ namespace guile {
     value() = default;
     ~value() = default;
     value(SCM o) : value_{o} { };
-    value(int32_t arg) { value_ = scm_from_int32(arg); };
+    value(int arg) { value_ = scm_from_int(arg); };
+    /* value(int32_t arg) { value_ = scm_from_int32(arg); }; */
     value(int16_t arg) { value_ = scm_from_int16(arg); };
     value(int8_t arg) { value_ = scm_from_int8(arg); };
     value(uint32_t arg) { value_ = scm_from_uint32(arg); };
     value(uint16_t arg) { value_ = scm_from_uint16(arg); };
     value(uint8_t arg) { value_ = scm_from_uint8(arg); };
     value(bool arg) { value_ = scm_from_bool(arg); };
+    value(float arg) { value_ = scm_from_double(arg); };
+    value(double arg) { value_ = scm_from_double(arg); };
+    value(const char* arg) { value_ = scm_from_locale_string(arg);};
     value(std::string str) { value_ = scm_from_locale_string(str.c_str()); };
     SCM get() const {return value_;};
+    bool unboundp() const {return SCM_UNBNDP(value_);};
     operator SCM () const {return value_;}
     operator int32_t () const {return scm_to_int32(value_);}
     operator int16_t() const { return scm_to_int16(value_); }
@@ -34,11 +49,22 @@ namespace guile {
     operator uint16_t () const {return scm_to_uint16(value_);}
     operator uint8_t () const {return scm_to_uint8(value_);}
     operator bool () const {return scm_to_bool(value_);}
+
+    operator double () const {return scm_to_double(value_);}
+    operator float () const {
+
+      return scm_to_double(value_);
+    }
+
     operator std::string () const {
       auto c_str=scm_to_locale_string(value_);
       auto str = std::string(c_str);
       free(c_str);
       return str;
+    }
+    operator char* () const {
+      auto c_str=scm_to_locale_string(value_);
+      return c_str;
     }
     friend std::ostream &operator<<(std::ostream &os, guile::value v){
       auto c = scm_to_locale_string(scm_simple_format(
@@ -80,25 +106,299 @@ namespace guile {
       return value{scm_call(value_,arg...,SCM_UNDEFINED)};
     }
 
-    // operator char *() const {
-    //   auto c_str=scm_to_locale_string(value_);
-    //   return c_str;
-    // }
   protected:
     SCM value_ = SCM_UNSPECIFIED;
   };
-  value func(value v) {
-    // ImGui::Begin(v// scm_to_utf8_string(v)
-    //              );
-    std::cout << v <<std::endl;
-    return v;
-  }
 } // namespace guile
+
+namespace im {
+/* template <typename F, typename Arg> */
+/* auto func{ */
+
+/* } */
+  using guile::value;
+  value create_context() {
+    auto c = ImGui::CreateContext();
+    return scm_from_pointer(
+        c, // [](void *c) {
+        //  if (c)
+        //    ImGui::DestroyContext(static_cast<ImGuiContext *>(c));
+        // }
+        nullptr
+      );
+  }
+  value destroy_context(value v) {
+    if (v.unboundp()){
+        ImGui::DestroyContext();
+    } else {
+        ImGuiContext *c = static_cast<ImGuiContext *>(scm_to_pointer(v));
+        ImGui::DestroyContext(c);
+    };
+    return SCM_UNSPECIFIED;
+  }
+  value getio() {
+    ImGuiIO &c = ImGui::GetIO();
+    // c.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    // c.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    return scm_from_pointer(&c, nullptr);
+  }
+  value GetStyle() {
+    return scm_from_pointer(&ImGui::GetStyle(), nullptr);
+  }
+  value ScaleAllSizes(value o,value scale) {
+    auto c = static_cast<ImGuiStyle*>(scm_to_pointer(o));
+    std::cout << scale << std::endl;
+    c->ScaleAllSizes(scale);
+    return SCM_UNSPECIFIED;
+  }
+  value GetVersion(){
+    return ImGui::GetVersion();
+  }
+
+  value setup_font(value io) {
+    ImGuiIO *c = static_cast<ImGuiIO *>(scm_to_pointer(io));
+    unsigned char* tex_pixels = nullptr;
+    int tex_w, tex_h;
+    c->Fonts->GetTexDataAsRGBA32(&tex_pixels,&tex_w,&tex_h);
+    return scm_list_2(value{tex_w},value{tex_h});
+  }
+
+  value set_io_display_size(value io,value vec2) {
+    ImGuiIO* c = static_cast<ImGuiIO*>(scm_to_pointer(io));
+    ImVec2 *vec = static_cast<ImVec2*>(scm_to_pointer(vec2));
+    c->DisplaySize=*vec;
+    return SCM_UNSPECIFIED;
+  }
+  value io_display_size(value io) {
+    ImGuiIO* cio = static_cast<ImGuiIO*>(scm_to_pointer(io));
+    //ImVec2 *vec = static_cast<ImVec2*>(scm_to_pointer(vec2));
+    auto c=cio->DisplaySize;
+    return scm_cons(scm_from_int(c.x), scm_from_int(c.y));
+  }
+  value SetNextWindowSize(value x,value y) {
+    auto vec=ImVec2(x ,y);
+    ImGui::SetNextWindowSize(vec);
+    return SCM_UNSPECIFIED;
+  }
+  value SetNextWindowPos(value x,value y, value cond, value px,value py) {
+    auto vec = ImVec2 (x,y);
+    auto vec2 = ImVec2(px, py);
+    ImGui::SetNextWindowPos(vec,cond,vec2);
+    return SCM_UNSPECIFIED;
+  };
+value set_io_config_flags(value io,value flag) {
+    ImGuiIO* c = static_cast<ImGuiIO*>(scm_to_pointer(io));
+    c->ConfigFlags |= scm_to_int(flag);
+    return SCM_UNSPECIFIED;
+  }
+  value vec2(value x,value y) {
+    auto c = new ImVec2(x,y);
+    return scm_from_pointer(c, [](void* v){
+      ImVec2 *vec = static_cast<ImVec2*>(v);
+      //std::cout << "x: " << vec->x << " y: " << vec->y << std::endl;
+      delete vec;
+    });
+  }
+  value new_frame() {
+    ImGui::NewFrame();
+    return SCM_UNSPECIFIED;
+  }
+  value Begin(value v) { return ImGui::Begin(v,nullptr,ImGuiWindowFlags_AlwaysAutoResize); }
+  value Render() {
+    ImGui::Render();
+  return SCM_UNSPECIFIED;
+  }
+  value End() {
+    ImGui::End();
+    return SCM_UNSPECIFIED;
+  }
+  value BeginMainMenuBar() { return ImGui::BeginMainMenuBar(); }
+  value EndMainMenuBar() {
+    ImGui::EndMainMenuBar();
+    return SCM_UNSPECIFIED;
+  }
+  value BeginTooltip() { return ImGui::BeginTooltip(); }
+  value EndTooltip() {
+    ImGui::EndTooltip();
+    return SCM_UNSPECIFIED;
+  }
+
+  value BeginGroup() {
+    ImGui::BeginGroup();
+    return SCM_UNSPECIFIED;}
+  value EndGroup() {
+    ImGui::EndGroup();
+    return SCM_UNSPECIFIED;
+  }
+
+  value Separator() {
+    ImGui::Separator();
+    return SCM_UNSPECIFIED;
+  }
+  value Spacing() {
+    ImGui::Spacing();
+    return SCM_UNSPECIFIED;
+  }
+
+  value BeginItemTooltip() { return ImGui::BeginItemTooltip(); }
+  value MenuItem(value label, value shortcut, value selected, value enabled) {
+    return ImGui::MenuItem(label,shortcut,selected,enabled);
+  }
+
+  value text(value str) {
+    ImGui::TextUnformatted(str);
+    return SCM_UNSPECIFIED;
+  }
+  value TextLink(value label) {
+    return ImGui::TextLink(label);
+  }
+  value Checkbox(value label,value state) {
+    bool v=state;
+    auto ret=ImGui::Checkbox(label,&v);
+    return scm_values_2(value(ret),
+                        value(v));
+  }
+
+  value SameLine() {
+    ImGui::SameLine();
+    return SCM_UNSPECIFIED;
+  }
+  value NewLine() {
+    ImGui::NewLine();
+    return SCM_UNSPECIFIED;
+  }
+  value Button(value label) {
+    return ImGui::Button(label);
+  }
+  namespace impl {
+    namespace sdl2 {
+
+      value InitForVulkan(value window){
+        SDL_Window* w=static_cast<SDL_Window*>(scm_to_pointer(window));
+        return ImGui_ImplSDL2_InitForVulkan(w);
+      }
+      value InitForOpenGl(value window, value gl_context){
+        SDL_Window *w = static_cast<SDL_Window *>(scm_to_pointer(window));
+        SDL_GLContext cont=static_cast<SDL_GLContext>(scm_to_pointer(gl_context));
+        return ImGui_ImplSDL2_InitForOpenGL(w,cont);
+      }
+      value NewFrame(){
+        ImGui_ImplSDL2_NewFrame();
+        return SCM_UNSPECIFIED;
+      }
+      value Shutdown(){
+        ImGui_ImplSDL2_Shutdown();
+        return SCM_UNSPECIFIED;
+      }
+      value ProcessEvent(value event) {
+        const SDL_Event* e=static_cast<SDL_Event*>(scm_to_pointer(event));
+        return ImGui_ImplSDL2_ProcessEvent(e);
+      }
+    }
+    namespace opengl2 {
+      value NewFrame(){
+        ImGui_ImplOpenGL2_NewFrame();
+        return SCM_UNSPECIFIED;
+      }
+    }
+    namespace opengl3 {
+      value init(value glsl_version){
+        if (glsl_version.unboundp())
+          return ImGui_ImplOpenGL3_Init();
+        else {
+          //std::cout << "glsl_version: " << glsl_version << std::endl;
+          return ImGui_ImplOpenGL3_Init(glsl_version);
+        }
+      }
+      value Shutdown(){
+        ImGui_ImplOpenGL3_Shutdown();
+        return SCM_UNSPECIFIED;
+      }
+      value NewFrame(){
+        ImGui_ImplOpenGL3_NewFrame();
+        return SCM_UNSPECIFIED;
+      }
+      value RenderDrawData() {
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        return SCM_UNSPECIFIED;
+      }
+    }
+  }
+}
+/* template <typename T, typename Fn> */
+/* static void define(const std::string &name, Fn fn) { */
+/*   scm_c_define_gsubr(name.c_str(), 1, 0, 0, (scm_t_subr)fn); */
+/* } */
 
 extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
-    scm_c_define_gsubr("imgui:begin", 1, 0, 0, (scm_t_subr)guile::func);
+    scm_c_define_gsubr("imgui:begin", 1, 0, 0, (scm_t_subr)im::Begin);
+    scm_c_define_gsubr("imgui:end", 0, 0, 0, (scm_t_subr)im::End);
+    scm_c_define_gsubr("imgui:begin-main-menu-bar", 0, 0, 0,
+                       (scm_t_subr)im::BeginMainMenuBar);
+
+        scm_c_define_gsubr("imgui:begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
+        scm_c_define_gsubr("imgui:end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);
+
+    scm_c_define_gsubr("imgui:end-main-menu-bar", 0, 0, 0,
+                       (scm_t_subr)im::EndMainMenuBar);
+    scm_c_define_gsubr("imgui:begin-tooltip", 0, 0, 0,
+                       (scm_t_subr)im::BeginTooltip);
+    scm_c_define_gsubr("imgui:begin-item-tooltip", 0, 0, 0,
+                       (scm_t_subr)im::BeginItemTooltip);
+    scm_c_define_gsubr("imgui:end-tooltip", 0, 0, 0,
+                       (scm_t_subr)im::EndTooltip);
+    scm_c_define_gsubr("imgui:menu-item", 4, 0, 0,
+                       (scm_t_subr)im::MenuItem);
+    scm_c_define_gsubr("imgui:set-next-window-size", 2, 0, 0,
+                       (scm_t_subr)im::SetNextWindowSize);
+    scm_c_define_gsubr("imgui:set-next-window-pos", 5, 0, 0, (scm_t_subr)im::SetNextWindowPos);
+    scm_c_define_gsubr("imgui:render", 0, 0, 0, (scm_t_subr)im::Render);
+    scm_c_define_gsubr("imgui:new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
+    scm_c_define_gsubr("imgui:text", 1, 0, 0, (scm_t_subr)im::text);
+    scm_c_define_gsubr("imgui:checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
+    scm_c_define_gsubr("imgui:textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
+    scm_c_define_gsubr("imgui:sameline", 0, 0, 0, (scm_t_subr)im::SameLine);
+    scm_c_define_gsubr("imgui:separator", 0, 0, 0, (scm_t_subr)im::Separator);
+    scm_c_define_gsubr("imgui:spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
+    scm_c_define_gsubr("imgui:newline", 0, 0, 0, (scm_t_subr)im::NewLine);
+    scm_c_define_gsubr("imgui:button", 1, 0, 0, (scm_t_subr)im::Button);
+    scm_c_define_gsubr("imgui:create-context", 0, 0, 0,
+                       (scm_t_subr)im::create_context);
+    scm_c_define_gsubr("imgui:destroy-context", 0, 1, 0,
+                       (scm_t_subr)im::destroy_context);
+    scm_c_define_gsubr("imgui:get-io", 0, 0, 0, (scm_t_subr)im::getio);
+    scm_c_define_gsubr("imgui:get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);
+    scm_c_define_gsubr("imgui:style-scaleallsizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
+    scm_c_define_gsubr("imgui:get-version", 0, 0, 0, (scm_t_subr)im::GetVersion);
+    scm_c_define_gsubr("imgui:setup-font", 1, 0, 0, (scm_t_subr)im::setup_font);
+    scm_c_define_gsubr("imgui:set-io-display-size", 2, 0, 0,
+                       (scm_t_subr)im::set_io_display_size);
+    scm_c_define_gsubr("imgui:io-display-size", 1, 0, 0,
+                       (scm_t_subr)im::io_display_size);
+    scm_c_define_gsubr("imgui:vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
+    //    scm_c_define_gsubr("imgui:vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
+    scm_c_define_gsubr("imgui:impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);
+    scm_c_define_gsubr("imgui:impl:sdl2:init-vulkan", 0, 0, 0,
+                       (scm_t_subr)im::impl::sdl2::InitForVulkan);
+    scm_c_define_gsubr("imgui:impl:sdl2:init-opengl", 2, 0, 0,
+                       (scm_t_subr)im::impl::sdl2::InitForOpenGl);
+
+    scm_c_define_gsubr("imgui:impl:sdl2:shutdown", 0, 0, 0,
+                       (scm_t_subr)im::impl::sdl2::Shutdown);
+    scm_c_define_gsubr("imgui:impl:sdl2:process-event", 1, 0, 0,
+                       (scm_t_subr)im::impl::sdl2::ProcessEvent);
+    scm_c_define_gsubr("imgui:impl:opengl3:shutdown", 0, 0, 0,
+                       (scm_t_subr)im::impl::opengl3::Shutdown);
+    scm_c_define_gsubr("imgui:impl:sdl2:new-frame", 0, 0, 0,
+                       (scm_t_subr)im::impl::sdl2::NewFrame);
+    scm_c_define_gsubr("imgui:impl:opengl3:new-frame", 0, 0, 0,
+                       (scm_t_subr)im::impl::opengl3::NewFrame);
+    scm_c_define_gsubr("imgui:impl:opengl3:render-draw-data", 0, 0, 0,
+                       (scm_t_subr)im::impl::opengl3::RenderDrawData);
+
+
 }
 }
