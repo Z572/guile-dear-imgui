@@ -102,6 +102,7 @@
         (imgui:sameline 0 50)
         (imgui:text "world")))
     (imgui:end-group)
+    (imgui:selectable "h" #f)
     (when checkbox-checked?
       (imgui:item-tooltip
        (imgui:text "tooltip")))
