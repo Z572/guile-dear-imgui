@@ -232,6 +232,14 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
 
+  value BeginMenu(value label,value enabled) {
+    return ImGui::BeginMenu(label, enabled);
+  }
+  value EndMenu() {
+    ImGui::EndMenu();
+    return SCM_UNSPECIFIED;
+  }
+
   value Separator() {
     ImGui::Separator();
     return SCM_UNSPECIFIED;
@@ -364,8 +372,11 @@ extern "C" {
     scm_c_define_gsubr("imgui:begin-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::BeginMainMenuBar);
 
-        scm_c_define_gsubr("imgui:begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
-        scm_c_define_gsubr("imgui:end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);
+    scm_c_define_gsubr("imgui:begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
+    scm_c_define_gsubr("imgui:end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);
+
+    scm_c_define_gsubr("imgui:begin-menu", 2, 0, 0, (scm_t_subr)im::BeginMenu);
+    scm_c_define_gsubr("imgui:end-menu", 0, 0, 0, (scm_t_subr)im::EndMenu);
 
     scm_c_define_gsubr("imgui:end-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::EndMainMenuBar);

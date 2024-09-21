@@ -50,6 +50,10 @@
   (when (imgui:begin-tooltip)
     body ...
     (imgui:end-tooltip)))
+(define-syntax-rule (with-menu (label act) body ...)
+  (when (imgui:begin-menu label act)
+    body ...
+    (imgui:end-menu)))
 (define-syntax-rule (imgui:item-tooltip body ...)
   (when (imgui:begin-item-tooltip)
     body ...
@@ -78,8 +82,14 @@
      ;; 1000 200
      ))
   (imgui:set-next-window-pos 0 0 0 0 0)
-  (when (and #f (imgui:begin-main-menu-bar))
-    (when (imgui:menu-item "hello" "ba: a" #f #t)
+  (when (and checkbox-checked?
+             (imgui:begin-main-menu-bar))
+    (with-menu ("hh" #t)
+      (imgui:menu-item "bf" "Ctrl+N" #t #t)
+      (imgui:menu-item "2" "bb" #f #t)
+      (with-menu ("ba" #t)
+        (imgui:menu-item "2" "bb" #f #t)))
+    (when (imgui:menu-item "hello" "Ctrl+N" #f #t)
       (pk 'clock)
       (set! done? #t))
     (imgui:end-main-menu-bar))
@@ -132,4 +142,5 @@
 
 ;; Local Variables:
 ;; eval: (put 'begin-window 'scheme-indent-function 1)
+;; eval: (put 'with-menu 'scheme-indent-function 1)
 ;; End:
