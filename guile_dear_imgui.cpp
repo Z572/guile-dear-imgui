@@ -231,6 +231,13 @@ value set_io_config_flags(value io,value flag) {
     ImGui::Spacing();
     return SCM_UNSPECIFIED;
   }
+  value InputText(value label,value buf,value buf_size,value flags) {
+    char *buff = buf();
+    maybe_set(flags, 0);
+    auto ret=ImGui::InputText(label,buff,buf_size,flags);
+    buf(buff);
+    return ret;
+  }
   value SliderInt(value label, value v, value v_min, value v_max, value flags) {
     maybe_set(flags, 0);
     int n = v();
@@ -534,6 +541,7 @@ extern "C" {
     scm_c_define_gsubr("get-font-size", 0, 0, 0, (scm_t_subr)im::GetFontSize);
     scm_c_define_gsubr("separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
+    scm_c_define_gsubr("input-text", 3, 1, 0, (scm_t_subr)im::InputText);
     scm_c_define_gsubr("newline", 0, 0, 0, (scm_t_subr)im::NewLine);
     scm_c_define_gsubr("bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
     scm_c_define_gsubr("button", 1, 0, 0, (scm_t_subr)im::Button);

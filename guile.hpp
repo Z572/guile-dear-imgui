@@ -27,6 +27,7 @@ namespace guile {
     value(int arg) { value_ = scm_from_int(arg); };
     /* value(int32_t arg) { value_ = scm_from_int32(arg); }; */
     value(int16_t arg) { value_ = scm_from_int16(arg); };
+    value(size_t arg) { value_ = scm_from_size_t(arg); };
     value(int8_t arg) { value_ = scm_from_int8(arg); };
     value(uint32_t arg) { value_ = scm_from_uint32(arg); };
     value(uint16_t arg) { value_ = scm_from_uint16(arg); };
@@ -47,6 +48,7 @@ namespace guile {
     operator SCM () const {return value_;}
     operator int32_t () const {return scm_to_int32(value_);}
     operator int16_t() const { return scm_to_int16(value_); }
+    operator size_t() const { return scm_to_size_t(value_); }
     operator int8_t() const { return scm_to_int8(value_); }
     operator uint32_t () const {return scm_to_uint32(value_);}
     operator uint16_t () const {return scm_to_uint16(value_);}
