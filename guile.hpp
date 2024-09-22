@@ -110,6 +110,6 @@ namespace guile {
     }
 
   protected:
-    SCM value_ = SCM_UNSPECIFIED;
+    SCM value_ = SCM_UNDEFINED;
   };
 } // namespace guile
