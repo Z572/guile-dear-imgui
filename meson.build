@@ -23,14 +23,15 @@ imgui_options = [
   'webgpu=disabled',
 ]
 
-dearimgui_sp = subproject('imgui', default_options: imgui_options)
-dearimgui_dep = dearimgui_sp.get_variable('imgui_dep')
 
-# schmutz=dependency('Schmutz')
 sdl2_dep=dependency('sdl2')
 glfw_dep=dependency('glfw3')
 guile_dep=dependency('guile-3.0')
-# lib_args+=guile3.get_variable(pkgconfig : 'CFLAGS')
+dearimgui_dep = dependency('imgui',required: false)
+if (not dearimgui_dep.found())
+  dearimgui_dep=subproject('imgui', default_options: imgui_options).get_variable('imgui_dep')
+endif
+
 custom_guile_xd=get_option('guile-extension-dir')
 if custom_guile_xd == ''
   guile_extension_dir = guile_dep.get_variable(pkgconfig: 'extensiondir')
