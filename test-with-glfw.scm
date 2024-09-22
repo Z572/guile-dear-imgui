@@ -18,21 +18,23 @@
 
 (define (init w)
   (impl:glfw:init-opengl
-   w
+   (unwrap-window w)
    #t)
   (impl:opengl3:init))
 
 (when (glfwinit)
   (glfwwindowhint GLFW_CONTEXT_VERSION_MAJOR 3)
   (glfwwindowhint GLFW_CONTEXT_VERSION_MINOR 0)
-  (let ((w (glfwcreatewindow 1280 720 "GLFW+OpenGL3 example"))
+  (let ((w (make-window
+            #:size '(1280 720)
+            #:title "GLFW+OpenGL3 example"))
         (input-i (make-parameter 0)))
-    (glfwmakecontextcurrent w)
-    (glfwswapinterval 1)
+    (make-context-current w)
+    (swap-interval 1)
     (create-context)
     (init w)
 
-    (while (not (glfwwindowshouldclose w))
+    (while (not (window-should-close? w))
       (poll-events)
       (do-new-frame)
       (new-frame)
@@ -44,13 +46,13 @@
       (gl-viewport 0 0 100 100)
       (render)
       (do-render)
-      (glfwswapbuffers w))
+      (swap-buffers w))
 
     (impl:opengl3:shutdown)
     (impl:glfw:shutdown)
     (destroy-context)
-    (glfwdestroywindow w)
-    (glfwterminate)))
+    (destroy-window w)
+    (terminate)))
 
 
 

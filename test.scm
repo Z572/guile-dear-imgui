@@ -16,7 +16,6 @@
 
 (sdl-init)
 (create-context)
-(define io (get-io))
 (define style (get-style))
 (style-scaleallsizes style 2)
 
@@ -83,7 +82,7 @@
     (do-poll-event)
     (do-new-frame)
     (new-frame)
-    (let ((n (io-display-size io)))
+    (let ((n (io-display-size (get-io))))
       (set-next-window-size
        (car n)
        (cdr n)))
@@ -148,7 +147,7 @@
 
     (render)
 
-    (let* ((w (io-display-size io)))
+    (let* ((w (io-display-size (get-io))))
       (gl-viewport 0 0 (car w) (cdr w)))
     (do-render)))
 

@@ -31,10 +31,16 @@ value SwapInterval(value interval) {
   glfwSwapInterval(interval);
   return SCM_UNSPECIFIED;
 }
-value WindowShouldClose(value window) {
-  auto o = static_cast<GLFWwindow *>(scm_to_pointer(window));
-  return (bool)glfwWindowShouldClose(o);
-}
+  value WindowShouldClose(value window) {
+    auto o = static_cast<GLFWwindow *>(scm_to_pointer(window));
+    return (bool)glfwWindowShouldClose(o);
+  }
+  value GetWindowSize(value window) {
+    auto o = static_cast<GLFWwindow *>(scm_to_pointer(window));
+    int width,height;
+    glfwGetWindowSize(o,&width,&height);
+    return scm_list_2(value(width), value(height));
+  }
   value PollEvents() {
     glfwPollEvents();
     return SCM_UNSPECIFIED;
@@ -54,19 +60,21 @@ void init_glfw() {
   defconst(GLFW_CONTEXT_NO_ERROR);
   defconst(GLFW_CONTEXT_VERSION_MINOR);
   scm_c_define_gsubr("glfwinit", 0, 0, 0, (scm_t_subr)GGLFW::init);
-  scm_c_define_gsubr("glfwterminate", 0, 0, 0, (scm_t_subr)GGLFW::Terminate);
+  scm_c_define_gsubr("terminate", 0, 0, 0, (scm_t_subr)GGLFW::Terminate);
   scm_c_define_gsubr("glfwcreatewindow", 3, 0, 0,
                        (scm_t_subr)GGLFW::CreateWindow);
   scm_c_define_gsubr("glfwdestroywindow", 1, 0, 0,
                        (scm_t_subr)GGLFW::DestroyWindow);
     scm_c_define_gsubr("glfwmakecontextcurrent", 1, 0, 0,
                        (scm_t_subr)GGLFW::MakeContextCurrent);
-    scm_c_define_gsubr("glfwswapinterval", 1, 0, 0,
+    scm_c_define_gsubr("swap-interval", 1, 0, 0,
                        (scm_t_subr)GGLFW::SwapInterval);
     scm_c_define_gsubr("glfwwindowhint", 2, 0, 0,
                        (scm_t_subr)GGLFW::WindowHint);
     scm_c_define_gsubr("glfwwindowshouldclose", 1, 0, 0,
                        (scm_t_subr)GGLFW::WindowShouldClose);
+    scm_c_define_gsubr("%get-window-size", 1, 0, 0,
+                       (scm_t_subr)GGLFW::GetWindowSize);
     scm_c_define_gsubr("poll-events", 0, 0, 0,
                        (scm_t_subr)GGLFW::PollEvents);
     scm_c_define_gsubr("glfwswapbuffers", 1, 0, 0,

@@ -59,7 +59,6 @@
                    with-popup
                    with-list-box))
 
-
 (define-wrapped-pointer-type <context>
   context?
   wrap-context unwrap-context
