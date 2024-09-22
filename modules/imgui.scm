@@ -118,7 +118,7 @@
 
 (define-syntax-parameter tab-item
   (lambda (stx)
-    (syntax-violation 'tab-item "return used outside of a tab-bar" stx)))
+    (syntax-violation 'tab-item "tab-item used outside of a tab-bar" stx)))
 
 (define-syntax-rule (with-combo (label preview_value ) body ...)
   (when (begin-combo label preview_value)
