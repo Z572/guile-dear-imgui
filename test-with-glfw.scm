@@ -29,7 +29,8 @@
             #:size '(1280 720)
             #:title "GLFW+OpenGL3 example"))
         (input-i (make-parameter 0))
-        (slider-int-p (make-parameter 0)))
+        (slider-int-p (make-parameter 0))
+        (drag-int-p (make-parameter 0)))
     (make-context-current w)
     (set-swap-interval! 'vsync)
     (create-context)
@@ -49,7 +50,15 @@
           (tab-item ("bar2")
             (text-colored '(1 0 0 1) "R:") (sameline)
             (input-int "hello!" input-i 1 100)
-            (slider-int "slider" slider-int-p 1 100))
+            (slider-int "slider" slider-int-p 1 100)
+            (drag-int "drag" drag-int-p 1 0 100)
+            (let ((status (gc-stats)))
+              (for-each
+               (lambda (x)
+                 (text (string-append (symbol->string (car x))
+                                      " -> "
+                                      (number->string (cdr x)))))
+               status)))
           (tab-item ("bar0")
             (progress-bar 0.5 (cons 0 0) "hov"))))
 

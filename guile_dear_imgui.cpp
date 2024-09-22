@@ -23,11 +23,9 @@
 #include <SDL_opengl.h>
 #endif
 
-namespace im {
-/* template <typename F, typename Arg> */
-/* auto func{ */
+#define maybe_set(v,val) if (v.unboundp()) {v=val;}
 
-/* } */
+namespace im {
   using guile::value;
   value create_context() {
     auto c = ImGui::CreateContext();
@@ -241,6 +239,17 @@ value set_io_config_flags(value io,value flag) {
     v(n);
     return ret;
   }
+  value DragInt(value label,value v, value v_speed, value v_min, value v_max,
+                value flags) {
+    int n = v();
+    maybe_set(v_speed,1.0f);
+    maybe_set(v_min, 0);
+    maybe_set(v_max, 0);
+    maybe_set(flags, 0);
+    auto ret = ImGui::DragInt(label, &n, v_speed, v_min, v_max, "%d", flags);
+    v(n);
+    return ret;
+  }
   value BeginItemTooltip() { return ImGui::BeginItemTooltip(); }
   value MenuItem(value label, value shortcut, value selected, value enabled) {
     return ImGui::MenuItem(label,shortcut,selected,enabled);
@@ -434,11 +443,8 @@ value set_io_config_flags(value io,value flag) {
       }
     }
   }
-}
-/* template <typename T, typename Fn> */
-/* static void define(const std::string &name, Fn fn) { */
-/*   scm_c_define_gsubr(name.c_str(), 1, 0, 0, (scm_t_subr)fn); */
-/* } */
+  } // namespace im
+#undef maybe_set
 
 extern "C" {
 
@@ -520,6 +526,7 @@ extern "C" {
     scm_c_define_gsubr("textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
     scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
     scm_c_define_gsubr("slider-int", 4, 1, 0, (scm_t_subr)im::SliderInt);
+    scm_c_define_gsubr("drag-int", 2, 4, 0, (scm_t_subr)im::DragInt);
     scm_c_define_gsubr("open-popup", 1, 0, 0, (scm_t_subr)im::OpenPopup);
     scm_c_define_gsubr("begin-popup", 1, 0, 0, (scm_t_subr)im::BeginPopup);
     scm_c_define_gsubr("begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);

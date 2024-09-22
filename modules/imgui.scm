@@ -40,6 +40,7 @@
             ;; end-tab-bar
             ;; begin-tab-item
             ;; end-tab-item
+            drag-int
             slider-int
             menu-item
             button
