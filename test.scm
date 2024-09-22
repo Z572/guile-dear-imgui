@@ -129,7 +129,7 @@
     (sameline)
     (group
      (indent)
-     (text "hello")
+     (text (format #f "font size: ~a" (get-font-size)))
 
      (sameline)
      (bullet)

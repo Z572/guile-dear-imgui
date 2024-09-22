@@ -271,6 +271,9 @@ value set_io_config_flags(value io,value flag) {
     ImGui::EndMenu();
     return SCM_UNSPECIFIED;
   }
+  value GetFontSize() {
+    return ImGui::GetFontSize();
+  }
 
   value Separator() {
     ImGui::Separator();
@@ -486,7 +489,7 @@ extern "C" {
     scm_c_define_gsubr("begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);
     scm_c_define_gsubr("end-popup", 0, 0, 0, (scm_t_subr)im::EndPopup);
 
-
+    scm_c_define_gsubr("get-font-size", 0, 0, 0, (scm_t_subr)im::GetFontSize);
     scm_c_define_gsubr("separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
     scm_c_define_gsubr("newline", 0, 0, 0, (scm_t_subr)im::NewLine);
