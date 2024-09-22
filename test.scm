@@ -1,53 +1,18 @@
-(use-modules (sdl2)
-             ((sdl2 bindings) #:prefix bind:)
-             ((system foreign) #:prefix ffi:)
-             (gl)
-             (srfi srfi-71)
-             (sdl2 render)
-             (sdl2 surface)
-             (sdl2 events)
-             (sdl2 video))
+#!/usr/bin/env -S guile -L modules
+!#
+(use-modules
+ (imgui)
+ (sdl2)
+ ((sdl2 bindings) #:prefix bind:)
+ ((system foreign) #:prefix ffi:)
+ (gl)
+ (srfi srfi-71)
+ (sdl2 render)
+ (sdl2 surface)
+ (sdl2 events)
+ (sdl2 video))
 
-(load-extension "build/libguile_dear_imgui.so" "init_imgui")
-(define-syntax-rule (with-window name body ...)
-  (begin (when (begin-window name)
-           body ...)
-         (end-window)))
-(define-syntax-rule (with-child-window name body ...)
-  (begin (when (begin-child name)
-           body ...)
-         (end-child)))
 
-(define-syntax-rule (with-list-box (name x y) body ...)
-  (when (begin-list-box name x y)
-    body ...
-    (end-list-box)))
-
-(define-syntax-rule (group body ...)
-  (begin (begin-group)
-         body  ...
-         (end-group)))
-
-(define-syntax-rule (tooltip body ...)
-  (when (begin-tooltip)
-    body ...
-    (end-tooltip)))
-(define-syntax-rule (with-combo (label preview_value ) body ...)
-  (when (begin-combo label preview_value)
-    body ...
-    (end-combo)))
-(define-syntax-rule (with-menu (label act) body ...)
-  (when (begin-menu label act)
-    body ...
-    (end-menu)))
-(define-syntax-rule (with-popup (label) body ...)
-  (when (begin-popup label)
-    body ...
-    (end-popup)))
-(define-syntax-rule (item-tooltip body ...)
-  (when (begin-item-tooltip)
-    body ...
-    (end-tooltip)))
 
 (sdl-init)
 (create-context)

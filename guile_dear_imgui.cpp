@@ -5,6 +5,7 @@
 #include <guile.hpp>
 #include <imgui.h>
 #include <imgui/backends/imgui_impl_sdl2.h>
+#include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl2.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <libguile.h>
@@ -325,6 +326,21 @@ value set_io_config_flags(value io,value flag) {
         const SDL_Event* e=static_cast<SDL_Event*>(scm_to_pointer(event));
         return ImGui_ImplSDL2_ProcessEvent(e);
       }
+      } // namespace sdl2
+    namespace glfw {
+
+      value InitForOpenGl(value window, value install_callbacks){
+        auto w = static_cast<GLFWwindow *>(scm_to_pointer(window));
+        return ImGui_ImplGlfw_InitForOpenGL(w,install_callbacks);
+      }
+      value NewFrame(){
+        ImGui_ImplGlfw_NewFrame();
+        return SCM_UNSPECIFIED;
+      }
+      value Shutdown(){
+        ImGui_ImplGlfw_Shutdown();
+        return SCM_UNSPECIFIED;
+      }
     }
     namespace opengl2 {
       value NewFrame(){
@@ -445,6 +461,8 @@ extern "C" {
 
     scm_c_define_gsubr("impl:sdl2:shutdown", 0, 0, 0,
                        (scm_t_subr)im::impl::sdl2::Shutdown);
+    scm_c_define_gsubr("impl:glfw:shutdown", 0, 0, 0,
+                       (scm_t_subr)im::impl::glfw::Shutdown);
     scm_c_define_gsubr("impl:sdl2:process-event", 1, 0, 0,
                        (scm_t_subr)im::impl::sdl2::ProcessEvent);
     scm_c_define_gsubr("impl:opengl3:shutdown", 0, 0, 0,
@@ -455,6 +473,11 @@ extern "C" {
                        (scm_t_subr)im::impl::opengl3::NewFrame);
     scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::RenderDrawData);
+
+    scm_c_define_gsubr("impl:glfw:init-opengl", 2, 0, 0,
+                       (scm_t_subr)im::impl::glfw::InitForOpenGl);
+    scm_c_define_gsubr("impl:glfw:new-frame", 0, 0, 0,
+                           (scm_t_subr)im::impl::glfw::NewFrame);
 
 
 }

@@ -39,9 +39,11 @@
     (native-inputs
      (list pkg-config
            guile-3.0-latest))
-    (inputs (list guile-3.0-latest imgui sdl2))
-    (propagated-inputs (list guile-sdl2
-                             guile3.0-opengl))
+    (inputs (list guile-3.0-latest imgui sdl2 glfw
+
+                  ;; for example
+                  guile-sdl2 guile3.0-opengl))
+
     (synopsis "")
     (description "")
     (home-page "")

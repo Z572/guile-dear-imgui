@@ -28,6 +28,7 @@ dearimgui_dep = dearimgui_sp.get_variable('imgui_dep')
 
 # schmutz=dependency('Schmutz')
 sdl2_dep=dependency('sdl2')
+glfw_dep=dependency('glfw3')
 guile_dep=dependency('guile-3.0')
 # lib_args+=guile3.get_variable(pkgconfig : 'CFLAGS')
 custom_guile_xd=get_option('guile-extension-dir')
@@ -42,6 +43,13 @@ shlib = shared_module('guile_dear_imgui', ['guile_dear_imgui.cpp', 'guile.hpp'],
   install : true,
   cpp_args : lib_args,
   dependencies : [guile_dep,dearimgui_dep,sdl2_dep],
+  install_dir : guile_extension_dir
+)
+
+gglfw = shared_module('guile_glfw', ['guile_glfw.cpp', 'guile.hpp'],
+  install : true,
+  cpp_args : lib_args,
+  dependencies : [guile_dep,glfw_dep],
   install_dir : guile_extension_dir
 )
 
