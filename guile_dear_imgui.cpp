@@ -115,7 +115,20 @@ value set_io_config_flags(value io,value flag) {
     ImGui::NewFrame();
     return SCM_UNSPECIFIED;
   }
-  value Begin(value v) { return ImGui::Begin(v,nullptr,ImGuiWindowFlags_AlwaysAutoResize); }
+  value Begin(value v, value p_open, value flags) {
+    bool n;
+    int flag=0;
+    auto p_open_boundp= p_open.boundp() and !(scm_is_false(p_open.get()));
+    if (p_open_boundp)
+      n = p_open();
+    if (flags.boundp())
+      flag=flags;
+    auto ret = ImGui::Begin(v, nullptr, flag);
+    if (p_open_boundp)
+      p_open(n);
+    return ret;
+  }
+
   value Render() {
     ImGui::Render();
   return SCM_UNSPECIFIED;
@@ -398,7 +411,30 @@ extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
-    scm_c_define_gsubr("begin-window", 1, 0, 0, (scm_t_subr)im::Begin);
+    defconst(ImGuiWindowFlags_None);
+    defconst(ImGuiWindowFlags_NoTitleBar);
+    defconst(ImGuiWindowFlags_NoResize);
+    defconst(ImGuiWindowFlags_NoMove);
+    defconst(ImGuiWindowFlags_NoScrollbar);
+    defconst(ImGuiWindowFlags_NoScrollWithMouse);
+    defconst(ImGuiWindowFlags_NoCollapse);
+    defconst(ImGuiWindowFlags_AlwaysAutoResize);
+    defconst(ImGuiWindowFlags_NoBackground);
+    defconst(ImGuiWindowFlags_NoSavedSettings);
+    defconst(ImGuiWindowFlags_NoMouseInputs);
+    defconst(ImGuiWindowFlags_MenuBar);
+    defconst(ImGuiWindowFlags_HorizontalScrollbar);
+    defconst(ImGuiWindowFlags_NoFocusOnAppearing);
+    defconst(ImGuiWindowFlags_NoBringToFrontOnFocus);
+    defconst(ImGuiWindowFlags_AlwaysVerticalScrollbar);
+    defconst(ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+    defconst(ImGuiWindowFlags_NoNavInputs);
+    defconst(ImGuiWindowFlags_NoNavFocus);
+    defconst(ImGuiWindowFlags_UnsavedDocument);
+    defconst(ImGuiWindowFlags_NoNav);
+    defconst(ImGuiWindowFlags_NoDecoration);
+    defconst(ImGuiWindowFlags_NoInputs);
+    scm_c_define_gsubr("begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("begin-child", 1, 0, 0, (scm_t_subr)im::BeginChild);
     scm_c_define_gsubr("end-child", 0, 0, 0, (scm_t_subr)im::EndChild);

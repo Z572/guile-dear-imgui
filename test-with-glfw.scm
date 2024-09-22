@@ -40,7 +40,7 @@
       (new-frame)
 
 
-      (with-window "main"
+      (with-window ("main" #f ImGuiWindowFlags_AlwaysAutoResize)
         (input-int "hello!" input-i 1 100))
 
       (gl-viewport 0 0 100 100)

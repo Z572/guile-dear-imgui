@@ -99,7 +99,7 @@
         (done? #t))
       (end-main-menu-bar))
 
-    (with-window "aba"
+    (with-window ("aba" #f ImGuiWindowFlags_AlwaysAutoResize)
       (with-popup ("a-popup")
         (text "select1")
         (selectable "1" #f)

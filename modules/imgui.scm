@@ -73,8 +73,8 @@
 
 (load-extension "build/libguile_dear_imgui.so" "init_imgui")
 
-(define-syntax-rule (with-window name body ...)
-  (begin (when (begin-window name)
+(define-syntax-rule (with-window (name args ...) body ...)
+  (begin (when (begin-window name args ...)
            body ...)
          (end-window)))
 (define-syntax-rule (with-child-window name body ...)
