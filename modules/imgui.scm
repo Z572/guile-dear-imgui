@@ -35,6 +35,10 @@
             end-combo
             begin-main-menu-bar
             end-main-menu-bar
+            ;; begin-tab-bar
+            ;; end-tab-bar
+            ;; begin-tab-item
+            ;; end-tab-item
             menu-item
             button
             small-button
@@ -62,6 +66,8 @@
                    with-menu
                    with-popup
                    with-list-box
+                   tab-bar
+                   tab-item
                    item-tooltip))
 
 (define-wrapped-pointer-type <context>
@@ -96,6 +102,24 @@
   (when (begin-tooltip)
     body ...
     (end-tooltip)))
+
+(define-syntax tab-bar
+  (syntax-rules ()
+    ((_ (name args ...) body ...)
+     (when (begin-tab-bar name args ...)
+       (syntax-parameterize ((tab-item (with-ellipsis :::
+                                         (syntax-rules ()
+                                           ((tab-item (n args2 :::) body2 :::)
+                                            (when (begin-tab-item n args2 :::)
+                                              body2 :::
+                                              (end-tab-item)))))))
+         body ...)
+       (end-tab-bar)))))
+
+(define-syntax-parameter tab-item
+  (lambda (stx)
+    (syntax-violation 'tab-item "return used outside of a tab-bar" stx)))
+
 (define-syntax-rule (with-combo (label preview_value ) body ...)
   (when (begin-combo label preview_value)
     body ...

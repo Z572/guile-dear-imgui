@@ -160,6 +160,26 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
 
+  value BeginTabBar(value id, value flags) {
+    if (flags.unboundp())
+      flags=0;
+    return ImGui::BeginTabBar(id,flags);
+  }
+  value EndTabBar() {
+    ImGui::EndTabBar();
+    return SCM_UNSPECIFIED;
+  }
+
+  value BeginTabItem(value id// ,value p_open, value flags
+                     ) {
+    return ImGui::BeginTabItem(id);
+  }
+  value EndTabItem() {
+    ImGui::EndTabItem();
+    return SCM_UNSPECIFIED;
+  }
+
+
   value BeginMainMenuBar() { return ImGui::BeginMainMenuBar(); }
   value EndMainMenuBar() {
     ImGui::EndMainMenuBar();
@@ -440,6 +460,12 @@ extern "C" {
     scm_c_define_gsubr("end-child", 0, 0, 0, (scm_t_subr)im::EndChild);
     scm_c_define_gsubr("begin-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::BeginMainMenuBar);
+
+    scm_c_define_gsubr("begin-tab-bar", 1, 1, 0, (scm_t_subr)im::BeginTabBar);
+    scm_c_define_gsubr("end-tab-bar", 0, 0, 0, (scm_t_subr)im::EndTabBar);
+
+    scm_c_define_gsubr("begin-tab-item", 1, 0, 0, (scm_t_subr)im::BeginTabItem);
+    scm_c_define_gsubr("end-tab-item", 0, 0, 0, (scm_t_subr)im::EndTabItem);
 
     scm_c_define_gsubr("begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
     scm_c_define_gsubr("end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);

@@ -38,10 +38,17 @@
       (poll-events)
       (do-new-frame)
       (new-frame)
-
-
+      ;; (let ((n (io-display-size (get-io))))
+      ;;   (set-next-window-size
+      ;;    (car n)
+      ;;    (cdr n)))
+      ;; (set-next-window-pos 0 0 0 0 0)
       (with-window ("main" #f ImGuiWindowFlags_AlwaysAutoResize)
-        (input-int "hello!" input-i 1 100))
+        (tab-bar ("bar1")
+          (tab-item ("bar2")
+            (input-int "hello!" input-i 1 100))
+          (tab-item ("bar0")
+            (progress-bar 0.5 (cons 0 0) "hov"))))
 
       (gl-viewport 0 0 100 100)
       (render)
@@ -61,6 +68,9 @@
 ;; eval: (put 'with-child-window 'scheme-indent-function 1)
 ;; eval: (put 'with-menu 'scheme-indent-function 1)
 ;; eval: (put 'with-popup 'scheme-indent-function 1)
+;; eval: (put 'tab-bar 'scheme-indent-function 1)
+;; eval: (put 'tab-item 'scheme-indent-function 1)
 ;; eval: (put 'with-list-box 'scheme-indent-function 1)
 ;; eval: (put 'with-combo 'scheme-indent-function 1)
+;; eval: (put 'with-ellipsis 'scheme-indent-function 1)
 ;; End:
