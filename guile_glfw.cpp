@@ -7,8 +7,9 @@ using guile::value;
     glfwTerminate();
     return SCM_UNSPECIFIED;
   }
-  value CreateWindow(value width,value height,value title) {
-    auto o = glfwCreateWindow(width, height, title, nullptr, nullptr);
+  value CreateWindow(value width, value height, value title) {
+    std::string t=title;
+    auto o = glfwCreateWindow(width, height, t.c_str(), nullptr, nullptr);
     if (o)
       return scm_from_pointer(o, nullptr);
     return SCM_BOOL_F;

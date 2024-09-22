@@ -30,6 +30,7 @@
             #:title "GLFW+OpenGL3 example"))
         (input-i (make-parameter 0))
         (input-text-p (make-parameter "h"))
+        (input-text-p2 (make-parameter ""))
         (slider-int-p (make-parameter 0))
         (drag-int-p (make-parameter 0)))
     (make-context-current w)
@@ -51,7 +52,9 @@
           (tab-item ("bar2")
             (text-colored '(1 0 0 1) "R:") (sameline)
             (input-int "hello!" input-i 1 100)
-            (input-text "text" input-text-p 10)
+            (input-text "text" input-text-p )
+            (input-text "text2" input-text-p2
+                        #:hint "dfsdf")
             (slider-int "slider" slider-int-p 1 100)
             (drag-int "drag" drag-int-p 1 0 100)
             (let ((status (gc-stats)))

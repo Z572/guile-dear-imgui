@@ -1,6 +1,7 @@
 (define-module (imgui)
   #:use-module (system foreign)
   #:export (create-context
+            open-popup
             get-io
             get-style
             style-scaleallsizes
@@ -140,3 +141,11 @@
   (when (begin-item-tooltip)
     body ...
     (end-tooltip)))
+(define* (input-text label buf #:optional (flags 0)
+                     #:key
+                     (hint #f)
+                     (callback #f))
+  (if callback (error "callback no impl!"))
+  (if hint
+      (input-text-with-hint label hint buf flags)
+      (%input-text label buf flags)))

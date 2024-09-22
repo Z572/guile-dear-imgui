@@ -35,8 +35,8 @@ namespace guile {
     value(bool arg) { value_ = scm_from_bool(arg); };
     value(float arg) { value_ = scm_from_double(arg); };
     value(double arg) { value_ = scm_from_double(arg); };
-    value(const char* arg) { value_ = scm_from_locale_string(arg);};
-    value(std::string str) { value_ = scm_from_locale_string(str.c_str()); };
+    value(const char* arg) { value_ = scm_from_utf8_string(arg);};
+    value(std::string str) { value_ = scm_from_utf8_string(str.c_str()); };
     SCM get() const {return value_;};
     bool unboundp() const {return SCM_UNBNDP(value_);};
     bool boundp() const { return !unboundp(); };
@@ -61,19 +61,19 @@ namespace guile {
       return scm_to_double(value_);
     }
 
-    operator std::string () const {
-      auto c_str=scm_to_locale_string(value_);
+    operator std::string() const {
+      auto c_str=scm_to_utf8_string(value_);
       auto str = std::string(c_str);
       free(c_str);
       return str;
     }
-    operator char* () const {
-      auto c_str=scm_to_locale_string(value_);
-      return c_str;
-    }
+    // operator char* () const {
+    //   auto c_str=scm_to_utf8_string(value_);
+    //   return c_str;
+    // }
     friend std::ostream &operator<<(std::ostream &os, guile::value v){
-      auto c = scm_to_locale_string(scm_simple_format(
-          SCM_BOOL_F, scm_from_locale_string("~a"), scm_list_1(v.get())));
+      auto c = scm_to_utf8_string(scm_simple_format(
+          SCM_BOOL_F, scm_from_utf8_string("~a"), scm_list_1(v.get())));
       os << c;
       free(c);
       return os;

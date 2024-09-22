@@ -4,6 +4,7 @@
 #include <exception>
 #include <guile.hpp>
 #include <imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 #include <imgui/backends/imgui_impl_sdl2.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl2.h>
@@ -24,7 +25,7 @@
 #endif
 
 #define maybe_set(v,val) if (v.unboundp()) {v=val;}
-
+#define LABEL(v) std::string(v).c_str()
 namespace im {
   using guile::value;
   value create_context() {
@@ -113,7 +114,7 @@ value set_io_config_flags(value io,value flag) {
     ImGui::NewFrame();
     return SCM_UNSPECIFIED;
   }
-  value Begin(value v, value p_open, value flags) {
+  value Begin(value label, value p_open, value flags) {
     bool n;
     int flag=0;
     auto p_open_boundp= p_open.boundp() and !(scm_is_false(p_open.get()));
@@ -121,7 +122,7 @@ value set_io_config_flags(value io,value flag) {
       n = p_open();
     if (flags.boundp())
       flag=flags;
-    auto ret = ImGui::Begin(v, nullptr, flag);
+    auto ret = ImGui::Begin(LABEL(label), nullptr, flag);
     if (p_open_boundp)
       p_open(n);
     return ret;
@@ -139,8 +140,8 @@ value set_io_config_flags(value io,value flag) {
                    // value window_flags
                    ) {
     if (id.string_p()) {
-      const char* str_id=id;
-      return ImGui::BeginChild(str_id, ImVec2(0, 0),
+      std::string str_id=id;
+      return ImGui::BeginChild(LABEL(id), ImVec2(0, 0),
                                ImGuiChildFlags_AutoResizeX |
                                    ImGuiChildFlags_AutoResizeY |
                                    ImGuiChildFlags_Border);
@@ -161,7 +162,7 @@ value set_io_config_flags(value io,value flag) {
   value BeginTabBar(value id, value flags) {
     if (flags.unboundp())
       flags=0;
-    return ImGui::BeginTabBar(id,flags);
+    return ImGui::BeginTabBar(LABEL(id),flags);
   }
   value EndTabBar() {
     ImGui::EndTabBar();
@@ -170,7 +171,7 @@ value set_io_config_flags(value io,value flag) {
 
   value BeginTabItem(value id// ,value p_open, value flags
                      ) {
-    return ImGui::BeginTabItem(id);
+    return ImGui::BeginTabItem(LABEL(id));
   }
   value EndTabItem() {
     ImGui::EndTabItem();
@@ -190,7 +191,7 @@ value set_io_config_flags(value io,value flag) {
   }
 
   value BeginCombo(value label, value preview_value) {
-    return ImGui::BeginCombo(label, preview_value);
+    return ImGui::BeginCombo(LABEL(label), LABEL(preview_value));
   }
   value EndCombo() {
     ImGui::EndCombo();
@@ -205,7 +206,7 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
   value BeginListBox(value label, value width,value height) {
-    return ImGui::BeginListBox(label,ImVec2(width, height));
+    return ImGui::BeginListBox(LABEL(label),ImVec2(width, height));
   }
   value EndListBox() {
     ImGui::EndListBox();
@@ -213,7 +214,7 @@ value set_io_config_flags(value io,value flag) {
   }
 
   value BeginMenu(value label,value enabled) {
-    return ImGui::BeginMenu(label, enabled);
+    return ImGui::BeginMenu(LABEL(label), enabled);
   }
   value EndMenu() {
     ImGui::EndMenu();
@@ -231,17 +232,24 @@ value set_io_config_flags(value io,value flag) {
     ImGui::Spacing();
     return SCM_UNSPECIFIED;
   }
-  value InputText(value label,value buf,value buf_size,value flags) {
-    char *buff = buf();
-    maybe_set(flags, 0);
-    auto ret=ImGui::InputText(label,buff,buf_size,flags);
+  value InputText(value label,value buf,value flags) {
+    std::string buff = buf();
+    auto ret=ImGui::InputText(LABEL(label),&buff,flags);
+    buf(buff);
+    return ret;
+  }
+  value InputTextWithHint(value label,value hint,value buf,value flags) {
+    std::string buff = buf();
+    auto ret = ImGui::InputTextWithHint(LABEL(label),
+                                        LABEL(hint),
+                                        &buff,flags);
     buf(buff);
     return ret;
   }
   value SliderInt(value label, value v, value v_min, value v_max, value flags) {
     maybe_set(flags, 0);
     int n = v();
-    auto ret = ImGui::SliderInt(label, &n, v_min, v_max, "%d", flags);
+    auto ret = ImGui::SliderInt(LABEL(label), &n, v_min, v_max, "%d", flags);
     v(n);
     return ret;
   }
@@ -252,17 +260,17 @@ value set_io_config_flags(value io,value flag) {
     maybe_set(v_min, 0);
     maybe_set(v_max, 0);
     maybe_set(flags, 0);
-    auto ret = ImGui::DragInt(label, &n, v_speed, v_min, v_max, "%d", flags);
+    auto ret = ImGui::DragInt(LABEL(label), &n, v_speed, v_min, v_max, "%d", flags);
     v(n);
     return ret;
   }
   value BeginItemTooltip() { return ImGui::BeginItemTooltip(); }
   value MenuItem(value label, value shortcut, value selected, value enabled) {
-    return ImGui::MenuItem(label,shortcut,selected,enabled);
+    return ImGui::MenuItem(LABEL(label),LABEL(shortcut),selected,enabled);
   }
 
   value text(value str) {
-    ImGui::TextUnformatted(str);
+    ImGui::TextUnformatted(LABEL(str));
     return SCM_UNSPECIFIED;
   }
   value TextColored(value col, value str) {
@@ -278,7 +286,7 @@ value set_io_config_flags(value io,value flag) {
 
       if (overlay_boundp) {
         ImGui::ProgressBar(fraction, ImVec2(size_arg.car(), size_arg.cdr()),
-                           overlay);
+                           LABEL(overlay));
       } else {
         ImGui::ProgressBar(fraction,ImVec2(size_arg.car(),size_arg.cdr()));
       }
@@ -288,9 +296,9 @@ value set_io_config_flags(value io,value flag) {
     }
     return SCM_UNSPECIFIED;
   }
-  value TextLink(value label) { return ImGui::TextLink(label); }
+  value TextLink(value label) { return ImGui::TextLink(LABEL(label)); }
   value TextLinkOpenURL(value label,value url) {
-    ImGui::TextLinkOpenURL(label, url);
+    ImGui::TextLinkOpenURL(LABEL(label), LABEL(url));
     return SCM_UNSPECIFIED;
   }
   value Indent(value indent_w) {
@@ -316,10 +324,12 @@ value set_io_config_flags(value io,value flag) {
       ImGui::OpenPopup(scm_to_unsigned_integer(id,0,INT_MAX));
     return SCM_UNSPECIFIED;
   }
-  value BeginPopup(value label) { return ImGui::BeginPopup(label); }
+  value BeginPopup(value label) {
+    return ImGui::BeginPopup(LABEL(label));
+}
   value BeginPopupModal(value label,value p_open) {
     bool open=p_open();
-    auto ret = ImGui::BeginPopupModal(label, &open);
+    auto ret = ImGui::BeginPopupModal(LABEL(label), &open);
     p_open(open);
     return ret;
   }
@@ -331,21 +341,21 @@ value set_io_config_flags(value io,value flag) {
   }
 
   value Checkbox(value label,value state) {
-    bool v=state();
-    auto ret = ImGui::Checkbox(label, &v);
+    bool v = state();
+    auto ret = ImGui::Checkbox(LABEL(label), &v);
     state(v);
     return ret;
   }
 
   value InputFloat(value label,value v,value step, value step_fast) {
     float val=v();
-    auto ret = ImGui::InputFloat(label, &val, step, step_fast);
+    auto ret = ImGui::InputFloat(LABEL(label), &val, step, step_fast);
     v(val);
     return value(ret);
   }
   value InputInt(value label,value v,value step, value step_fast) {
     int val=v();
-    auto ret = ImGui::InputInt(label, &val, step, step_fast);
+    auto ret = ImGui::InputInt(LABEL(label), &val, step, step_fast);
     v(val);
     return value(ret);
   }
@@ -368,13 +378,13 @@ value set_io_config_flags(value io,value flag) {
     ImGui::Bullet();
     return SCM_UNSPECIFIED;
   }
-  value Button(value label) { return ImGui::Button(label); }
-  value SmallButton(value label) { return ImGui::SmallButton(label); }
+  value Button(value label) { return ImGui::Button(LABEL(label)); }
+  value SmallButton(value label) { return ImGui::SmallButton(LABEL(label)); }
   value Selectable(value label, value selected) {
     bool selectedp=false;
     if (selected.is_procedure_p())
       selectedp = selected();
-    auto ret = ImGui::Selectable(label, &selectedp);
+    auto ret = ImGui::Selectable(LABEL(label), &selectedp);
     if (selected.is_procedure_p())
       selected(selectedp);
     return value(ret);
@@ -432,7 +442,7 @@ value set_io_config_flags(value io,value flag) {
           return ImGui_ImplOpenGL3_Init();
         else {
           //std::cout << "glsl_version: " << glsl_version << std::endl;
-          return ImGui_ImplOpenGL3_Init(glsl_version);
+          return ImGui_ImplOpenGL3_Init(LABEL(glsl_version));
         }
       }
       value Shutdown(){
@@ -541,7 +551,8 @@ extern "C" {
     scm_c_define_gsubr("get-font-size", 0, 0, 0, (scm_t_subr)im::GetFontSize);
     scm_c_define_gsubr("separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
-    scm_c_define_gsubr("input-text", 3, 1, 0, (scm_t_subr)im::InputText);
+    scm_c_define_gsubr("%input-text", 3, 0, 0, (scm_t_subr)im::InputText);
+    scm_c_define_gsubr("input-text-with-hint", 4, 0, 0, (scm_t_subr)im::InputTextWithHint);
     scm_c_define_gsubr("newline", 0, 0, 0, (scm_t_subr)im::NewLine);
     scm_c_define_gsubr("bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
     scm_c_define_gsubr("button", 1, 0, 0, (scm_t_subr)im::Button);
