@@ -42,7 +42,8 @@ namespace guile {
     value(std::string str) { value_ = scm_from_locale_string(str.c_str()); };
     SCM get() const {return value_;};
     bool unboundp() const {return SCM_UNBNDP(value_);};
-    bool boundp() const {return !unboundp();};
+    bool boundp() const { return !unboundp(); };
+    bool string_p() const {return scm_to_bool(scm_string_p(value_));};
     operator SCM () const {return value_;}
     operator int32_t () const {return scm_to_int32(value_);}
     operator int16_t() const { return scm_to_int16(value_); }
@@ -214,6 +215,29 @@ value set_io_config_flags(value io,value flag) {
     ImGui::End();
     return SCM_UNSPECIFIED;
   }
+  value BeginChild(value id// , value size, value child_flags,
+                   // value window_flags
+                   ) {
+    if (id.string_p()) {
+      const char* str_id=id;
+      return ImGui::BeginChild(str_id, ImVec2(0, 0),
+                               ImGuiChildFlags_AutoResizeX |
+                                   ImGuiChildFlags_AutoResizeY |
+                                   ImGuiChildFlags_Border);
+
+    } else {
+      ImGuiID iid=id;
+      return ImGui::BeginChild(iid, ImVec2(0, 0),
+                               ImGuiChildFlags_AutoResizeX |
+                                   ImGuiChildFlags_AutoResizeY |
+                                   ImGuiChildFlags_Border);
+    }
+  }
+  value EndChild() {
+    ImGui::EndChild();
+    return SCM_UNSPECIFIED;
+  }
+
   value BeginMainMenuBar() { return ImGui::BeginMainMenuBar(); }
   value EndMainMenuBar() {
     ImGui::EndMainMenuBar();
@@ -314,6 +338,12 @@ value set_io_config_flags(value io,value flag) {
                         value(v));
   }
 
+  value InputFloat(value label,value v,value step, value step_fast) {
+    float val=v;
+    auto ret=ImGui::InputFloat(label,&val,step,step_fast);
+    return scm_values_2(value(ret),
+                        value(val));
+  }
   value InputInt(value label,value v,value step, value step_fast) {
     int val=v;
     auto ret=ImGui::InputInt(label,&val,step,step_fast);
@@ -413,6 +443,8 @@ extern "C" {
     IMGUI_CHECKVERSION();
     scm_c_define_gsubr("begin-window", 1, 0, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
+    scm_c_define_gsubr("begin-child", 1, 0, 0, (scm_t_subr)im::BeginChild);
+    scm_c_define_gsubr("end-child", 0, 0, 0, (scm_t_subr)im::EndChild);
     scm_c_define_gsubr("begin-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::BeginMainMenuBar);
 
@@ -445,6 +477,7 @@ extern "C" {
     scm_c_define_gsubr("unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
     scm_c_define_gsubr("checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
     scm_c_define_gsubr("input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
+    scm_c_define_gsubr("input-float", 4, 0, 0, (scm_t_subr)im::InputFloat);
     scm_c_define_gsubr("textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
     scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);

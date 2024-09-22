@@ -46,6 +46,10 @@
   (begin (when (begin-window name)
            body ...)
          (end-window)))
+(define-syntax-rule (with-child-window name body ...)
+  (begin (when (begin-child name)
+           body ...)
+         (end-child)))
 
 (define-syntax-rule (with-list-box (name x y) body ...)
   (when (begin-list-box name x y)
@@ -76,6 +80,7 @@
 
 (define checkbox-checked? #f)
 (define input-n 0)
+(define input-2 0.0)
 (define popup-select-1 #f)
 (while (not done?)
   (let loop ((event (bind:sdl-poll-event sdl-event-ptr)))
@@ -116,40 +121,46 @@
       (selectable "2" #f)
       (when (selectable "3" popup-select-1)
         (set! popup-select-1 (not popup-select-1))))
-    (with-list-box ("select" 50 1000)
-      (selectable "2" #f)
-      (selectable "2" #f)
-      (selectable "2" #f))
-    (indent)
-    (text "hello")
-
+    (with-child-window "bb"
+      (with-list-box ("select" 50 0)
+        (selectable "2" #f)
+        (selectable "2" #f)
+        (selectable "2" #f)))
     (sameline)
-    (bullet)
-    (text (get-version))
-    (unindent)
     (group
+     (indent)
+     (text "hello")
+
+     (sameline)
+     (bullet)
+     (text (get-version))
+     (unindent)
      (let ((cliceed state (checkbox "check heerer!" checkbox-checked?))
-           (cliceed-i state2 (input-int "input int:" input-n 1 100)))
+           (cliceed-i state2 (input-int (format #f "value is ~a" input-n) input-n 1 100))
+           (cliceed-2 state3 (input-float (format #f "value is ~a" input-2) input-2 20 100)))
        (when (button "hello:")
          (open-popup "a-popup"))
        (when cliceed
          (set! checkbox-checked? state))
        (when cliceed-i
          (set! input-n state2))
+       (when cliceed-2
+         (set! input-2 state3))
        (when checkbox-checked?
          (sameline 0 50)
-         (text "world"))))
-    (small-button ">")
-    (sameline)
-    (selectable "h" #f)
-    (when checkbox-checked?
-      (item-tooltip
-       (text "tooltip")))
+         (text "world")))
+     (small-button ">")
+     (sameline)
+     (selectable "h" #f)
+     (when checkbox-checked?
+       (item-tooltip
+        (text "tooltip")))
 
-    (when (textlink "https//a不过")
-      (pk 'clock)
-      (set! done? #t))
-    (textlink-open-url "author" "https://github.com/z572")
+     (when (textlink "https//a不过")
+       (pk 'clock)
+       (set! done? #t))
+     (textlink-open-url "author" "https://github.com/z572"))
+
     (separator)
     (newline))
 
@@ -169,6 +180,7 @@
 
 ;; Local Variables:
 ;; eval: (put 'with-window 'scheme-indent-function 1)
+;; eval: (put 'with-child-window 'scheme-indent-function 1)
 ;; eval: (put 'with-menu 'scheme-indent-function 1)
 ;; eval: (put 'with-popup 'scheme-indent-function 1)
 ;; eval: (put 'with-list-box 'scheme-indent-function 1)
