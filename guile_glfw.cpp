@@ -51,7 +51,7 @@ value SwapInterval(value interval) {
     return SCM_UNSPECIFIED;
   }
   } // namespace GGLFW
-#define defconst(v) scm_c_define(#v,scm_from_int(v))
+
 extern "C" {
 
 void init_glfw() {

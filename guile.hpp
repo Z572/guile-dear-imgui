@@ -17,6 +17,7 @@
 #include <string>
 #include <iostream>
 
+#define defconst(v) scm_c_define(#v,scm_from_int(v))
 namespace guile {
   class value {
   public:
