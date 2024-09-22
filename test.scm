@@ -37,7 +37,7 @@
  ((@@ (sdl2 video) unwrap-window) s-window)
  ((@@ (sdl2 video) unwrap-gl-context) s-context))
 (impl:opengl3:init)
-(define done? #f)
+(define done? (make-parameter #f))
 
 (define %sdl-event ((@@ (sdl2 events) make-sdl-event)))
 (define sdl-event-ptr (ffi:bytevector->pointer %sdl-event))
@@ -82,11 +82,11 @@
     body ...
     (end-tooltip)))
 
-(define checkbox-checked? #f)
-(define input-n 0)
-(define input-2 0.0)
-(define popup-select-1 #f)
-(while (not done?)
+(define checkbox-checked? (make-parameter #f))
+(define input-n (make-parameter 0))
+(define input-2 (make-parameter 0.0))
+(define select-1 (make-parameter #f))
+(while (not (done?))
   (let loop ((event (bind:sdl-poll-event sdl-event-ptr)))
     ;; (when event (pk 'event event))
     ;; (when event
@@ -105,7 +105,7 @@
      (car n)
      (cdr n)))
   (set-next-window-pos 0 0 0 0 0)
-  (when (and checkbox-checked?
+  (when (and (checkbox-checked?)
              (begin-main-menu-bar))
     (with-menu ("hh" #t)
       (menu-item "bf" "Ctrl+N" #t #t)
@@ -114,18 +114,17 @@
         (menu-item "2" "bb" #f #t)))
     (when (menu-item "hello" "Ctrl+N" #f #t)
       (pk 'clock)
-      (set! done? #t))
+      (done? #t))
     (end-main-menu-bar))
 
   (with-window "aba"
     (with-popup ("a-popup")
       (text "select1")
-      (selectable "2" #f)
-      (when (selectable "3" popup-select-1)
-        (set! popup-select-1 (not popup-select-1))))
+      (selectable "1" #f)
+      (selectable "3" #f))
     (with-child-window "bb"
       (with-list-box ("select" 50 0)
-        (selectable "2" #f)
+        (selectable "clock" select-1)
         (selectable "2" #f)
         (selectable "2" #f)))
     (sameline)
@@ -137,34 +136,28 @@
      (bullet)
      (text (get-version))
      (unindent)
-     (let ((cliceed state (checkbox "check heerer!" checkbox-checked?))
-           (cliceed-i state2 (input-int (format #f "value is ~a" input-n) input-n 1 100))
-           (cliceed-2 state3 (input-float (format #f "value is ~a" input-2) input-2 20 100)))
+     (let ((cliceed (checkbox "check heerer!" checkbox-checked?))
+           (cliceed-i (input-int (format #f "value is ~a" (input-n)) input-n 1 100))
+           (cliceed-2 (input-float (format #f "value is ~a" (input-2)) input-2 20 100)))
        (with-combo ("combo" "2")
          (selectable "c" #f)
          (selectable "b" #f)
          (selectable "d" #f))
        (when (button "hello:")
          (open-popup "a-popup"))
-       (when cliceed
-         (set! checkbox-checked? state))
-       (when cliceed-i
-         (set! input-n state2))
-       (when cliceed-2
-         (set! input-2 state3))
-       (when checkbox-checked?
+       (when (checkbox-checked?)
          (sameline 0 50)
          (text "world")))
      (small-button ">")
      (sameline)
      (selectable "h" #f)
-     (when checkbox-checked?
+     (when (checkbox-checked?)
        (item-tooltip
         (text "tooltip")))
 
      (when (textlink "https//a不过")
        (pk 'clock)
-       (set! done? #t))
+       (done? #t))
      (textlink-open-url "author" "https://github.com/z572"))
 
     (newline)

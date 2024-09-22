@@ -39,6 +39,8 @@ namespace guile {
     bool unboundp() const {return SCM_UNBNDP(value_);};
     bool boundp() const { return !unboundp(); };
     bool string_p() const {return scm_to_bool(scm_string_p(value_));};
+    bool is_bool_p() const {return scm_is_bool(value_);};
+    bool is_procedure_p() const {return scm_is_true(scm_procedure_p(value_));};
     operator SCM () const {return value_;}
     operator int32_t () const {return scm_to_int32(value_);}
     operator int16_t() const { return scm_to_int16(value_); }

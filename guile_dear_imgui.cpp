@@ -239,9 +239,10 @@ value set_io_config_flags(value io,value flag) {
   }
   value BeginPopup(value label) { return ImGui::BeginPopup(label); }
   value BeginPopupModal(value label,value p_open) {
-    bool open=p_open;
-    auto ret=ImGui::BeginPopupModal(label,&open);
-    return scm_values_2(value(ret), value(open));
+    bool open=p_open();
+    auto ret = ImGui::BeginPopupModal(label, &open);
+    p_open(open);
+    return ret;
   }
 
 
@@ -251,23 +252,23 @@ value set_io_config_flags(value io,value flag) {
   }
 
   value Checkbox(value label,value state) {
-    bool v=state;
-    auto ret=ImGui::Checkbox(label,&v);
-    return scm_values_2(value(ret),
-                        value(v));
+    bool v=state();
+    auto ret = ImGui::Checkbox(label, &v);
+    state(v);
+    return ret;
   }
 
   value InputFloat(value label,value v,value step, value step_fast) {
-    float val=v;
-    auto ret=ImGui::InputFloat(label,&val,step,step_fast);
-    return scm_values_2(value(ret),
-                        value(val));
+    float val=v();
+    auto ret = ImGui::InputFloat(label, &val, step, step_fast);
+    v(val);
+    return value(ret);
   }
   value InputInt(value label,value v,value step, value step_fast) {
-    int val=v;
-    auto ret=ImGui::InputInt(label,&val,step,step_fast);
-    return scm_values_2(value(ret),
-                        value(val));
+    int val=v();
+    auto ret = ImGui::InputInt(label, &val, step, step_fast);
+    v(val);
+    return value(ret);
   }
 
   value SameLine(value x,value s) {
@@ -291,9 +292,13 @@ value set_io_config_flags(value io,value flag) {
   value Button(value label) { return ImGui::Button(label); }
   value SmallButton(value label) { return ImGui::SmallButton(label); }
   value Selectable(value label, value selected) {
-    bool selectedp = selected;
-    auto ret=ImGui::Selectable(label, &selectedp);
-    return scm_values_2(value(ret), value(selectedp));
+    bool selectedp=false;
+    if (selected.is_procedure_p())
+      selectedp = selected();
+    auto ret = ImGui::Selectable(label, &selectedp);
+    if (selected.is_procedure_p())
+      selected(selectedp);
+    return value(ret);
   }
 
   namespace impl {
