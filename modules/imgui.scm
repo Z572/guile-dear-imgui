@@ -38,6 +38,7 @@
             menu-item
             button
             small-button
+            progress-bar
             textlink
             textlink-open-url
             separator

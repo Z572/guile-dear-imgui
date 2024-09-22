@@ -136,6 +136,7 @@
        (when (checkbox-checked?)
          (item-tooltip
           (text "tooltip")))
+       (progress-bar 0.5 (cons 0 0) "hov")
 
        (when (textlink "https//a不过")
          (pk 'clock)

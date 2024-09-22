@@ -210,6 +210,23 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TextUnformatted(str);
     return SCM_UNSPECIFIED;
   }
+  value ProgressBar(value fraction, value size_arg, value overlay) {
+    auto size_arg_boundp=size_arg.boundp();
+    if (size_arg_boundp) {
+      auto overlay_boundp = overlay.boundp();
+
+      if (overlay_boundp) {
+        ImGui::ProgressBar(fraction, ImVec2(size_arg.car(), size_arg.cdr()),
+                           overlay);
+      } else {
+        ImGui::ProgressBar(fraction,ImVec2(size_arg.car(),size_arg.cdr()));
+      }
+    }
+    else {
+      ImGui::ProgressBar(fraction);
+    }
+    return SCM_UNSPECIFIED;
+  }
   value TextLink(value label) { return ImGui::TextLink(label); }
   value TextLinkOpenURL(value label,value url) {
     ImGui::TextLinkOpenURL(label, url);
@@ -422,6 +439,7 @@ extern "C" {
     scm_c_define_gsubr("checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
     scm_c_define_gsubr("input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
     scm_c_define_gsubr("input-float", 4, 0, 0, (scm_t_subr)im::InputFloat);
+    scm_c_define_gsubr("progress-bar", 1, 2, 0, (scm_t_subr)im::ProgressBar);
     scm_c_define_gsubr("textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
     scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
