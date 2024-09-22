@@ -233,7 +233,14 @@ value set_io_config_flags(value io,value flag) {
     ImGui::Spacing();
     return SCM_UNSPECIFIED;
   }
-
+  value SliderInt(value label, value v, value v_min, value v_max, value flags) {
+    if (flags.unboundp())
+      flags=0;
+    int n = v();
+    auto ret = ImGui::SliderInt(label, &n, v_min, v_max, "%d", flags);
+    v(n);
+    return ret;
+  }
   value BeginItemTooltip() { return ImGui::BeginItemTooltip(); }
   value MenuItem(value label, value shortcut, value selected, value enabled) {
     return ImGui::MenuItem(label,shortcut,selected,enabled);
@@ -505,6 +512,7 @@ extern "C" {
     scm_c_define_gsubr("textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
     scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
+    scm_c_define_gsubr("slider-int", 4, 1, 0, (scm_t_subr)im::SliderInt);
     scm_c_define_gsubr("open-popup", 1, 0, 0, (scm_t_subr)im::OpenPopup);
     scm_c_define_gsubr("begin-popup", 1, 0, 0, (scm_t_subr)im::BeginPopup);
     scm_c_define_gsubr("begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);

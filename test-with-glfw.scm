@@ -28,7 +28,8 @@
   (let ((w (make-window
             #:size '(1280 720)
             #:title "GLFW+OpenGL3 example"))
-        (input-i (make-parameter 0)))
+        (input-i (make-parameter 0))
+        (slider-int-p (make-parameter 0)))
     (make-context-current w)
     (set-swap-interval! 'vsync)
     (create-context)
@@ -46,7 +47,8 @@
       (with-window ("main" #f ImGuiWindowFlags_AlwaysAutoResize)
         (tab-bar ("bar1")
           (tab-item ("bar2")
-            (input-int "hello!" input-i 1 100))
+            (input-int "hello!" input-i 1 100)
+            (slider-int "slider" slider-int-p 1 100))
           (tab-item ("bar0")
             (progress-bar 0.5 (cons 0 0) "hov"))))
 

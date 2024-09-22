@@ -39,6 +39,7 @@
             ;; end-tab-bar
             ;; begin-tab-item
             ;; end-tab-item
+            slider-int
             menu-item
             button
             small-button
