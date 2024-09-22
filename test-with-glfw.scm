@@ -11,10 +11,9 @@
   (impl:glfw:new-frame))
 
 (define (do-render)
-  (set-gl-clear-color 0 0 0 240)
+  (set-gl-clear-color 0 0 0 0.5)
   (gl-clear (clear-buffer-mask color-buffer depth-buffer))
-  (impl:opengl3:render-draw-data)
-  )
+  (impl:opengl3:render-draw-data))
 
 (define (init w)
   (impl:glfw:init-opengl
@@ -25,6 +24,7 @@
 (when (glfwinit)
   (glfwwindowhint GLFW_CONTEXT_VERSION_MAJOR 3)
   (glfwwindowhint GLFW_CONTEXT_VERSION_MINOR 0)
+  (glfwwindowhint GLFW_TRANSPARENT_FRAMEBUFFER 1)
   (let ((w (make-window
             #:size '(1280 720)
             #:title "GLFW+OpenGL3 example"))

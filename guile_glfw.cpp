@@ -55,6 +55,7 @@ value SwapInterval(value interval) {
 extern "C" {
 
 void init_glfw() {
+  defconst(GLFW_TRANSPARENT_FRAMEBUFFER);
   defconst(GLFW_CONTEXT_VERSION_MAJOR);
   defconst(GLFW_CONTEXT_CREATION_API);
   defconst(GLFW_CONTEXT_NO_ERROR);
