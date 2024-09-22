@@ -8,7 +8,7 @@
             make-window
             make-context-current
             ;;glfwmakecontextcurrent
-            swap-interval
+            set-swap-interval!
             window-should-close?
             ;; glfwwindowshouldclose
             poll-events
@@ -50,3 +50,10 @@
   (glfwmakecontextcurrent (maybe-unwrap-window w)))
 (define (swap-buffers w)
   (glfwswapbuffers (maybe-unwrap-window w)))
+
+(define (set-swap-interval! interval)
+  (swap-interval (case interval
+                   ('immediate 0)
+                   ('vsync 1)
+                   ('late-swap-tear -1)
+                   (else interval))))

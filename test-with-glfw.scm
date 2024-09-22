@@ -30,7 +30,7 @@
             #:title "GLFW+OpenGL3 example"))
         (input-i (make-parameter 0)))
     (make-context-current w)
-    (swap-interval 1)
+    (set-swap-interval! 'vsync)
     (create-context)
     (init w)
 
