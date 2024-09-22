@@ -38,7 +38,7 @@ else
 endif
 
 
-shlib = shared_module('guile_dear_imgui', 'guile_dear_imgui.cpp',
+shlib = shared_module('guile_dear_imgui', ['guile_dear_imgui.cpp', 'guile.hpp'],
   install : true,
   cpp_args : lib_args,
   dependencies : [guile_dep,dearimgui_dep,sdl2_dep],

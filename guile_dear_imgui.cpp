@@ -2,7 +2,7 @@
 #include <climits>
 #include <cstdint>
 #include <exception>
-#include <guile_dear_imgui.hpp>
+#include <guile.hpp>
 #include <imgui.h>
 #include <imgui/backends/imgui_impl_sdl2.h>
 #include <imgui/backends/imgui_impl_opengl2.h>
