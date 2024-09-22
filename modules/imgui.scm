@@ -33,6 +33,9 @@
             input-float
             begin-combo
             end-combo
+            begin-main-menu-bar
+            end-main-menu-bar
+            menu-item
             button
             small-button
             textlink
@@ -57,7 +60,8 @@
                    with-combo
                    with-menu
                    with-popup
-                   with-list-box))
+                   with-list-box
+                   item-tooltip))
 
 (define-wrapped-pointer-type <context>
   context?
