@@ -65,6 +65,10 @@
   (when (begin-tooltip)
     body ...
     (end-tooltip)))
+(define-syntax-rule (with-combo (label preview_value ) body ...)
+  (when (begin-combo label preview_value)
+    body ...
+    (end-combo)))
 (define-syntax-rule (with-menu (label act) body ...)
   (when (begin-menu label act)
     body ...
@@ -99,9 +103,7 @@
   (let ((n (io-display-size io)))
     (set-next-window-size
      (car n)
-     (cdr n)
-     ;; 1000 200
-     ))
+     (cdr n)))
   (set-next-window-pos 0 0 0 0 0)
   (when (and checkbox-checked?
              (begin-main-menu-bar))
@@ -138,6 +140,10 @@
      (let ((cliceed state (checkbox "check heerer!" checkbox-checked?))
            (cliceed-i state2 (input-int (format #f "value is ~a" input-n) input-n 1 100))
            (cliceed-2 state3 (input-float (format #f "value is ~a" input-2) input-2 20 100)))
+       (with-combo ("combo" "2")
+         (selectable "c" #f)
+         (selectable "b" #f)
+         (selectable "d" #f))
        (when (button "hello:")
          (open-popup "a-popup"))
        (when cliceed
@@ -161,8 +167,8 @@
        (set! done? #t))
      (textlink-open-url "author" "https://github.com/z572"))
 
-    (separator)
-    (newline))
+    (newline)
+    (separator))
 
   (render)
 
@@ -184,4 +190,5 @@
 ;; eval: (put 'with-menu 'scheme-indent-function 1)
 ;; eval: (put 'with-popup 'scheme-indent-function 1)
 ;; eval: (put 'with-list-box 'scheme-indent-function 1)
+;; eval: (put 'with-combo 'scheme-indent-function 1)
 ;; End:

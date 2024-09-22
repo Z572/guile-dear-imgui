@@ -249,6 +249,14 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
 
+  value BeginCombo(value label, value preview_value) {
+    return ImGui::BeginCombo(label, preview_value);
+  }
+  value EndCombo() {
+    ImGui::EndCombo();
+    return SCM_UNSPECIFIED;
+  }
+
   value BeginGroup() {
     ImGui::BeginGroup();
     return SCM_UNSPECIFIED;}
@@ -468,6 +476,10 @@ extern "C" {
                        (scm_t_subr)im::BeginItemTooltip);
     scm_c_define_gsubr("end-tooltip", 0, 0, 0,
                        (scm_t_subr)im::EndTooltip);
+    scm_c_define_gsubr("begin-combo", 2, 0, 0,
+                       (scm_t_subr)im::BeginCombo);
+    scm_c_define_gsubr("end-combo", 0, 0, 0,
+                       (scm_t_subr)im::EndCombo);
     scm_c_define_gsubr("menu-item", 4, 0, 0,
                        (scm_t_subr)im::MenuItem);
     scm_c_define_gsubr("set-next-window-size", 2, 0, 0,
