@@ -33,7 +33,7 @@
     (init w)
 
     (while (not (glfwwindowshouldclose w))
-      (glfwpollevents)
+      (poll-events)
       (do-new-frame)
       (new-frame)
 

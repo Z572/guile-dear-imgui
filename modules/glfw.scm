@@ -7,9 +7,10 @@
             glfwmakecontextcurrent
             glfwswapinterval
             glfwwindowshouldclose
-            glfwpollevents
+            poll-events
             glfwswapbuffers
             glfwdestroywindow
             glfwterminate))
 
 (load-extension "build/libguile_glfw.so" "init_glfw")
+

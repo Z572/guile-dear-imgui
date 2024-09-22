@@ -67,7 +67,7 @@ void init_glfw() {
                        (scm_t_subr)GGLFW::WindowHint);
     scm_c_define_gsubr("glfwwindowshouldclose", 1, 0, 0,
                        (scm_t_subr)GGLFW::WindowShouldClose);
-    scm_c_define_gsubr("glfwpollevents", 0, 0, 0,
+    scm_c_define_gsubr("poll-events", 0, 0, 0,
                        (scm_t_subr)GGLFW::PollEvents);
     scm_c_define_gsubr("glfwswapbuffers", 1, 0, 0,
                        (scm_t_subr)GGLFW::SwapBuffers);
