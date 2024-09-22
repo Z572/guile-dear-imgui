@@ -250,6 +250,12 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TextUnformatted(str);
     return SCM_UNSPECIFIED;
   }
+  value TextColored(value col, value str) {
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col[0],col[1],col[2],col[3]));
+    text(str);
+    ImGui::PopStyleColor();
+    return SCM_UNSPECIFIED;
+  }
   value ProgressBar(value fraction, value size_arg, value overlay) {
     auto size_arg_boundp=size_arg.boundp();
     if (size_arg_boundp) {
@@ -503,6 +509,7 @@ extern "C" {
     scm_c_define_gsubr("render", 0, 0, 0, (scm_t_subr)im::Render);
     scm_c_define_gsubr("new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
     scm_c_define_gsubr("text", 1, 0, 0, (scm_t_subr)im::text);
+    scm_c_define_gsubr("text-colored", 2, 0, 0, (scm_t_subr)im::TextColored);
     scm_c_define_gsubr("indent", 0, 1, 0, (scm_t_subr)im::Indent);
     scm_c_define_gsubr("unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
     scm_c_define_gsubr("checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);

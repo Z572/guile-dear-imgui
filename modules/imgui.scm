@@ -24,6 +24,7 @@
             indent
             unindent
             text
+            text-colored
             newline
             get-font-size
             bullet

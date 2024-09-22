@@ -47,6 +47,7 @@
       (with-window ("main" #f ImGuiWindowFlags_AlwaysAutoResize)
         (tab-bar ("bar1")
           (tab-item ("bar2")
+            (text-colored '(1 0 0 1) "R:") (sameline)
             (input-int "hello!" input-i 1 100)
             (slider-int "slider" slider-int-p 1 100))
           (tab-item ("bar0")
