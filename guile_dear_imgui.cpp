@@ -232,8 +232,7 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
   value SliderInt(value label, value v, value v_min, value v_max, value flags) {
-    if (flags.unboundp())
-      flags=0;
+    maybe_set(flags, 0);
     int n = v();
     auto ret = ImGui::SliderInt(label, &n, v_min, v_max, "%d", flags);
     v(n);
