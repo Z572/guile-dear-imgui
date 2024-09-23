@@ -489,6 +489,17 @@ extern "C" {
     defconst(ImGuiWindowFlags_NoNav);
     defconst(ImGuiWindowFlags_NoDecoration);
     defconst(ImGuiWindowFlags_NoInputs);
+
+    defconst(ImGuiConfigFlags_None);
+    defconst(ImGuiConfigFlags_NavEnableGamepad);
+    defconst(ImGuiConfigFlags_NavEnableGamepad);
+    defconst(ImGuiConfigFlags_NavEnableSetMousePos);
+    defconst(ImGuiConfigFlags_NavNoCaptureKeyboard);
+    defconst(ImGuiConfigFlags_NoMouse);
+    defconst(ImGuiConfigFlags_NoMouseCursorChange);
+    defconst(ImGuiConfigFlags_NoKeyboard);
+    defconst(ImGuiConfigFlags_IsSRGB);
+    defconst(ImGuiConfigFlags_IsTouchScreen);
     scm_c_define_gsubr("begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("begin-child", 1, 0, 0, (scm_t_subr)im::BeginChild);
