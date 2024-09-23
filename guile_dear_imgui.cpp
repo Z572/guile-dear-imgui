@@ -376,6 +376,22 @@ value set_io_config_flags(value io,value flag) {
     col(scm_list_4(value(colors[0]),value(colors[1]),value(colors[2]),value(colors[3])));
     return ret;
   }
+    value ColorEdit3(value label, value col, value flags) {
+    maybe_set(flags, 0);
+    auto v=col();
+    float colors[3] = {v[0],v[1],v[2]};
+    auto ret = ImGui::ColorEdit3(LABEL(label), colors, flags);
+    col(scm_list_3(value(colors[0]),value(colors[1]),value(colors[2])));
+    return ret;
+  }
+  value ColorEdit4(value label, value col, value flags) {
+    maybe_set(flags, 0);
+    auto v=col();
+    float colors[4] = {v[0],v[1],v[2],v[3]};
+    auto ret = ImGui::ColorEdit4(LABEL(label), colors, flags);
+    col(scm_list_4(value(colors[0]),value(colors[1]),value(colors[2]),value(colors[3])));
+    return ret;
+  }
   value SameLine(value x,value s) {
 
     float offset_from_start_x = 0.0f, spacing = -1.0f;
@@ -567,6 +583,8 @@ extern "C" {
     scm_c_define_gsubr("progress-bar", 1, 2, 0, (scm_t_subr)im::ProgressBar);
     scm_c_define_gsubr("textlink", 1, 0, 0, (scm_t_subr)im::TextLink);
     scm_c_define_gsubr("textlink-open-url", 2, 0, 0, (scm_t_subr)im::TextLinkOpenURL);
+    scm_c_define_gsubr("color-edit3", 2, 1, 0, (scm_t_subr)im::ColorEdit3);
+    scm_c_define_gsubr("color-edit4", 2, 1, 0, (scm_t_subr)im::ColorEdit4);
     scm_c_define_gsubr("color-picker3", 2, 1, 0, (scm_t_subr)im::ColorPicker3);
     scm_c_define_gsubr("color-picker4", 2, 1, 0, (scm_t_subr)im::ColorPicker4);
     scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);

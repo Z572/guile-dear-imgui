@@ -21,6 +21,8 @@
             begin-group
             end-group
             selectable
+            color-edit3
+            color-edit4
             color-picker3
             color-picker4
             sameline
