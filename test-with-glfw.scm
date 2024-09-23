@@ -32,7 +32,8 @@
         (input-text-p (make-parameter "h"))
         (input-text-p2 (make-parameter ""))
         (slider-int-p (make-parameter 0))
-        (drag-int-p (make-parameter 0)))
+        (drag-int-p (make-parameter 0))
+        (color (make-parameter (list 0 0 0 0))))
     (make-context-current w)
     (set-swap-interval! 'vsync)
     (create-context)
@@ -66,6 +67,7 @@
                                       (number->string (cdr x)))))
                status)))
           (tab-item ("bar0")
+            (color-picker4 "color:" color)
             (progress-bar 0.5 (cons 0 0) "hov"))))
 
       (gl-viewport 0 0 100 100)

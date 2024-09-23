@@ -21,6 +21,8 @@
             begin-group
             end-group
             selectable
+            color-picker3
+            color-picker4
             sameline
             indent
             unindent
