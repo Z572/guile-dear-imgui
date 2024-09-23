@@ -16,6 +16,7 @@
             destroy-window
             terminate
             window?
+            get-cursor-pos
             unwrap-window))
 
 (define-wrapped-pointer-type <window>
@@ -50,6 +51,9 @@
   (glfwmakecontextcurrent (maybe-unwrap-window w)))
 (define (swap-buffers w)
   (glfwswapbuffers (maybe-unwrap-window w)))
+
+(define (get-cursor-pos w)
+  (%get-cursor-pos (maybe-unwrap-window w)))
 
 (define (set-swap-interval! interval)
   (swap-interval (case interval

@@ -42,6 +42,12 @@ value SwapInterval(value interval) {
     glfwGetWindowSize(o,&width,&height);
     return scm_list_2(value(width), value(height));
   }
+    value GetCursorPos(value window) {
+    auto o = static_cast<GLFWwindow *>(scm_to_pointer(window));
+    double x,y;
+    glfwGetCursorPos(o,&x,&y);
+    return scm_cons(value(x), value(y));
+  }
   value PollEvents() {
     glfwPollEvents();
     return SCM_UNSPECIFIED;
@@ -77,6 +83,8 @@ void init_glfw() {
                        (scm_t_subr)GGLFW::WindowShouldClose);
     scm_c_define_gsubr("%get-window-size", 1, 0, 0,
                        (scm_t_subr)GGLFW::GetWindowSize);
+        scm_c_define_gsubr("%get-cursor-pos", 1, 0, 0,
+                       (scm_t_subr)GGLFW::GetCursorPos);
     scm_c_define_gsubr("poll-events", 0, 0, 0,
                        (scm_t_subr)GGLFW::PollEvents);
     scm_c_define_gsubr("glfwswapbuffers", 1, 0, 0,
