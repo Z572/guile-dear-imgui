@@ -67,6 +67,15 @@ void init_glfw() {
   defconst(GLFW_CONTEXT_CREATION_API);
   defconst(GLFW_CONTEXT_NO_ERROR);
   defconst(GLFW_CONTEXT_VERSION_MINOR);
+  defconst(GLFW_DECORATED);
+  defconst(GLFW_AUTO_ICONIFY);
+  defconst(GLFW_MAXIMIZED);
+  defconst(GLFW_FLOATING);
+  defconst(GLFW_HOVERED);
+
+  defconst(GLFW_WAYLAND_PREFER_LIBDECOR);
+  defconst(GLFW_WAYLAND_DISABLE_LIBDECOR);
+  defconst(GLFW_CENTER_CURSOR);
   scm_c_define_gsubr("glfwinit", 0, 0, 0, (scm_t_subr)GGLFW::init);
   scm_c_define_gsubr("terminate", 0, 0, 0, (scm_t_subr)GGLFW::Terminate);
   scm_c_define_gsubr("glfwcreatewindow", 3, 0, 0,
