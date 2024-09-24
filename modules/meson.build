@@ -13,6 +13,7 @@ foreach src : module_sources
     input: src,
     install: true,
     install_dir: libdir / guile_compiled_module_dir,
-    output: obj
+    output: obj,
+    depends: [shlib,gglfw]
   )
 endforeach
