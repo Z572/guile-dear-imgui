@@ -430,21 +430,6 @@ value set_io_config_flags(value io,value flag) {
   }
 
   namespace impl {
-    namespace glfw {
-
-      value InitForOpenGl(value window, value install_callbacks){
-        auto w = static_cast<GLFWwindow *>(scm_to_pointer(window));
-        return ImGui_ImplGlfw_InitForOpenGL(w,install_callbacks);
-      }
-      value NewFrame(){
-        ImGui_ImplGlfw_NewFrame();
-        return SCM_UNSPECIFIED;
-      }
-      value Shutdown(){
-        ImGui_ImplGlfw_Shutdown();
-        return SCM_UNSPECIFIED;
-      }
-    }
     namespace opengl2 {
       value NewFrame(){
         ImGui_ImplOpenGL2_NewFrame();
@@ -609,21 +594,12 @@ extern "C" {
     //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
     scm_c_define_gsubr("impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);
 
-    scm_c_define_gsubr("impl:glfw:shutdown", 0, 0, 0,
-                       (scm_t_subr)im::impl::glfw::Shutdown);
-
     scm_c_define_gsubr("impl:opengl3:shutdown", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::Shutdown);
     scm_c_define_gsubr("impl:opengl3:new-frame", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::NewFrame);
     scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::RenderDrawData);
-
-    scm_c_define_gsubr("impl:glfw:init-opengl", 2, 0, 0,
-                       (scm_t_subr)im::impl::glfw::InitForOpenGl);
-    scm_c_define_gsubr("impl:glfw:new-frame", 0, 0, 0,
-                           (scm_t_subr)im::impl::glfw::NewFrame);
-
 
 }
 }

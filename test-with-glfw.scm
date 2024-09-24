@@ -2,13 +2,14 @@
 !#
 (use-modules
  (imgui)
+ (imgui backends glfw3)
  (glfw)
  (gl)
  (srfi srfi-71))
 
 (define (do-new-frame)
   (impl:opengl3:new-frame)
-  (impl:glfw:new-frame))
+  (impl:glfw3:new-frame))
 
 (define (do-render)
   (set-gl-clear-color 0 0 0 0.5)
@@ -16,7 +17,7 @@
   (impl:opengl3:render-draw-data))
 
 (define (init w)
-  (impl:glfw:init-opengl
+  (impl:glfw3:init-opengl
    (unwrap-window w)
    #t)
   (impl:opengl3:init))
@@ -78,7 +79,7 @@
       (swap-buffers w))
 
     (impl:opengl3:shutdown)
-    (impl:glfw:shutdown)
+    (impl:glfw3:shutdown)
     (destroy-context)
     (destroy-window w)
     (terminate)))
