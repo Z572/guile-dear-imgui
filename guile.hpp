@@ -17,7 +17,15 @@
 #include <string>
 #include <iostream>
 
+#if defined(DEBUG)
+#define defconst(v)                                                            \
+  std::cout << "define " #v;                                                   \
+  scm_c_define(#v, scm_from_int(v));                                           \
+  scm_c_export(#v);                                                            \
+  std::cout << " done" << std::endl
+#else
 #define defconst(v) scm_c_define(#v,scm_from_int(v)); scm_c_export(#v)
+#endif
 namespace guile {
   class value {
   public:
