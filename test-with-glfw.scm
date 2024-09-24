@@ -57,6 +57,7 @@
             (input-text "text" input-text-p )
             (input-text "text2" input-text-p2
                         #:hint "dfsdf")
+            (default-focus)
             (slider-int "slider" slider-int-p 1 100)
             (drag-int "drag" drag-int-p 1 0 100)
             (text (format #f "~a" (get-cursor-pos w)))

@@ -117,6 +117,14 @@ value set_io_config_flags(value io,value flag) {
       delete vec;
     });
   }
+  value SetItemDefaultFocus() {
+    ImGui::SetItemDefaultFocus();
+    return SCM_UNSPECIFIED;
+  }
+  value SetKeyboardFocusHere(value offset) {
+    ImGui::SetKeyboardFocusHere(offset);
+    return SCM_UNSPECIFIED;
+  }
   value new_frame() {
     ImGui::NewFrame();
     return SCM_UNSPECIFIED;
@@ -602,6 +610,8 @@ extern "C" {
     scm_c_define_gsubr("begin-popup-modal", 2, 0, 0, (scm_t_subr)im::BeginPopupModal);
     scm_c_define_gsubr("end-popup", 0, 0, 0, (scm_t_subr)im::EndPopup);
 
+    scm_c_define_gsubr("default-focus", 0, 0, 0, (scm_t_subr)im::SetItemDefaultFocus);
+    scm_c_define_gsubr("keyboard-focus-here!", 1, 0, 0, (scm_t_subr)im::SetKeyboardFocusHere);
     scm_c_define_gsubr("get-font-size", 0, 0, 0, (scm_t_subr)im::GetFontSize);
     scm_c_define_gsubr("separator", 0, 0, 0, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);

@@ -56,6 +56,8 @@
             textlink-open-url
             separator
             render
+            default-focus
+            keyboard-focus-here!
             show-font-selector
             show-style-selector
             impl:opengl3:shutdown
