@@ -1,4 +1,4 @@
-tests = ['none.scm']
+tests = ['none.scm','sdl2.scm']
 foreach t : tests
   test('test ' + t,
        pre_inst_env,
@@ -6,5 +6,6 @@ foreach t : tests
          guile,
          '--no-auto-compile',
          meson.current_source_dir() / t
-       ])
+       ],
+       env :['SDL_VIDEODRIVER=offscreen'])
 endforeach
