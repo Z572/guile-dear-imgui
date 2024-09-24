@@ -73,10 +73,10 @@ namespace im {
     return scm_list_2(value{tex_w},value{tex_h});
   }
 
-  value set_io_display_size(value io,value vec2) {
+  value set_io_display_size(value io,value w,value h) {
     ImGuiIO* c = static_cast<ImGuiIO*>(scm_to_pointer(io));
-    ImVec2 *vec = static_cast<ImVec2*>(scm_to_pointer(vec2));
-    c->DisplaySize=*vec;
+    auto vec = ImVec2(w,h);
+    c->DisplaySize=vec;
     return SCM_UNSPECIFIED;
   }
   value io_display_size(value io) {
@@ -586,7 +586,7 @@ extern "C" {
     scm_c_define_gsubr("show-style-selector", 1, 0, 0, (scm_t_subr)im::ShowStyleSelector);
     scm_c_define_gsubr("get-version", 0, 0, 0, (scm_t_subr)im::GetVersion);
     scm_c_define_gsubr("setup-font", 1, 0, 0, (scm_t_subr)im::setup_font);
-    scm_c_define_gsubr("set-io-display-size", 2, 0, 0,
+    scm_c_define_gsubr("set-io-display-size", 3, 0, 0,
                        (scm_t_subr)im::set_io_display_size);
     scm_c_define_gsubr("io-display-size", 1, 0, 0,
                        (scm_t_subr)im::io_display_size);

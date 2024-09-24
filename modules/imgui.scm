@@ -15,7 +15,7 @@
             end-popup
             begin-child
             end-child
-
+            set-io-display-size
             begin-list-box
             end-list-box
             begin-group
