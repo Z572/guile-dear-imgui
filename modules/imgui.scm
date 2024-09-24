@@ -66,10 +66,7 @@
             destroy-context
             impl:opengl3:render-draw-data
             impl:opengl3:init
-            impl:opengl3:new-frame
-            impl:glfw:init-opengl
-            impl:glfw:new-frame
-            impl:glfw:shutdown)
+            impl:opengl3:new-frame)
   #:export-syntax (group
                    with-window
                    with-child-window
