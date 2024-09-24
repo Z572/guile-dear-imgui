@@ -1,12 +1,12 @@
-module_sources = [
-  'glfw.scm',
-  'imgui.scm',
+backend_sources = [
+  'sdl2.scm',
 ]
 fs = import('fs')
-module_objects = []
-foreach src : module_sources
+backend_module_objects = []
+
+foreach src : backend_sources
   obj = fs.replace_suffix(src,'.go')
-  module_objects += custom_target(
+  backend_module_objects += custom_target(
     obj,
     command: guile_compile,
     input: src,
@@ -16,4 +16,3 @@ foreach src : module_sources
     depends: [shlib,gglfw]
   )
 endforeach
-subdir('imgui/backends')

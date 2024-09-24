@@ -61,13 +61,9 @@
             show-font-selector
             show-style-selector
             impl:opengl3:shutdown
-            impl:sdl2:shutdown
             destroy-context
             impl:opengl3:render-draw-data
-            impl:sdl2:init-opengl
             impl:opengl3:init
-            impl:sdl2:process-event
-            impl:sdl2:new-frame
             impl:opengl3:new-frame
             impl:glfw:init-opengl
             impl:glfw:new-frame

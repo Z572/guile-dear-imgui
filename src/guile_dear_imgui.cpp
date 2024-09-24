@@ -1,11 +1,9 @@
-#include "SDL_video.h"
 #include <climits>
 #include <cstdint>
 #include <exception>
 #include <guile.hpp>
 #include <imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
-#include <imgui/backends/imgui_impl_sdl2.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl2.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
@@ -17,12 +15,6 @@
 #include <iostream>
 
 #include <typeinfo>
-
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <SDL_opengles2.h>
-#else
-#include <SDL_opengl.h>
-#endif
 
 #define maybe_set(v,val) if (v.unboundp()) {v=val;}
 #define LABEL(v) std::string(v).c_str()
@@ -438,30 +430,6 @@ value set_io_config_flags(value io,value flag) {
   }
 
   namespace impl {
-    namespace sdl2 {
-
-      value InitForVulkan(value window){
-        SDL_Window* w=static_cast<SDL_Window*>(scm_to_pointer(window));
-        return ImGui_ImplSDL2_InitForVulkan(w);
-      }
-      value InitForOpenGl(value window, value gl_context){
-        SDL_Window *w = static_cast<SDL_Window *>(scm_to_pointer(window));
-        SDL_GLContext cont=static_cast<SDL_GLContext>(scm_to_pointer(gl_context));
-        return ImGui_ImplSDL2_InitForOpenGL(w,cont);
-      }
-      value NewFrame(){
-        ImGui_ImplSDL2_NewFrame();
-        return SCM_UNSPECIFIED;
-      }
-      value Shutdown(){
-        ImGui_ImplSDL2_Shutdown();
-        return SCM_UNSPECIFIED;
-      }
-      value ProcessEvent(value event) {
-        const SDL_Event* e=static_cast<SDL_Event*>(scm_to_pointer(event));
-        return ImGui_ImplSDL2_ProcessEvent(e);
-      }
-      } // namespace sdl2
     namespace glfw {
 
       value InitForOpenGl(value window, value install_callbacks){
@@ -640,21 +608,12 @@ extern "C" {
     scm_c_define_gsubr("vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
     //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
     scm_c_define_gsubr("impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);
-    scm_c_define_gsubr("impl:sdl2:init-vulkan", 0, 0, 0,
-                       (scm_t_subr)im::impl::sdl2::InitForVulkan);
-    scm_c_define_gsubr("impl:sdl2:init-opengl", 2, 0, 0,
-                       (scm_t_subr)im::impl::sdl2::InitForOpenGl);
 
-    scm_c_define_gsubr("impl:sdl2:shutdown", 0, 0, 0,
-                       (scm_t_subr)im::impl::sdl2::Shutdown);
     scm_c_define_gsubr("impl:glfw:shutdown", 0, 0, 0,
                        (scm_t_subr)im::impl::glfw::Shutdown);
-    scm_c_define_gsubr("impl:sdl2:process-event", 1, 0, 0,
-                       (scm_t_subr)im::impl::sdl2::ProcessEvent);
+
     scm_c_define_gsubr("impl:opengl3:shutdown", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::Shutdown);
-    scm_c_define_gsubr("impl:sdl2:new-frame", 0, 0, 0,
-                       (scm_t_subr)im::impl::sdl2::NewFrame);
     scm_c_define_gsubr("impl:opengl3:new-frame", 0, 0, 0,
                        (scm_t_subr)im::impl::opengl3::NewFrame);
     scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,

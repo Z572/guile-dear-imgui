@@ -2,6 +2,7 @@
 !#
 (use-modules
  (imgui)
+ (imgui backends sdl2)
  (sdl2)
  ((sdl2 bindings) #:prefix bind:)
  ((system foreign) #:prefix ffi:)

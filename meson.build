@@ -28,9 +28,6 @@ imgui_options = [
   'webgpu=disabled',
 ]
 
-
-sdl2_dep=dependency('sdl2')
-glfw_dep=dependency('glfw3')
 guile_dep=dependency('guile-3.0')
 dearimgui_dep = dependency('imgui',required: false)
 if (not dearimgui_dep.found())
