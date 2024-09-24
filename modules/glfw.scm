@@ -1,4 +1,5 @@
 (define-module (glfw)
+  #:use-module (ice-9 match)
   #:use-module (system foreign)
   #:use-module (srfi srfi-1)
   #:export (glfwinit
@@ -56,7 +57,7 @@
   (%get-cursor-pos (maybe-unwrap-window w)))
 
 (define (set-swap-interval! interval)
-  (swap-interval (case interval
+  (swap-interval (match interval
                    ('immediate 0)
                    ('vsync 1)
                    ('late-swap-tear -1)
