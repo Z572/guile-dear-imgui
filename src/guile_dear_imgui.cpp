@@ -85,6 +85,20 @@ namespace im {
     auto c=cio->DisplaySize;
     return scm_cons(scm_from_int(c.x), scm_from_int(c.y));
   }
+    value io_fonts(value io) {
+    ImGuiIO* cio = static_cast<ImGuiIO*>(scm_to_pointer(io));
+    //ImVec2 *vec = static_cast<ImVec2*>(scm_to_pointer(vec2));
+    auto c=cio->Fonts;
+    return scm_from_pointer(c,nullptr);
+  }
+  value GetTexDataAsRGBA32(value o,value b, value width, value height) {
+    auto font = static_cast<ImFontAtlas*>(scm_to_pointer(o));
+    unsigned char* tex_pixels = nullptr;
+    int n,v;
+    font->GetTexDataAsRGBA32(&tex_pixels,&n,&v);
+    return SCM_UNSPECIFIED;
+  }
+
   value SetNextWindowSize(value x,value y) {
     auto vec=ImVec2(x ,y);
     ImGui::SetNextWindowSize(vec);
@@ -590,6 +604,10 @@ extern "C" {
                        (scm_t_subr)im::set_io_display_size);
     scm_c_define_gsubr("io-display-size", 1, 0, 0,
                        (scm_t_subr)im::io_display_size);
+    scm_c_define_gsubr("io-fonts", 1, 0, 0,
+                       (scm_t_subr)im::io_fonts);
+    scm_c_define_gsubr("io-fonts-get-texdata-as-rgba32", 4, 0, 0,
+                       (scm_t_subr)im::GetTexDataAsRGBA32);
     scm_c_define_gsubr("vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
     //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
     scm_c_define_gsubr("impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);

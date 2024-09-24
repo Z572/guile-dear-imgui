@@ -16,6 +16,8 @@
             begin-child
             end-child
             set-io-display-size
+            io-fonts
+            io-fonts-get-texdata-as-rgba32
             begin-list-box
             end-list-box
             begin-group
