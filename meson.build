@@ -9,7 +9,7 @@ lib_args = ['-DBUILDING_GUILE_DEAR_IMGUI']
 
 
 imgui_options = [
-  'default_library=static',
+  'default_library=shared',
   'werror=false',
   # use 'auto_features=disabled' once available: https://github.com/mesonbuild/meson/issues/5320
   'dx9=disabled',
