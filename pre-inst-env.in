@@ -1,0 +1,13 @@
+#!/bin/sh
+
+abs_top_srcdir="`cd "@SRC_ROOT@" > /dev/null; pwd`"
+abs_top_builddir="`cd "@BUILD_ROOT@" > /dev/null; pwd`"
+
+GUILE_LOAD_COMPILED_PATH="$abs_top_builddir/${GUILE_LOAD_COMPILED_PATH:+:}$GUILE_LOAD_COMPILED_PATH"
+GUILE_LOAD_PATH="$abs_top_srcdir/:$abs_top_srcdir:$GUILE_LOAD_PATH"
+export GUILE_LOAD_COMPILED_PATH GUILE_LOAD_PATH
+LTDL_LIBRARY_PATH="$abs_top_builddir/"
+export LTDL_LIBRARY_PATH
+PATH="$abs_top_builddir/scripts:$abs_top_builddir:$PATH"
+export PATH
+exec "$@"

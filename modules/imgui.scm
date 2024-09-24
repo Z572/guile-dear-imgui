@@ -90,7 +90,7 @@
     (format p "#<context ~x>"
             (pointer-address (unwrap-context b)))))
 
-(load-extension "build/libguile_dear_imgui.so" "init_imgui")
+(load-extension "libguile_dear_imgui.so" "init_imgui")
 
 (define-syntax-rule (with-window (name args ...) body ...)
   (begin (when (begin-window name args ...)

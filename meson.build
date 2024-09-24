@@ -6,7 +6,12 @@ project('guile-dear-imgui', 'cpp',
 # not the executables that use the library.
 lib_args = ['-DBUILDING_GUILE_DEAR_IMGUI']
 
+prefix = get_option('prefix')
+bindir = get_option('bindir')
+libdir = get_option('libdir')
+datadir = get_option('datadir')
 
+guile_compiled_module_dir = 'guile' / '3.0' / 'site-ccache'
 
 imgui_options = [
   'default_library=shared',
@@ -40,6 +45,41 @@ else
 endif
 
 
+
+guild = guile_dep.get_pkgconfig_variable('guild')
+guile = guile_dep.get_pkgconfig_variable('guile')
+
+guile_warnings = [
+  '-Warity-mismatch',
+  '-Wbad-case-datum',
+  '-Wduplicate-case-datum',
+  '-Wformat',
+  '-Wunbound-variable',
+  '-Wunsupported-warning',
+  '-Wunused-toplevel',
+  '-Wunused-variable',
+]
+
+guile_compile = [
+  guild,
+  'compile',
+  guile_warnings,
+  '-o',
+  '@OUTPUT@',
+  '@INPUT@',
+]
+
+
+runner_data = configuration_data()
+runner_data.set('GUILE', guile)
+runner_data.set('SRC_ROOT', meson.source_root())
+runner_data.set('BUILD_ROOT', meson.build_root())
+
+
+pre_inst_env = configure_file(input: 'pre-inst-env.in',
+                         output: 'pre-inst-env',
+                         configuration: runner_data)
+
 shlib = shared_module('guile_dear_imgui', ['guile_dear_imgui.cpp', 'guile.hpp'],
   install : true,
   cpp_args : lib_args,
@@ -54,7 +94,7 @@ gglfw = shared_module('guile_glfw', ['guile_glfw.cpp', 'guile.hpp'],
   install_dir : guile_extension_dir
 )
 
-
+subdir('modules')
 # Make this library usable as a Meson subproject.
 guile_dear_imgui_dep = declare_dependency(
   include_directories: include_directories('.'),

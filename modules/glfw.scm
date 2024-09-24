@@ -26,7 +26,7 @@
     (format port "#<window size: ~s>"
             (window-size window))))
 
-(load-extension "build/libguile_glfw.so" "init_glfw")
+(load-extension "libguile_glfw.so" "init_glfw")
 
 (define* (make-window #:key
                       (title "Guile GLFW Window")
