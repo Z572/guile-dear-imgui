@@ -1,4 +1,4 @@
-#!/usr/bin/env -S guile -L modules
+#!/usr/bin/env -S guile
 !#
 (use-modules
  (imgui)
