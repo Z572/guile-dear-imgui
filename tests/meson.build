@@ -7,5 +7,5 @@ foreach t : tests
          '--no-auto-compile',
          meson.current_source_dir() / t
        ],
-       env :['SDL_VIDEODRIVER=offscreen'])
+       env :['SDL_VIDEODRIVER=offscreen','HOME=/tmp'])
 endforeach
