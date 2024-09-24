@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <climits>
+#include <magic_enum.hpp>
 #include <cstdint>
 #include <exception>
 #include <guile.hpp>
@@ -476,44 +478,29 @@ value set_io_config_flags(value io,value flag) {
   } // namespace im
 #undef maybe_set
 
+#define export_enum(e)                                      \
+  {                                                         \
+    constexpr auto enums = magic_enum::enum_entries<e>();   \
+    std::for_each(enums.begin(), enums.end(), [](auto o) {  \
+      const char *str = o.second.data();                    \
+      scm_c_define(str, guile::value(o.first));             \
+      scm_c_export(str);                                    \
+    });                                                     \
+  }
+
 extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
-    defconst(ImGuiWindowFlags_None);
-    defconst(ImGuiWindowFlags_NoTitleBar);
-    defconst(ImGuiWindowFlags_NoResize);
-    defconst(ImGuiWindowFlags_NoMove);
-    defconst(ImGuiWindowFlags_NoScrollbar);
-    defconst(ImGuiWindowFlags_NoScrollWithMouse);
-    defconst(ImGuiWindowFlags_NoCollapse);
-    defconst(ImGuiWindowFlags_AlwaysAutoResize);
-    defconst(ImGuiWindowFlags_NoBackground);
-    defconst(ImGuiWindowFlags_NoSavedSettings);
-    defconst(ImGuiWindowFlags_NoMouseInputs);
-    defconst(ImGuiWindowFlags_MenuBar);
-    defconst(ImGuiWindowFlags_HorizontalScrollbar);
-    defconst(ImGuiWindowFlags_NoFocusOnAppearing);
-    defconst(ImGuiWindowFlags_NoBringToFrontOnFocus);
-    defconst(ImGuiWindowFlags_AlwaysVerticalScrollbar);
-    defconst(ImGuiWindowFlags_AlwaysHorizontalScrollbar);
-    defconst(ImGuiWindowFlags_NoNavInputs);
-    defconst(ImGuiWindowFlags_NoNavFocus);
-    defconst(ImGuiWindowFlags_UnsavedDocument);
-    defconst(ImGuiWindowFlags_NoNav);
-    defconst(ImGuiWindowFlags_NoDecoration);
-    defconst(ImGuiWindowFlags_NoInputs);
+    export_enum(ImGuiWindowFlags_);
+    export_enum(ImGuiConfigFlags_);
+    export_enum(ImGuiViewportFlags_);
+    export_enum(ImGuiComboFlags_);
+    export_enum(ImGuiTreeNodeFlags_);
+    export_enum(ImGuiStyleVar_);
+    export_enum(ImGuiButtonFlags_);
+    export_enum(ImGuiColorEditFlags_);
 
-    defconst(ImGuiConfigFlags_None);
-    defconst(ImGuiConfigFlags_NavEnableGamepad);
-    defconst(ImGuiConfigFlags_NavEnableGamepad);
-    defconst(ImGuiConfigFlags_NavEnableSetMousePos);
-    defconst(ImGuiConfigFlags_NavNoCaptureKeyboard);
-    defconst(ImGuiConfigFlags_NoMouse);
-    defconst(ImGuiConfigFlags_NoMouseCursorChange);
-    defconst(ImGuiConfigFlags_NoKeyboard);
-    defconst(ImGuiConfigFlags_IsSRGB);
-    defconst(ImGuiConfigFlags_IsTouchScreen);
     scm_c_define_gsubr("begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("begin-child", 1, 0, 0, (scm_t_subr)im::BeginChild);

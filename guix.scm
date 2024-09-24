@@ -13,6 +13,7 @@
  (gnu packages)
  (gnu packages  boost)
  (gnu packages autotools)
+ (gnu packages cpp)
  (gnu packages guile)
  (gnu packages gtk)
  (gnu packages guile-xyz)
@@ -59,6 +60,7 @@
      (list pkg-config
            guile-3.0-latest))
     (inputs (list guile-3.0-latest imgui-1.91.2 sdl2 glfw-3.4
+                  magic-enum
                   ;; for example
                   guile-sdl2 guile3.0-opengl))
     (arguments
