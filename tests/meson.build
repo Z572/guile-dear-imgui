@@ -1,4 +1,4 @@
-tests = ['none.scm','sdl2.scm']
+tests = ['none.scm','sdl2.scm','glfw.scm']
 foreach t : tests
   test('test ' + t,
        pre_inst_env,
