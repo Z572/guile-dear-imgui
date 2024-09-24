@@ -56,6 +56,8 @@
             textlink-open-url
             separator
             render
+            show-font-selector
+            show-style-selector
             impl:opengl3:shutdown
             impl:sdl2:shutdown
             destroy-context

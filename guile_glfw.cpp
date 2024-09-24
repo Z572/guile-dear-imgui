@@ -92,7 +92,7 @@ void init_glfw() {
                        (scm_t_subr)GGLFW::WindowShouldClose);
     scm_c_define_gsubr("%get-window-size", 1, 0, 0,
                        (scm_t_subr)GGLFW::GetWindowSize);
-        scm_c_define_gsubr("%get-cursor-pos", 1, 0, 0,
+    scm_c_define_gsubr("%get-cursor-pos", 1, 0, 0,
                        (scm_t_subr)GGLFW::GetCursorPos);
     scm_c_define_gsubr("poll-events", 0, 0, 0,
                        (scm_t_subr)GGLFW::PollEvents);
