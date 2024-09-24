@@ -5,7 +5,10 @@ project('guile-dear-imgui', 'cpp',
 # These arguments are only used to build the shared library
 # not the executables that use the library.
 lib_args = ['-DBUILDING_GUILE_DEAR_IMGUI']
-
+ImDrawIdx=get_option('ImDrawIdx')
+if ImDrawIdx !=''
+  lib_args+='-DImDrawIdx='+ ImDrawIdx
+endif
 prefix = get_option('prefix')
 bindir = get_option('bindir')
 libdir = get_option('libdir')

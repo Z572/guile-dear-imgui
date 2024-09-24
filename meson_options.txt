@@ -1,4 +1,5 @@
 option('guile-extension-dir', type : 'string',
        description : 'guile extension dir')
+option('ImDrawIdx', type : 'string')
 option('sdl2', type : 'feature', value : 'auto')
 option('glfw3', type : 'feature', value : 'auto')
