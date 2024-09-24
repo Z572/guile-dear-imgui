@@ -79,6 +79,7 @@ pre_inst_env = configure_file(input: 'pre-inst-env.in',
 
 subdir('src')
 subdir('modules')
+subdir('tests')
 # Make this library usable as a Meson subproject.
 guile_dear_imgui_dep = declare_dependency(
   include_directories: include_directories('src'),
