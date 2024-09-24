@@ -11,6 +11,7 @@ bindir = get_option('bindir')
 libdir = get_option('libdir')
 datadir = get_option('datadir')
 
+guile_module_dir= 'guile' / 'site' / '3.0'
 guile_compiled_module_dir = 'guile' / '3.0' / 'site-ccache'
 
 imgui_options = [
@@ -98,3 +99,6 @@ pkg_mod.generate(
   libraries : shlib,
   version : '0.1',
 )
+install_subdir('modules', install_dir: datadir / guile_module_dir,
+               strip_directory: true,
+               exclude_files: ['meson.build','imgui/backends/meson.build'])
