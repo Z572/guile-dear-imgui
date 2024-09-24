@@ -32,10 +32,19 @@ imgui_options = [
   'webgpu=disabled',
 ]
 
+cpp=meson.get_compiler('cpp')
 guile_dep=dependency('guile-3.0')
 dearimgui_dep = dependency('imgui',required: false)
 if (not dearimgui_dep.found())
-  dearimgui_dep=subproject('imgui', default_options: imgui_options).get_variable('imgui_dep')
+  dearimgui_dep_from_compiler=cpp.find_library('imgui',
+                                               has_headers:'imgui.h',
+                                               required: false)
+  if dearimgui_dep_from_compiler.found()
+    dearimgui_dep = declare_dependency(dependencies: dearimgui_dep_from_compiler)
+  else
+    dearimgui_dep=subproject('imgui',
+                             default_options: imgui_options).get_variable('imgui_dep')
+  endif
 endif
 
 custom_guile_xd=get_option('guile-extension-dir')
