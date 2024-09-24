@@ -67,6 +67,7 @@ void init_glfw() {
   defconst(GLFW_CONTEXT_CREATION_API);
   defconst(GLFW_CONTEXT_NO_ERROR);
   defconst(GLFW_CONTEXT_VERSION_MINOR);
+  defconst(GLFW_VISIBLE);
   // defconst(GLFW_DECORATED);
   // defconst(GLFW_AUTO_ICONIFY);
   // defconst(GLFW_MAXIMIZED);
