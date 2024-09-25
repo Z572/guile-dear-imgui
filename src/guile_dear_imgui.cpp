@@ -457,6 +457,12 @@ extern "C" {
 
   void init_imgui() {
     IMGUI_CHECKVERSION();
+    ImGui::SetAllocatorFunctions([](size_t sz,void* user_data){
+      return scm_gc_malloc(sz,"imgui");
+    },
+      [](void* ptr, void* user_data){
+        scm_gc_free(ptr,0,"imgui:free");
+      });
     export_enum(ImGuiWindowFlags_);
     export_enum(ImGuiConfigFlags_);
     export_enum(ImGuiViewportFlags_);
