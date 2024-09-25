@@ -52,7 +52,7 @@
 (define-public guile-dear-imgui
   (package
     (name "guile-dear-imgui")
-    (version (call-with-input-file "meson.version"
+    (version (call-with-input-file (string-append %srcdir "/" "meson.version")
                get-string-all))
     (source (local-file "." "guile-dear-imgui"
                         #:recursive? #t
