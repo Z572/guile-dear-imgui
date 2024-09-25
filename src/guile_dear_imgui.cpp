@@ -470,7 +470,7 @@ extern "C" {
     export_enum(ImGuiTreeNodeFlags_);
     export_enum(ImGuiStyleVar_);
     export_enum(ImGuiButtonFlags_);
-    export_enum(ImGuiColorEditFlags_);
+    // export_enum(ImGuiColorEditFlags_);
 
     scm_c_define_gsubr("begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
