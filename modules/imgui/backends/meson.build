@@ -7,7 +7,7 @@ foreach src : backends
     command: guile_compile,
     input: src + '.scm',
     install: true,
-    install_dir: libdir / guile_compiled_module_dir,
+    install_dir: libdir / guile_compiled_module_dir / 'imgui/backends',
     output: obj,
     depends: [shlib,gglfw]
   )
