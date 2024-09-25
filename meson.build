@@ -1,6 +1,6 @@
 project('guile-dear-imgui', 'cpp',
-  version : '0.1',
-  default_options : ['warning_level=3', 'cpp_std=c++17'])
+        version : files('meson.version'),
+        default_options : ['warning_level=3', 'cpp_std=c++17'])
 
 # These arguments are only used to build the shared library
 # not the executables that use the library.

@@ -1,6 +1,7 @@
 (use-modules
  (guix utils) (guix packages)
  ((guix licenses) #:prefix license:)
+ (rnrs io ports)
  (gnu packages xorg)
  (guix download)
  (guix git-download)
@@ -51,7 +52,8 @@
 (define-public guile-dear-imgui
   (package
     (name "guile-dear-imgui")
-    (version "0")
+    (version (call-with-input-file "meson.version"
+               get-string-all))
     (source (local-file "." "guile-dear-imgui"
                         #:recursive? #t
                         #:select? (git-predicate %srcdir)))
