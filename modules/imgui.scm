@@ -62,11 +62,7 @@
             keyboard-focus-here!
             show-font-selector
             show-style-selector
-            impl:opengl3:shutdown
-            destroy-context
-            impl:opengl3:render-draw-data
-            impl:opengl3:init
-            impl:opengl3:new-frame)
+            destroy-context)
   #:export-syntax (group
                    with-window
                    with-child-window

@@ -6,9 +6,6 @@
 #include <guile.hpp>
 #include <imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/backends/imgui_impl_opengl2.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
 #include <libguile.h>
 #include <functional>
 #include <memory>
@@ -18,7 +15,6 @@
 
 #include <typeinfo>
 
-#define maybe_set(v,val) if (v.unboundp()) {v=val;}
 #define LABEL(v) std::string(v).c_str()
 namespace im {
   using guile::value;
@@ -444,37 +440,6 @@ value set_io_config_flags(value io,value flag) {
       selected(selectedp);
     return value(ret);
   }
-
-  namespace impl {
-    namespace opengl2 {
-      value NewFrame(){
-        ImGui_ImplOpenGL2_NewFrame();
-        return SCM_UNSPECIFIED;
-      }
-    }
-    namespace opengl3 {
-      value init(value glsl_version){
-        if (glsl_version.unboundp())
-          return ImGui_ImplOpenGL3_Init();
-        else {
-          //std::cout << "glsl_version: " << glsl_version << std::endl;
-          return ImGui_ImplOpenGL3_Init(LABEL(glsl_version));
-        }
-      }
-      value Shutdown(){
-        ImGui_ImplOpenGL3_Shutdown();
-        return SCM_UNSPECIFIED;
-      }
-      value NewFrame(){
-        ImGui_ImplOpenGL3_NewFrame();
-        return SCM_UNSPECIFIED;
-      }
-      value RenderDrawData() {
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        return SCM_UNSPECIFIED;
-      }
-    }
-  }
   } // namespace im
 #undef maybe_set
 
@@ -597,14 +562,5 @@ extern "C" {
                        (scm_t_subr)im::GetTexDataAsRGBA32);
     scm_c_define_gsubr("vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
     //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
-    scm_c_define_gsubr("impl:opengl3:init",0,1,0, (scm_t_subr)im::impl::opengl3::init);
-
-    scm_c_define_gsubr("impl:opengl3:shutdown", 0, 0, 0,
-                       (scm_t_subr)im::impl::opengl3::Shutdown);
-    scm_c_define_gsubr("impl:opengl3:new-frame", 0, 0, 0,
-                       (scm_t_subr)im::impl::opengl3::NewFrame);
-    scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
-                       (scm_t_subr)im::impl::opengl3::RenderDrawData);
-
 }
 }

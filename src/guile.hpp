@@ -26,6 +26,11 @@
 #else
 #define defconst(v) scm_c_define(#v,scm_from_int(v)); scm_c_export(#v)
 #endif
+#define maybe_set(v, val)                                                      \
+  if (v.unboundp()) {                                                          \
+    v = val;                                                                   \
+  }
+#define LABEL(v) std::string(v).c_str()
 namespace guile {
   class value {
   public:

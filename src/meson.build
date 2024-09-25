@@ -6,7 +6,7 @@ shlib = shared_module('guile_dear_imgui', ['guile_dear_imgui.cpp', 'guile.hpp'],
   dependencies : [guile_dep,dearimgui_dep,magic_enum],
   install_dir : guile_extension_dir)
 
-backends=['sdl2','glfw3']
+backends=['sdl2','glfw3','gl']
 foreach i : backends
   backend_dep=dependency(i,required: get_option(i))
   if backend_dep.found()
