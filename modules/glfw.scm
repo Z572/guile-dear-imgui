@@ -12,6 +12,9 @@
             set-swap-interval!
             window-should-close?
             ;; glfwwindowshouldclose
+            set-window-title!
+            get-window-title
+            window-title
             poll-events
             swap-buffers
             destroy-window
@@ -55,6 +58,15 @@
 
 (define (get-cursor-pos w)
   (%get-cursor-pos (maybe-unwrap-window w)))
+
+(define (set-window-title! w title)
+  (%set-window-title (maybe-unwrap-window w) title))
+
+(define (get-window-title w)
+  (%get-window-title (maybe-unwrap-window w)))
+
+(define window-title
+  (make-procedure-with-setter get-window-title set-window-title!))
 
 (define (set-swap-interval! interval)
   (swap-interval (match interval

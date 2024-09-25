@@ -19,6 +19,15 @@ using guile::value;
   glfwDestroyWindow(o);
   return SCM_UNSPECIFIED;
   }
+  value SetWindowTitle(value window, value title) {
+    auto o = static_cast<GLFWwindow *>(scm_to_pointer(window));
+    glfwSetWindowTitle(o,LABEL(title));
+    return SCM_UNSPECIFIED;
+  }
+  value GetWindowTitle(value window) {
+    auto o = static_cast<GLFWwindow *>(scm_to_pointer(window));
+    return glfwGetWindowTitle(o);
+  }
   value MakeContextCurrent(value window) {
     auto o=static_cast<GLFWwindow*>(scm_to_pointer(window));
     glfwMakeContextCurrent(o);
@@ -81,6 +90,10 @@ void init_glfw() {
   scm_c_define_gsubr("terminate", 0, 0, 0, (scm_t_subr)GGLFW::Terminate);
   scm_c_define_gsubr("glfwcreatewindow", 3, 0, 0,
                        (scm_t_subr)GGLFW::CreateWindow);
+  scm_c_define_gsubr("%set-window-title", 2, 0, 0,
+                     (scm_t_subr)GGLFW::SetWindowTitle);
+    scm_c_define_gsubr("%get-window-title", 1, 0, 0,
+                       (scm_t_subr)GGLFW::GetWindowTitle);
   scm_c_define_gsubr("glfwdestroywindow", 1, 0, 0,
                        (scm_t_subr)GGLFW::DestroyWindow);
     scm_c_define_gsubr("glfwmakecontextcurrent", 1, 0, 0,

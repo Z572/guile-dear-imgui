@@ -54,8 +54,10 @@
         (tab-bar ("bar1")
           (tab-item ("bar2")
             (show-style-selector "f")
+            (text (window-title w))
             (text-colored '(1 0 0 1) "R:") (sameline)
             (input-int "hello!" input-i 1 100)
+            (set! (window-title w) (format #f "i: ~a" (slider-int-p)))
             (input-text "text" input-text-p )
             (input-text "text2" input-text-p2
                         #:hint "dfsdf")
