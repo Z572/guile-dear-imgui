@@ -28,6 +28,13 @@ namespace im {
         nullptr
       );
   }
+  value ImFontAtlasAddFontFromFileTTF(value o ,value filename, value size_pixels,value conf,value ranges){
+      auto fontAtlas = static_cast<struct ::ImFontAtlas*>(scm_to_pointer(o));
+      auto fontconfig=static_cast<ImFontConfig*>(scm_to_pointer(conf));
+      auto rang=static_cast<ImWchar*>(scm_to_pointer(ranges));
+      auto font=fontAtlas->AddFontFromFileTTF(LABEL(filename),size_pixels,fontconfig,rang);
+      return scm_from_pointer(font,nullptr);
+  }
   value destroy_context(value v) {
     if (v.unboundp()){
         ImGui::DestroyContext();
@@ -472,6 +479,7 @@ extern "C" {
     export_enum(ImGuiButtonFlags_);
     // export_enum(ImGuiColorEditFlags_);
 
+    scm_c_define_gsubr("ImFontAtlasAddFontFromFileTTF", 5, 0, 0, (scm_t_subr)im::ImFontAtlasAddFontFromFileTTF);
     scm_c_define_gsubr("begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("begin-child", 1, 0, 0, (scm_t_subr)im::BeginChild);

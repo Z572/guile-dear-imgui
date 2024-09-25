@@ -1,5 +1,6 @@
 (define-module (imgui)
   #:use-module (system foreign)
+  #:use-module ((rnrs base) #:select (assert))
   #:export (create-context
             open-popup
             get-io
@@ -18,6 +19,7 @@
             set-io-display-size
             io-fonts
             io-fonts-get-texdata-as-rgba32
+            add-font-from-file!
             begin-list-box
             end-list-box
             begin-group
@@ -156,3 +158,12 @@
   (if hint
       (input-text-with-hint label hint buf flags)
       (%input-text label buf flags)))
+
+(define* (add-font-from-file! f filename size
+                              #:key
+                              (font-config %null-pointer)
+                              (ranges %null-pointer))
+  (assert (file-exists? filename))
+  (assert (or (string-suffix-ci? ".ttf" filename)
+              (string-suffix-ci? ".otf" filename)))
+  (ImFontAtlasAddFontFromFileTTF f filename size font-config ranges))
