@@ -3,6 +3,7 @@
 (use-modules
  (imgui)
  (imgui backends glfw3)
+ (imgui backends gl)
  (glfw)
  (gl)
  (srfi srfi-71))
