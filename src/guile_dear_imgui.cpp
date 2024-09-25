@@ -547,9 +547,9 @@ extern "C" {
     scm_c_define_gsubr("button", 1, 0, 0, (scm_t_subr)im::Button);
     scm_c_define_gsubr("small-button", 1, 0, 0, (scm_t_subr)im::SmallButton);
     scm_c_define_gsubr("selectable", 2, 0, 0, (scm_t_subr)im::Selectable);
-    scm_c_define_gsubr("create-context", 0, 0, 0,
+    scm_c_define_gsubr("%create-context", 0, 0, 0,
                        (scm_t_subr)im::create_context);
-    scm_c_define_gsubr("destroy-context", 0, 1, 0,
+    scm_c_define_gsubr("%destroy-context", 0, 1, 0,
                        (scm_t_subr)im::destroy_context);
     scm_c_define_gsubr("get-io", 0, 0, 0, (scm_t_subr)im::getio);
     scm_c_define_gsubr("get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);

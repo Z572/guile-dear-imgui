@@ -83,6 +83,14 @@
 
 (load-extension "libguile_dear_imgui.so" "init_imgui")
 
+(define (create-context)
+  (wrap-context (%create-context)))
+
+(define* (destroy-context #:optional (ctx #f))
+  (if ctx
+      (%destroy-context (unwrap-context ctx))
+      (%destroy-context)))
+
 (define-syntax-rule (with-window (name args ...) body ...)
   (begin (when (begin-window name args ...)
            body ...)
