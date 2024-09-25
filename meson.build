@@ -1,4 +1,5 @@
 project('guile-dear-imgui', 'cpp',
+        license : 'GPLv3+',
         version : files('meson.version'),
         default_options : ['warning_level=3', 'cpp_std=c++17'])
 
