@@ -15,6 +15,9 @@
             set-window-title!
             get-window-title
             window-title
+            window-size
+            get-window-size
+            set-window-size!
             poll-events
             swap-buffers
             destroy-window
@@ -49,8 +52,14 @@
 
 (define (window-should-close? w)
   (glfwwindowshouldclose (maybe-unwrap-window w)))
-(define (window-size w)
-  (%get-window-size (unwrap-window w)))
+
+(define (get-window-size w)
+  (%get-window-size (maybe-unwrap-window w)))
+(define (set-window-size! w o)
+  (%set-window-size (maybe-unwrap-window w) (first o) (second o)))
+(define window-size
+  (make-procedure-with-setter get-window-size set-window-size!))
+
 (define (make-context-current w)
   (glfwmakecontextcurrent (maybe-unwrap-window w)))
 (define (swap-buffers w)
