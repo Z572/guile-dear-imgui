@@ -456,7 +456,7 @@ value set_io_config_flags(value io,value flag) {
     std::for_each(enums.begin(), enums.end(), [](auto o) {  \
       const char *str = o.second.data();                    \
       scm_c_define(str, guile::value(o.first));             \
-      scm_c_export(str);                                    \
+      scm_c_export(str,nullptr);                            \
     });                                                     \
   }
 
