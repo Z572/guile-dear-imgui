@@ -162,7 +162,7 @@
 (define* (add-font-from-file! f filename size
                               #:key
                               (font-config %null-pointer)
-                              (ranges %null-pointer))
+                              (ranges #f))
   (assert (file-exists? filename))
   (assert (or (string-suffix-ci? ".ttf" filename)
               (string-suffix-ci? ".otf" filename)))

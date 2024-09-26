@@ -28,11 +28,27 @@ namespace im {
         nullptr
       );
   }
+#define CASE(str, func) if (s==str) return fontAtlas->func;
+
+  const ImWchar* GetGlyphRanges(::ImFontAtlas* fontAtlas,value symbol){
+    if (scm_is_false(symbol.get()))
+      return nullptr;
+    std::string s = value(scm_symbol_to_string(symbol));
+    CASE("chinese-simplified-common", GetGlyphRangesChineseSimplifiedCommon());
+    CASE("chinese-full", GetGlyphRangesChineseFull());
+    CASE("default", GetGlyphRangesDefault());
+    CASE("greek", GetGlyphRangesGreek());
+    CASE("korean", GetGlyphRangesKorean());
+    CASE("thai", GetGlyphRangesThai());
+    return nullptr;
+  }
+#undef CASE
   value ImFontAtlasAddFontFromFileTTF(value o ,value filename, value size_pixels,value conf,value ranges){
       auto fontAtlas = static_cast<struct ::ImFontAtlas*>(scm_to_pointer(o));
       auto fontconfig=static_cast<ImFontConfig*>(scm_to_pointer(conf));
-      auto rang=static_cast<ImWchar*>(scm_to_pointer(ranges));
-      auto font=fontAtlas->AddFontFromFileTTF(LABEL(filename),size_pixels,fontconfig,rang);
+      auto rang=GetGlyphRanges(fontAtlas,ranges);
+      auto font = fontAtlas->AddFontFromFileTTF(LABEL(filename), size_pixels,
+                                                fontconfig,rang);
       return scm_from_pointer(font,nullptr);
   }
   value destroy_context(value v) {
