@@ -83,7 +83,9 @@
                    tab-bar
                    tab-item
                    table
-                   item-tooltip))
+                   item-tooltip
+                   with-style
+                   with-style-colors))
 
 (define-wrapped-pointer-type <context>
   context?
@@ -188,3 +190,44 @@
   (make-procedure-with-setter
    get-table-column-index
    set-table-column-index!))
+
+
+(define-syntax with-style-colors
+  (lambda (x)
+    (syntax-case x ()
+      ((_ ((color value))
+          body ...)
+       #`(if (PushStyleColor (symbol->string 'color) value)
+             (begin body ... (PopStyleColor))
+             (error "unknown style color! ~a" 'color)))
+      ((_ ((color value) o ...)
+          body ...)
+       #`(with-style-colors ((color value))
+           (with-style-colors (o ...)
+             body ...))))))
+(define-syntax with-style
+  (lambda (x)
+    (syntax-case x ()
+      ((_ ((var value))
+          body ...)
+       #`(if (PushStyleVar (symbol->string 'var) value)
+             (begin body ... (PopStyleVar))
+             (error "unknown style var! ~a" 'color)))
+      ((f ((var value) o ...)
+          body ...)
+       #`(f ((var value))
+            (f (o ...)
+               body ...))))))
+;; Local Variables:
+;; eval: (put 'with-window 'scheme-indent-function 1)
+;; eval: (put 'with-child-window 'scheme-indent-function 1)
+;; eval: (put 'with-menu 'scheme-indent-function 1)
+;; eval: (put 'with-popup 'scheme-indent-function 1)
+;; eval: (put 'tab-bar 'scheme-indent-function 1)
+;; eval: (put 'tab-item 'scheme-indent-function 1)
+;; eval: (put 'with-list-box 'scheme-indent-function 1)
+;; eval: (put 'with-combo 'scheme-indent-function 1)
+;; eval: (put 'with-style 'scheme-indent-function 1)
+;; eval: (put 'with-style-colors 'scheme-indent-function 1)
+;; eval: (put 'with-ellipsis 'scheme-indent-function 1)
+;; End:

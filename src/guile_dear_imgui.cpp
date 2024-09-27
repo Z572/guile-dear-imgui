@@ -501,7 +501,55 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TableHeader(LABEL(label));
     return SCM_UNSPECIFIED;
 }
-  } // namespace im
+value PushStyleColor(value idx, value col) {
+  std::string str="ImGuiCol_" + std::string(idx);
+    auto is_p = magic_enum::enum_cast<ImGuiCol_>(str);
+    if (is_p.has_value()) {
+      ImGui::PushStyleColor(is_p.value(), ImVec4(col[0],col[1],col[2],col[3]));
+    return true;
+    }
+    return false;
+}
+  value PopStyleColor(value count){
+    maybe_set(count, 1);
+    ImGui::PopStyleColor(count);
+    return SCM_UNSPECIFIED;
+  }
+
+  value PushStyleVar(value idx, value col) {
+  std::string str="ImGuiStyleVar_" + std::string(idx);
+    auto is_p = magic_enum::enum_cast<ImGuiStyleVar_>(str);
+    if (is_p.has_value()) {
+      auto v = is_p.value();
+      switch (v) {
+      case ImGuiStyleVar_WindowPadding:
+      case ImGuiStyleVar_WindowMinSize:
+      case ImGuiStyleVar_WindowTitleAlign:
+      case ImGuiStyleVar_FramePadding:
+      case ImGuiStyleVar_ItemSpacing:
+      case ImGuiStyleVar_ItemInnerSpacing:
+      case ImGuiStyleVar_CellPadding:
+      case ImGuiStyleVar_ButtonTextAlign:
+      case ImGuiStyleVar_SelectableTextAlign:
+      case ImGuiStyleVar_SeparatorTextAlign:
+      case ImGuiStyleVar_SeparatorTextPadding:
+        ImGui::PushStyleVar(v, ImVec2(col[0], col[1]));
+        break;
+      default:
+        ImGui::PushStyleVar(v, (float)col);
+        break;
+      }
+    return true;
+    }
+    return false;
+}
+  value PopStyleVar(value count){
+    maybe_set(count, 1);
+    ImGui::PopStyleVar(count);
+    return SCM_UNSPECIFIED;
+}
+
+} // namespace im
 
 #define export_enum(e)                                      \
   {                                                         \
@@ -639,5 +687,10 @@ extern "C" {
                        (scm_t_subr)im::GetTexDataAsRGBA32);
     scm_c_define_gsubr("vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
     //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
+    scm_c_define_gsubr("PopStyleColor", 0, 1, 0, (scm_t_subr)im::PopStyleColor);
+    scm_c_define_gsubr("PushStyleColor", 2, 0, 0,
+                       (scm_t_subr)im::PushStyleColor);
+    scm_c_define_gsubr("PopStyleVar", 0, 1, 0, (scm_t_subr)im::PopStyleVar);
+    scm_c_define_gsubr("PushStyleVar", 2, 0, 0, (scm_t_subr) im::PushStyleVar);
 }
 }
