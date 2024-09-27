@@ -72,7 +72,12 @@
             keyboard-focus-here!
             show-font-selector
             show-style-selector
-            destroy-context)
+            destroy-context
+            align-text-to-frame-padding
+            get-text-line-height
+            get-text-line-height-with-spacing
+            get-frame-height
+            get-frame-height-with-spacing)
   #:export-syntax (group
                    with-window
                    with-child-window

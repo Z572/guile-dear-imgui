@@ -547,7 +547,21 @@ value PushStyleColor(value idx, value col) {
     maybe_set(count, 1);
     ImGui::PopStyleVar(count);
     return SCM_UNSPECIFIED;
-}
+  }
+  value AlignTextToFramePadding() {
+    ImGui::AlignTextToFramePadding();
+    return SCM_UNSPECIFIED;
+  }
+  value GetTextLineHeight() { return ImGui::GetTextLineHeight(); }
+  value GetTextLineHeightWithSpacing() {
+    return ImGui::GetTextLineHeightWithSpacing();
+  }
+  value GetFrameHeight() { return ImGui::GetFrameHeight(); }
+  value GetFrameHeightWithSpacing() {
+    return ImGui::GetFrameHeightWithSpacing();
+  }
+
+
 
 } // namespace im
 
@@ -691,6 +705,22 @@ extern "C" {
     scm_c_define_gsubr("PushStyleColor", 2, 0, 0,
                        (scm_t_subr)im::PushStyleColor);
     scm_c_define_gsubr("PopStyleVar", 0, 1, 0, (scm_t_subr)im::PopStyleVar);
-    scm_c_define_gsubr("PushStyleVar", 2, 0, 0, (scm_t_subr) im::PushStyleVar);
+    scm_c_define_gsubr("PushStyleVar", 2, 0, 0, (scm_t_subr)im::PushStyleVar);
+
+    scm_c_define_gsubr("align-text-to-frame-padding", 0, 0, 0,
+                       (scm_t_subr)im::AlignTextToFramePadding);
+
+    scm_c_define_gsubr("get-text-line-height", 0, 0, 0,
+                       (scm_t_subr)im::GetTextLineHeight);
+
+    scm_c_define_gsubr("get-text-line-height-with-spacing", 0, 0, 0,
+                       (scm_t_subr)im::GetTextLineHeightWithSpacing);
+
+    scm_c_define_gsubr("get-frame-height", 0, 0, 0,
+                       (scm_t_subr)im::GetFrameHeight);
+
+    scm_c_define_gsubr("get-frame-height-with-spacing", 0, 0, 0,
+                       (scm_t_subr)im::GetFrameHeightWithSpacing);
+
 }
 }
