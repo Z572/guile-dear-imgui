@@ -104,69 +104,87 @@
       (%destroy-context (unwrap-context ctx))
       (%destroy-context)))
 
+(define-syntax-rule (im-catch begin end body ...)
+  (let ((r #f))
+    (dynamic-wind
+      (lambda () #t)
+      (lambda ()
+        (when begin
+          (set! r #t)
+          body
+          ...))
+      (lambda ()
+        (when r
+          end)))))
+
 (define-syntax-rule (with-window (name args ...) body ...)
-  (begin (when (begin-window name args ...)
-           body ...)
-         (end-window)))
-(define-syntax-rule (with-child-window name body ...)
-  (begin (when (begin-child name)
-           body ...)
-         (end-child)))
+  (dynamic-wind
+    (lambda () #t)
+    (lambda ()
+      (when (begin-window name args ...)
+        body ...))
+    end-window))
+
+(define-syntax-rule (with-child-window (name args ...) body ...)
+  (dynamic-wind
+    (lambda () #t)
+    (lambda ()
+      (when (begin-child name args ...)
+        body ...))
+    end-child))
 
 (define-syntax-rule (with-list-box (name x y) body ...)
-  (when (begin-list-box name x y)
-    body ...
-    (end-list-box)))
+  (im-catch (begin-list-box name x y)
+            (end-list-box)
+            body ...))
 
 (define-syntax-rule (group body ...)
-  (begin (begin-group)
-         body  ...
-         (end-group)))
+  (im-catch (begin-group) (end-group) body ...))
 
 (define-syntax-rule (tooltip body ...)
-  (when (begin-tooltip)
-    body ...
-    (end-tooltip)))
+  (im-catch (begin-tooltip) (end-tooltip) body ...))
 
 (define-syntax tab-bar
   (syntax-rules ()
     ((_ (name args ...) body ...)
-     (when (begin-tab-bar name args ...)
-       (syntax-parameterize ((tab-item (with-ellipsis :::
-                                         (syntax-rules ()
-                                           ((tab-item (n args2 :::) body2 :::)
-                                            (when (begin-tab-item n args2 :::)
-                                              body2 :::
-                                              (end-tab-item)))))))
-         body ...)
-       (end-tab-bar)))))
+     (im-catch (begin-tab-bar name args ...)
+               (end-tab-bar)
+               (syntax-parameterize ((tab-item
+                                         (with-ellipsis :::
+                                           (syntax-rules ()
+                                             ((tab-item (n args2 :::) body2 :::)
+                                              (im-catch
+                                               (begin-tab-item n args2 :::)
+                                               (end-tab-item)
+                                               body2 :::))))))
+                 body ...)))))
 
 (define-syntax-parameter tab-item
   (lambda (stx)
     (syntax-violation 'tab-item "tab-item used outside of a tab-bar" stx)))
 
 (define-syntax-rule (with-combo (label preview_value ) body ...)
-  (when (begin-combo label preview_value)
-    body ...
-    (end-combo)))
+  (im-catch (begin-combo label preview_value)
+            (end-combo)
+            body ...))
 (define-syntax-rule (with-menu (label act) body ...)
-  (when (begin-menu label act)
-    body ...
-    (end-menu)))
+  (im-catch (begin-menu label act)
+            (end-menu)
+            body ...))
+
 (define-syntax-rule (with-popup (label) body ...)
-  (when (begin-popup label)
-    body ...
-    (end-popup)))
+  (im-catch (begin-popup label)
+            (end-popup)
+            body ...))
 (define-syntax-rule (item-tooltip body ...)
-  (when (begin-item-tooltip)
-    body ...
-    (end-tooltip)))
+  (im-catch (begin-item-tooltip)
+            (end-tooltip)
+            body ...))
 
 (define-syntax-rule (table (id column args ...) body ...)
-  (when (begin-table id column args ...)
-
-    body ...
-    (end-table)))
+  (im-catch (begin-table id column args ...)
+            (end-table)
+            body ...))
 
 (define* (input-text label buf #:optional (flags 0)
                      #:key
