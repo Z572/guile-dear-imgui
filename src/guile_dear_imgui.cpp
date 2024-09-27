@@ -463,8 +463,45 @@ value set_io_config_flags(value io,value flag) {
       selected(selectedp);
     return value(ret);
   }
+  value BeginTable(value id, value column) {
+    return ImGui::BeginTable(LABEL(id), column,
+                             ImGuiTableFlags_BordersInnerH |
+                             ImGuiTableFlags_BordersInnerV);
+
+  }
+  value EndTable() {
+    ImGui::EndTable();
+    return SCM_UNSPECIFIED;
+  }
+  value TableNextRow(value row_flags, value min_row_heighet) {
+    ImGui::TableNextRow();
+    return SCM_UNSPECIFIED;
+  }
+  value TableNextColumn() {
+    return ImGui::TableNextColumn();
+  }
+  value TableSetColumnIndex(value n) {
+    return ImGui::TableSetColumnIndex(n);
+  }
+  value TableGetColumnIndex(){
+    return ImGui::TableGetColumnIndex();
+  }
+  value TableSetupColumn(value label,value flags,value init_width_or_weight,value user_id){
+    maybe_set(flags,0);
+    maybe_set(init_width_or_weight,0.0f);
+    maybe_set(user_id,0);
+    ImGui::TableSetupColumn(LABEL(label),flags,init_width_or_weight,user_id);
+    return SCM_UNSPECIFIED;
+}
+  value TableHeadersRow(){
+    ImGui::TableHeadersRow();
+    return SCM_UNSPECIFIED;
+}
+  value TableHeader(value label){
+    ImGui::TableHeader(LABEL(label));
+    return SCM_UNSPECIFIED;
+}
   } // namespace im
-#undef maybe_set
 
 #define export_enum(e)                                      \
   {                                                         \
@@ -517,6 +554,16 @@ extern "C" {
 
     scm_c_define_gsubr("begin-menu", 2, 0, 0, (scm_t_subr)im::BeginMenu);
     scm_c_define_gsubr("end-menu", 0, 0, 0, (scm_t_subr)im::EndMenu);
+
+    scm_c_define_gsubr("begin-table", 2, 0, 0, (scm_t_subr)im::BeginTable);
+    scm_c_define_gsubr("end-table", 0, 0, 0, (scm_t_subr)im::EndTable);
+    scm_c_define_gsubr("table-next-row", 0, 2, 0, (scm_t_subr)im::TableNextRow);
+    scm_c_define_gsubr("table-next-column", 0, 2, 0, (scm_t_subr)im::TableNextColumn);
+    scm_c_define_gsubr("set-table-column-index!",1,0,0,(scm_t_subr)im::TableSetColumnIndex);
+    scm_c_define_gsubr("get-table-column-index",0,0,0,(scm_t_subr)im::TableGetColumnIndex);
+    scm_c_define_gsubr("table-setup-column",1,3,0,(scm_t_subr)im::TableSetupColumn);
+    scm_c_define_gsubr("table-headers-row",0,0,0,(scm_t_subr)im::TableHeadersRow);
+    scm_c_define_gsubr("table-header",1,0,0,(scm_t_subr)im::TableHeader);
 
     scm_c_define_gsubr("end-main-menu-bar", 0, 0, 0,
                        (scm_t_subr)im::EndMainMenuBar);

@@ -56,6 +56,14 @@
             button
             small-button
             progress-bar
+            begin-table
+            end-table
+            table-next-row
+            table-next-column
+            table-column-index
+            table-setup-column
+            table-headers-row
+            table-header
             textlink
             textlink-open-url
             separator
@@ -74,6 +82,7 @@
                    with-list-box
                    tab-bar
                    tab-item
+                   table
                    item-tooltip))
 
 (define-wrapped-pointer-type <context>
@@ -150,6 +159,13 @@
   (when (begin-item-tooltip)
     body ...
     (end-tooltip)))
+
+(define-syntax-rule (table (id column args ...) body ...)
+  (when (begin-table id column args ...)
+
+    body ...
+    (end-table)))
+
 (define* (input-text label buf #:optional (flags 0)
                      #:key
                      (hint #f)
@@ -167,3 +183,8 @@
   (assert (or (string-suffix-ci? ".ttf" filename)
               (string-suffix-ci? ".otf" filename)))
   (ImFontAtlasAddFontFromFileTTF f filename size font-config ranges))
+
+(define table-column-index
+  (make-procedure-with-setter
+   get-table-column-index
+   set-table-column-index!))

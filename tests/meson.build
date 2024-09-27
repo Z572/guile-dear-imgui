@@ -1,4 +1,4 @@
-tests = ['none.scm','sdl2.scm','glfw.scm']
+tests = ['none.scm','sdl2.scm','glfw.scm','table.scm']
 foreach t : tests
   test('test ' + t,
        pre_inst_env,
@@ -9,3 +9,6 @@ foreach t : tests
        ],
        env :['SDL_VIDEODRIVER=offscreen','HOME=/tmp'])
 endforeach
+configure_file(input: 'helper.scm',
+               output: 'helper.scm',
+              copy: true)
