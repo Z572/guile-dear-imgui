@@ -76,6 +76,22 @@ value SwapInterval(value interval) {
 extern "C" {
 
 void init_glfw() {
+  const GLFWallocator allocator = {
+    .allocate =
+    [](size_t size, [[maybe_unused]] void *user) {
+      return scm_gc_malloc(size, "glfw allocate");
+    },
+    .reallocate =
+    [](void *block, size_t size, [[maybe_unused]] void *user) {
+      return scm_gc_realloc(block, sizeof(block), size, "glfw reallocate");
+    },
+    .deallocate =
+    [](void *block,[[maybe_unused]] void *user) {
+      scm_gc_free(block, sizeof(block), "glfw deallocate");
+    },
+    .user = nullptr,
+  };
+  glfwInitAllocator(&allocator);
   defconst(GLFW_TRANSPARENT_FRAMEBUFFER);
   defconst(GLFW_CONTEXT_VERSION_MAJOR);
   defconst(GLFW_CONTEXT_CREATION_API);
