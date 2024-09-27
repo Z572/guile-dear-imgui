@@ -560,6 +560,7 @@ value PushStyleColor(value idx, value col) {
   value GetFrameHeightWithSpacing() {
     return ImGui::GetFrameHeightWithSpacing();
   }
+  value GetTime(){return ImGui::GetTime();}
 
 
 
@@ -721,6 +722,8 @@ extern "C" {
 
     scm_c_define_gsubr("get-frame-height-with-spacing", 0, 0, 0,
                        (scm_t_subr)im::GetFrameHeightWithSpacing);
+    scm_c_define_gsubr("get-time", 0, 0, 0,
+                       (scm_t_subr)im::GetTime);
 
 }
 }

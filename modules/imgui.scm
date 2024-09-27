@@ -76,6 +76,7 @@
             align-text-to-frame-padding
             get-text-line-height
             get-text-line-height-with-spacing
+            get-time
             get-frame-height
             get-frame-height-with-spacing)
   #:export-syntax (group
