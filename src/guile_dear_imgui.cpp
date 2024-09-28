@@ -554,6 +554,27 @@ value PushStyleColor(value idx, value col) {
   }
   value GetTime(){return ImGui::GetTime();}
 
+  value TreeNode(value label, value flags) {
+    if (flags.unboundp())
+      return ImGui::TreeNode(LABEL(label));
+    else
+      return ImGui::TreeNodeEx(LABEL(label),flags);
+  }
+  value TreePush(value label) {
+    ImGui::TreePush(LABEL(label));
+    return SCM_UNSPECIFIED;
+  }
+  value TreePop() {
+    ImGui::TreePop();
+    return SCM_UNSPECIFIED;
+  }
+
+  value CollapsingHeader(value label, value flags) {
+    if (flags.unboundp())
+      return ImGui::CollapsingHeader(LABEL(label));
+    else
+      return ImGui::CollapsingHeader(LABEL(label),flags);
+  }
 
 
 } // namespace im
@@ -715,5 +736,10 @@ extern "C" {
     scm_c_define_gsubr("get-time", 0, 0, 0,
                        (scm_t_subr)im::GetTime);
 
+    scm_c_define_gsubr("tree-node", 1, 1, 0, (scm_t_subr)im::TreeNode);
+    scm_c_define_gsubr("tree-push", 1, 0, 0, (scm_t_subr)im::TreePush);
+    scm_c_define_gsubr("tree-pop", 1, 0, 0, (scm_t_subr)im::TreePop);
+    scm_c_define_gsubr("collapsing-header", 1, 1, 0,
+                       (scm_t_subr)im::CollapsingHeader);
 }
 }

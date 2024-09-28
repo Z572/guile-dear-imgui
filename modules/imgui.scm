@@ -73,6 +73,10 @@
             show-font-selector
             show-style-selector
             destroy-context
+            tree-node
+            tree-push
+            tree-pop
+            collapsing-header
             align-text-to-frame-padding
             get-text-line-height
             get-text-line-height-with-spacing
