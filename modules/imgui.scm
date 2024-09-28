@@ -55,6 +55,7 @@
             menu-item
             button
             small-button
+            invisible-button
             progress-bar
             begin-table
             end-table

@@ -445,6 +445,10 @@ value set_io_config_flags(value io,value flag) {
   }
   value Button(value label) { return ImGui::Button(LABEL(label)); }
   value SmallButton(value label) { return ImGui::SmallButton(LABEL(label)); }
+  value InvisibleButton(value id, value size) {
+    return ImGui::InvisibleButton(LABEL(id), ImVec2(size[0], size[1]));
+  }
+
   value Selectable(value label, value selected) {
     bool selectedp=false;
     if (selected.is_procedure_p())
@@ -692,6 +696,11 @@ extern "C" {
     scm_c_define_gsubr("bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
     scm_c_define_gsubr("button", 1, 0, 0, (scm_t_subr)im::Button);
     scm_c_define_gsubr("small-button", 1, 0, 0, (scm_t_subr)im::SmallButton);
+    guile::define("invisible-button", 2,
+               (scm_t_subr)im::InvisibleButton,
+               "flexible button behavior without the visuals, frequently "
+               "useful to build custom behaviors using the public api (along "
+               "with IsItemActive, IsItemHovered, etc.)");
     scm_c_define_gsubr("selectable", 2, 0, 0, (scm_t_subr)im::Selectable);
     scm_c_define_gsubr("%create-context", 0, 0, 0,
                        (scm_t_subr)im::create_context);
