@@ -136,14 +136,6 @@ value set_io_config_flags(value io,value flag) {
     c->ConfigFlags |= scm_to_int(flag);
     return SCM_UNSPECIFIED;
   }
-  value vec2(value x,value y) {
-    auto c = new ImVec2(x,y);
-    return scm_from_pointer(c, [](void* v){
-      ImVec2 *vec = static_cast<ImVec2*>(v);
-      //std::cout << "x: " << vec->x << " y: " << vec->y << std::endl;
-      delete vec;
-    });
-  }
   value SetItemDefaultFocus() {
     ImGui::SetItemDefaultFocus();
     return SCM_UNSPECIFIED;
@@ -700,8 +692,6 @@ extern "C" {
                        (scm_t_subr)im::io_fonts);
     scm_c_define_gsubr("io-fonts-get-texdata-as-rgba32", 4, 0, 0,
                        (scm_t_subr)im::GetTexDataAsRGBA32);
-    scm_c_define_gsubr("vec2", 2, 0, 0, (scm_t_subr) im::vec2 );
-    //    scm_c_define_gsubr("vec2.x", 1, 0, 0, (scm_t_subr) [](value vec){} );
     scm_c_define_gsubr("PopStyleColor", 0, 1, 0, (scm_t_subr)im::PopStyleColor);
     scm_c_define_gsubr("PushStyleColor", 2, 0, 0,
                        (scm_t_subr)im::PushStyleColor);
