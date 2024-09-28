@@ -145,4 +145,30 @@ namespace guile {
     return value{scm_list_n(arg...,SCM_UNDEFINED)};
   }
 
+
+  inline guile::value define(std::string name, int req, int opt,
+                                 scm_t_subr v) {
+        return scm_c_define_gsubr(name.c_str(), req, opt, 0, v);
+  }
+
+  inline guile::value define(std::string name, int req, scm_t_subr v) {
+    return define(name, req, 0, v);
+  }
+  inline guile::value define(std::string name, scm_t_subr v) {
+    return define(name, 0, v);
+  }
+  inline guile::value define(std::string name, int req, int opt,
+                                 scm_t_subr v, std::string document) {
+    auto proc = define(name, req, opt, v);
+    scm_set_procedure_property_x(proc, scm_from_utf8_symbol("documentation"),
+                                 guile::value(document));
+    return proc;
+  }
+
+  inline guile::value define(std::string name, int req, scm_t_subr v,
+                                 std::string document)
+  {
+    return define(name, req, 0, v,document);
+  }
+
 } // namespace guile
