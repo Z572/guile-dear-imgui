@@ -5,7 +5,7 @@
             open-popup
             get-io
             get-style
-            style-scaleallsizes
+            style-scale-all-sizes
             new-frame
             io-display-size
             set-next-window-size

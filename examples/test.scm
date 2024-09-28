@@ -19,7 +19,7 @@
 (sdl-init)
 (create-context)
 (define style (get-style))
-(style-scaleallsizes style 2)
+(style-scale-all-sizes style 2)
 
 (define s-window (make-window #:opengl? #t
                               #:resizable? #t

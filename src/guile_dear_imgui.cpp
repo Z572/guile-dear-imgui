@@ -679,7 +679,7 @@ extern "C" {
                        (scm_t_subr)im::destroy_context);
     scm_c_define_gsubr("get-io", 0, 0, 0, (scm_t_subr)im::getio);
     scm_c_define_gsubr("get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);
-    scm_c_define_gsubr("style-scaleallsizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
+    scm_c_define_gsubr("style-scale-all-sizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
     scm_c_define_gsubr("show-font-selector", 1, 0, 0, (scm_t_subr)im::ShowFontSelector);
     scm_c_define_gsubr("show-style-selector", 1, 0, 0, (scm_t_subr)im::ShowStyleSelector);
     scm_c_define_gsubr("get-version", 0, 0, 0, (scm_t_subr)im::GetVersion);
