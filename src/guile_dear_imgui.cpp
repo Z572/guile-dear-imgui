@@ -102,9 +102,8 @@ namespace im {
   }
   value io_display_size(value io) {
     ImGuiIO* cio = static_cast<ImGuiIO*>(scm_to_pointer(io));
-    //ImVec2 *vec = static_cast<ImVec2*>(scm_to_pointer(vec2));
     auto c=cio->DisplaySize;
-    return scm_cons(scm_from_int(c.x), scm_from_int(c.y));
+    return guile::list(c.x, c.y);
   }
     value io_fonts(value io) {
     ImGuiIO* cio = static_cast<ImGuiIO*>(scm_to_pointer(io));
