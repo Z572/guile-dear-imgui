@@ -127,4 +127,22 @@ namespace guile {
   protected:
     SCM value_ = SCM_UNDEFINED;
   };
+  inline value cons(value a, value b) { return value{scm_cons(a, b)}; };
+  inline value list(value a) { return value{scm_list_1(a)}; }
+  inline value list(value a, value b) { return value{scm_list_2(a, b)}; }
+  inline value list(value a, value b, value c) {
+    return value{scm_list_3(a, b, c)};
+  }
+  inline value list(value a, value b, value c,value d) {
+    return value{scm_list_4(a, b, c,d)};
+  }
+  inline value list(value a, value b, value c,value d,value e) {
+    return value{scm_list_5(a, b, c,d,e)};
+  }
+  template <typename... T,
+            typename = std::enable_if_t<(sizeof...(T) > 5), void>>
+    inline value list(T...arg) {
+    return value{scm_list_n(arg...,SCM_UNDEFINED)};
+  }
+
 } // namespace guile
