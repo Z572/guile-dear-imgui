@@ -579,6 +579,16 @@ value PushStyleColor(value idx, value col) {
       return ImGui::CollapsingHeader(LABEL(label),flags);
   }
 
+  value IsWindowAppearing() { return ImGui ::IsWindowAppearing(); };
+  value IsWindowCollapsed() { return ImGui ::IsWindowCollapsed(); };
+  value IsWindowFocused(value flags) {
+    maybe_set(flags, 0)
+    return ImGui ::IsWindowFocused(flags);
+  };
+  value IsWindowHovered(value flags) {
+    maybe_set(flags, 0)
+    return ImGui ::IsWindowHovered(flags);
+  };
 
 } // namespace im
 
@@ -749,5 +759,10 @@ extern "C" {
     scm_c_define_gsubr("tree-pop", 1, 0, 0, (scm_t_subr)im::TreePop);
     scm_c_define_gsubr("collapsing-header", 1, 1, 0,
                        (scm_t_subr)im::CollapsingHeader);
+    guile::define("window-appearing?", (scm_t_subr)im::IsWindowAppearing);
+    guile::define("window-collapsed?", (scm_t_subr)im::IsWindowCollapsed);
+    guile::define("window-focused?",0,1, (scm_t_subr)im::IsWindowFocused);
+    guile::define("window-hovered?", 0, 1, (scm_t_subr)im::IsWindowHovered);
+
 }
 }

@@ -79,6 +79,10 @@
             tree-pop
             collapsing-header
             align-text-to-frame-padding
+            window-appearing?
+            window-focused?
+            window-hovered?
+            window-collapsed?
             get-text-line-height
             get-text-line-height-with-spacing
             get-time
