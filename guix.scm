@@ -70,7 +70,7 @@
       #:configure-flags #~(list
                            "-DImDrawIdx=unsigned int"
                            (string-append
-                            "-Dguile-extension-dir=" #$output "/lib"))
+                            "-Dguile-extension-dir=lib"))
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'unpack 'unbundle-imgui

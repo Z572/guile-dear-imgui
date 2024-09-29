@@ -52,10 +52,8 @@ custom_guile_xd=get_option('guile-extension-dir')
 if custom_guile_xd == ''
   guile_extension_dir = guile_dep.get_variable(pkgconfig: 'extensiondir')
 else
-  guile_extension_dir = custom_guile_xd
+  guile_extension_dir = get_option('prefix') / custom_guile_xd
 endif
-
-
 
 guild = guile_dep.get_pkgconfig_variable('guild')
 guile = guile_dep.get_pkgconfig_variable('guile')
@@ -117,3 +115,5 @@ pkg_mod.generate(
 install_subdir('modules', install_dir: datadir / guile_module_dir,
                strip_directory: true,
                exclude_files: ['meson.build','imgui/backends/meson.build'])
+
+summary({'extension dir':guile_extension_dir})
