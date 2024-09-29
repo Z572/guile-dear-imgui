@@ -626,6 +626,24 @@ value PushStyleColor(value idx, value col) {
     return SCM_UNSPECIFIED;
   };
 
+  value IsKeyDown(value key) {
+    auto v = ImGuiKey(scm_to_int(key));
+    return ImGui::IsKeyDown(v);
+  };
+  value IsKeyPressed(value key, value repeat) {
+    maybe_set(repeat, true)
+    auto v = ImGuiKey(scm_to_int(key));
+    return ImGui::IsKeyPressed(v,repeat);
+  };
+  value IsKeyReleased(value key) {
+    auto v = ImGuiKey(scm_to_int(key));
+    return ImGui::IsKeyReleased(v);
+  };
+  value GetKeyName(value key) {
+    auto v = ImGuiKey(scm_to_int(key));
+    return ImGui::GetKeyName(v);
+  };
+
 } // namespace im
 
 #define export_enum(e)                                      \
@@ -816,5 +834,11 @@ extern "C" {
     guile::define("%set-cursor-screen-position!", 2, 0,
                   (scm_t_subr)im::SetCursorScreenPos);
     guile::define("%set-cursor-position!", 2, 0, (scm_t_subr)im::SetCursorPos);
-}
+  }
+  void init_imgui_inputs() {
+    guile::define("%key-down?", 1, (scm_t_subr)im::IsKeyDown);
+    guile::define("%key-pressed?", 1, 1, (scm_t_subr)im::IsKeyPressed);
+    guile::define("%key-released?", 1, (scm_t_subr)im::IsKeyReleased);
+    guile::define("%key-name", 1, (scm_t_subr)im::GetKeyName);
+  }
 }

@@ -9,6 +9,7 @@ foreach src : backends
     install: true,
     install_dir: libdir / guile_compiled_module_dir / 'imgui/backends',
     output: obj,
-    depends: [shlib,gglfw]
+    depends: [shlib,gglfw],
+    env: bulid_GUILE_EXTENSIONS_PATH
   )
 endforeach

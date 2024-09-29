@@ -74,6 +74,8 @@ guile_warnings = [
 guile_compile = [
   guild,
   'compile',
+  '-L',
+  meson.source_root() / 'modules',
   guile_warnings,
   '-o',
   '@OUTPUT@',
