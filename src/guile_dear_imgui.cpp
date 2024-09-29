@@ -590,6 +590,12 @@ value PushStyleColor(value idx, value col) {
     return ImGui ::IsWindowHovered(flags);
   };
 
+  value GetScrollX() { return ImGui ::GetScrollX(); };
+  value GetScrollY() { return ImGui ::GetScrollY(); };
+  value GetScrollMaxX() { return ImGui ::GetScrollMaxX(); };
+  value GetScrollMaxY() { return ImGui ::GetScrollMaxY(); };
+
+
 } // namespace im
 
 #define export_enum(e)                                      \
@@ -763,6 +769,11 @@ extern "C" {
     guile::define("window-collapsed?", (scm_t_subr)im::IsWindowCollapsed);
     guile::define("window-focused?",0,1, (scm_t_subr)im::IsWindowFocused);
     guile::define("window-hovered?", 0, 1, (scm_t_subr)im::IsWindowHovered);
+
+    guile::define("scroll-x", 0, 0, (scm_t_subr)im::GetScrollX);
+    guile::define("scroll-y", 0, 0, (scm_t_subr)im::GetScrollY);
+    guile::define("scroll-max-x", 0, 0, (scm_t_subr)im::GetScrollMaxX);
+    guile::define("scroll-max-y", 0, 0, (scm_t_subr)im::GetScrollMaxY);
 
 }
 }

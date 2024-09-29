@@ -83,6 +83,12 @@
             window-focused?
             window-hovered?
             window-collapsed?
+
+            scroll-x
+            scroll-y
+            scroll-max-x
+            scroll-max-y
+
             get-text-line-height
             get-text-line-height-with-spacing
             get-time
