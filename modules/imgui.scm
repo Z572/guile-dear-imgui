@@ -1,5 +1,7 @@
 (define-module (imgui)
   #:use-module (system foreign)
+  #:use-module (srfi srfi-34)
+  #:use-module (srfi srfi-35)
   #:use-module ((rnrs base) #:select (assert))
   #:export (create-context
             current-context
@@ -102,7 +104,8 @@
             get-text-line-height-with-spacing
             get-time
             get-frame-height
-            get-frame-height-with-spacing)
+            get-frame-height-with-spacing
+            assert-context)
   #:export-syntax (group
                    with-window
                    with-child-window
@@ -116,6 +119,15 @@
                    item-tooltip
                    with-style
                    with-style-colors))
+
+(define-condition-type &imgui-no-context &message
+  &imgui-no-context-condition?)
+
+(define-inlinable (assert-context)
+  (unless (current-context)
+    (raise (condition
+            (&imgui-no-context
+             (message "Not in a context!"))))))
 
 (define-wrapped-pointer-type <context>
   context?
