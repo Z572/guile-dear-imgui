@@ -595,6 +595,32 @@ value PushStyleColor(value idx, value col) {
   value GetScrollMaxX() { return ImGui ::GetScrollMaxX(); };
   value GetScrollMaxY() { return ImGui ::GetScrollMaxY(); };
 
+  value GetCursorStartPos() {
+    auto v = ImGui::GetCursorStartPos();
+    return guile::list(v.x,v.y);
+  }
+  value GetCursorScreenPos() {
+    auto v = ImGui::GetCursorScreenPos();
+    return guile::list(v.x,v.y);
+  };
+  value GetContentRegionAvail() {
+    auto v = ImGui::GetContentRegionAvail();
+    return guile::list(v.x,v.y);
+  };
+  value GetCursorPos() {
+    auto v = ImGui::GetCursorPos();
+    return guile::list(v.x,v.y);
+  };
+  value SetCursorScreenPos(value x,value y) {
+    auto v = ImVec2(x,y);
+    ImGui::SetCursorScreenPos(v);
+    return SCM_UNSPECIFIED;
+  };
+  value SetCursorPos(value x,value y) {
+    auto v = ImVec2(x,y);
+    ImGui::SetCursorPos(v);
+    return SCM_UNSPECIFIED;
+  };
 
 } // namespace im
 
@@ -775,5 +801,15 @@ extern "C" {
     guile::define("scroll-max-x", 0, 0, (scm_t_subr)im::GetScrollMaxX);
     guile::define("scroll-max-y", 0, 0, (scm_t_subr)im::GetScrollMaxY);
 
+    guile::define("cursor-start-position", 0, 0,
+                  (scm_t_subr)im::GetCursorStartPos);
+    guile::define("%cursor-screen-position", 0, 0,
+                  (scm_t_subr)im::GetCursorScreenPos);
+    guile::define("content-regin-avail", 0, 0,
+                  (scm_t_subr)im::GetContentRegionAvail);
+    guile::define("%cursor-position", 0, 0, (scm_t_subr)im::GetCursorPos);
+    guile::define("%set-cursor-screen-position!", 2, 0,
+                  (scm_t_subr)im::SetCursorScreenPos);
+    guile::define("%set-cursor-position!", 2, 0, (scm_t_subr)im::SetCursorPos);
 }
 }

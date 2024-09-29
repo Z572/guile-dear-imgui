@@ -89,6 +89,14 @@
             scroll-max-x
             scroll-max-y
 
+            cursor-start-position
+            cursor-screen-position
+            cursor-position
+            set-cursor-screen-position!
+            set-cursor-position!
+            content-regin-avail
+
+
             get-text-line-height
             get-text-line-height-with-spacing
             get-time
@@ -244,6 +252,7 @@
        #`(with-style-colors ((color value))
            (with-style-colors (o ...)
              body ...))))))
+
 (define-syntax with-style
   (lambda (x)
     (syntax-case x ()
@@ -257,6 +266,21 @@
        #`(f ((var value))
             (f (o ...)
                body ...))))))
+
+(define set-cursor-position!
+  (case-lambda ((vec) (%set-cursor-position! (first vec) (second vec)))
+               ((x y) (%set-cursor-position! x y))))
+(define cursor-position
+  (make-procedure-with-setter
+   %cursor-position set-cursor-position!))
+
+(define set-cursor-screen-position!
+  (case-lambda ((vec) (%set-cursor-screen-position! (first vec) (second vec)))
+               ((x y) (%set-cursor-screen-position! x y))))
+(define cursor-screen-position
+  (make-procedure-with-setter
+   %cursor-screen-position set-cursor-screen-position!))
+
 ;; Local Variables:
 ;; eval: (put 'with-window 'scheme-indent-function 1)
 ;; eval: (put 'with-child-window 'scheme-indent-function 1)
