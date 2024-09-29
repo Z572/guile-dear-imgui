@@ -4,7 +4,12 @@
   #:export (key-down?
             key-pressed?
             key-released?
-            key-name))
+            key-name
+
+            mouse-down?
+            mouse-released?
+            mouse-clicked?
+            mouse-double-clicked?))
 
 (load-extension "libguile_dear_imgui.so" "init_imgui_inputs")
 
@@ -24,3 +29,19 @@
 (define (key-name key)
   (assert-context)
   (%key-name key))
+
+(define (mouse-down? m)
+  (assert-context)
+  (%mouse-down? m))
+
+(define (mouse-released? m)
+  (assert-context)
+  (%mouse-released? m))
+
+(define (mouse-clicked? m)
+  (assert-context)
+  (%mouse-clicked? m))
+
+(define (mouse-double-clicked? m)
+  (assert-context)
+  (%mouse-double-clicked? m))

@@ -644,6 +644,20 @@ value PushStyleColor(value idx, value col) {
     return ImGui::GetKeyName(v);
   };
 
+  value IsMouseDown(value key) {
+    return ImGui::IsMouseDown(key);
+  };
+  value IsMouseClicked(value button, value repeat) {
+    maybe_set(repeat, false)
+    return ImGui::IsMouseClicked(button,repeat);
+  };
+  value IsMouseReleased(value button) {
+    return ImGui::IsMouseReleased(button);
+  };
+    value IsMouseDoubleClicked(value button) {
+    return ImGui::IsMouseDoubleClicked(button);
+  };
+
 } // namespace im
 
 #define export_enum(e)                                      \
@@ -840,5 +854,10 @@ extern "C" {
     guile::define("%key-pressed?", 1, 1, (scm_t_subr)im::IsKeyPressed);
     guile::define("%key-released?", 1, (scm_t_subr)im::IsKeyReleased);
     guile::define("%key-name", 1, (scm_t_subr)im::GetKeyName);
+
+    guile::define("%mouse-down?", 1, (scm_t_subr)im::IsMouseDown);
+    guile::define("%mouse-released?", 1, (scm_t_subr)im::IsMouseReleased);
+    guile::define("%mouse-clicked?", 1, 1, (scm_t_subr)im::IsMouseClicked);
+    guile::define("%mouse-double-clicked?", 1, (scm_t_subr)im::IsMouseDoubleClicked);
   }
 }
