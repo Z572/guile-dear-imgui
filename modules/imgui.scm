@@ -2,6 +2,7 @@
   #:use-module (system foreign)
   #:use-module ((rnrs base) #:select (assert))
   #:export (create-context
+            current-context
             open-popup
             get-io
             get-style
@@ -132,6 +133,9 @@
   (if ctx
       (%destroy-context (unwrap-context ctx))
       (%destroy-context)))
+
+(define (current-context)
+  (and=> (%current-context) wrap-context))
 
 (define-syntax-rule (im-catch begin end body ...)
   (let ((r #f))

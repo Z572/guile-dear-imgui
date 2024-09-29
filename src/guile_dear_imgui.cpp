@@ -60,6 +60,10 @@ namespace im {
     };
     return SCM_UNSPECIFIED;
   }
+  value GetCurrentContext() {
+    auto ctx=ImGui::GetCurrentContext();
+    return (ctx) ? scm_from_pointer(ctx, nullptr) : SCM_BOOL_F;
+  }
   value getio() {
     ImGuiIO &c = ImGui::GetIO();
     // c.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -748,6 +752,7 @@ extern "C" {
                        (scm_t_subr)im::create_context);
     scm_c_define_gsubr("%destroy-context", 0, 1, 0,
                        (scm_t_subr)im::destroy_context);
+    guile::define("%current-context", (scm_t_subr)im::GetCurrentContext);
     scm_c_define_gsubr("get-io", 0, 0, 0, (scm_t_subr)im::getio);
     scm_c_define_gsubr("get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);
     scm_c_define_gsubr("style-scale-all-sizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
