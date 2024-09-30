@@ -11,8 +11,6 @@
             style-scale-all-sizes
             new-frame
             io-display-size
-            set-next-window-size
-            set-next-window-pos
             begin-window
             end-window
             begin-popup
@@ -82,10 +80,6 @@
             tree-pop
             collapsing-header
             align-text-to-frame-padding
-            window-appearing?
-            window-focused?
-            window-hovered?
-            window-collapsed?
 
             scroll-x
             scroll-y

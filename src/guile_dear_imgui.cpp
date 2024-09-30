@@ -736,9 +736,6 @@ extern "C" {
                        (scm_t_subr)im::EndCombo);
     scm_c_define_gsubr("menu-item", 4, 0, 0,
                        (scm_t_subr)im::MenuItem);
-    scm_c_define_gsubr("set-next-window-size", 2, 0, 0,
-                       (scm_t_subr)im::SetNextWindowSize);
-    scm_c_define_gsubr("set-next-window-pos", 5, 0, 0, (scm_t_subr)im::SetNextWindowPos);
     scm_c_define_gsubr("render", 0, 0, 0, (scm_t_subr)im::Render);
     scm_c_define_gsubr("new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
     scm_c_define_gsubr("text", 1, 0, 0, (scm_t_subr)im::text);
@@ -828,10 +825,6 @@ extern "C" {
     scm_c_define_gsubr("tree-pop", 1, 0, 0, (scm_t_subr)im::TreePop);
     scm_c_define_gsubr("collapsing-header", 1, 1, 0,
                        (scm_t_subr)im::CollapsingHeader);
-    guile::define("window-appearing?", (scm_t_subr)im::IsWindowAppearing);
-    guile::define("window-collapsed?", (scm_t_subr)im::IsWindowCollapsed);
-    guile::define("window-focused?",0,1, (scm_t_subr)im::IsWindowFocused);
-    guile::define("window-hovered?", 0, 1, (scm_t_subr)im::IsWindowHovered);
 
     guile::define("scroll-x", 0, 0, (scm_t_subr)im::GetScrollX);
     guile::define("scroll-y", 0, 0, (scm_t_subr)im::GetScrollY);
@@ -859,5 +852,14 @@ extern "C" {
     guile::define("%mouse-released?", 1, (scm_t_subr)im::IsMouseReleased);
     guile::define("%mouse-clicked?", 1, 1, (scm_t_subr)im::IsMouseClicked);
     guile::define("%mouse-double-clicked?", 1, (scm_t_subr)im::IsMouseDoubleClicked);
+  }
+  void init_imgui_window() {
+    guile::define("set-next-window-size", 2, (scm_t_subr)im::SetNextWindowSize);
+    guile::define("set-next-window-pos", 5,(scm_t_subr)im::SetNextWindowPos);
+
+    guile::define("window-appearing?", (scm_t_subr)im::IsWindowAppearing);
+    guile::define("window-collapsed?", (scm_t_subr)im::IsWindowCollapsed);
+    guile::define("window-focused?",0,1, (scm_t_subr)im::IsWindowFocused);
+    guile::define("window-hovered?", 0, 1, (scm_t_subr)im::IsWindowHovered);
   }
 }
