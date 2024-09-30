@@ -261,8 +261,11 @@ value set_io_config_flags(value io,value flag) {
     return ImGui::GetFontSize();
   }
 
-  value Separator() {
-    ImGui::Separator();
+  value Separator(value label) {
+    if (label.boundp())
+      ImGui::SeparatorText(LABEL(label));
+    else
+      ImGui::Separator();
     return SCM_UNSPECIFIED;
   }
   value Spacing() {
@@ -763,7 +766,7 @@ extern "C" {
     scm_c_define_gsubr("default-focus", 0, 0, 0, (scm_t_subr)im::SetItemDefaultFocus);
     scm_c_define_gsubr("keyboard-focus-here!", 1, 0, 0, (scm_t_subr)im::SetKeyboardFocusHere);
     scm_c_define_gsubr("get-font-size", 0, 0, 0, (scm_t_subr)im::GetFontSize);
-    scm_c_define_gsubr("separator", 0, 0, 0, (scm_t_subr)im::Separator);
+    guile::define("separator", 0, 1, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
     scm_c_define_gsubr("%input-text", 3, 0, 0, (scm_t_subr)im::InputText);
     scm_c_define_gsubr("input-text-with-hint", 4, 0, 0, (scm_t_subr)im::InputTextWithHint);
