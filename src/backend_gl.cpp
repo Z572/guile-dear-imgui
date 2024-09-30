@@ -3,8 +3,39 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <libguile.h>
 #include <guile.hpp>
+#if defined (HAVE_STB_IMAGE)
+#include <GL/gl.h>
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_MALLOC(sz) scm_gc_malloc(sz,"stbi")
+#define STBI_FREE(p) scm_gc_free(p,sizeof(p),"stbi")
+#define STBI_REALLOC(p,newsz) scm_gc_realloc(p,sizeof(p),newsz,"stbi")
+#include <stb_image.h>
+#endif
+
+
 namespace im {
   using guile::value;
+#if defined (HAVE_STB_IMAGE)
+  value loadimage(value filename) {
+    int image_width = 0;
+    int image_height = 0;
+    int channels_in_file;
+    auto image_data =
+      ::stbi_load(LABEL(filename), &image_width, &image_height, &channels_in_file, 4);
+    if (image_data == nullptr)
+      return scm_values_3(SCM_BOOL_F, SCM_BOOL_F, SCM_BOOL_F);
+    GLuint image_texture;
+    glGenTextures(1, &image_texture);
+    glBindTexture(GL_TEXTURE_2D, image_texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+    stbi_image_free(image_data);
+    return scm_values_3(scm_from_unsigned_integer(image_texture), value(image_width), value(image_height));
+  }
+#endif
     namespace opengl2 {
       value NewFrame(){
         ImGui_ImplOpenGL2_NewFrame();
@@ -44,8 +75,12 @@ extern "C" {
                        (scm_t_subr)im::opengl3::Shutdown);
     scm_c_define_gsubr("impl:opengl3:new-frame", 0, 0, 0,
                        (scm_t_subr)im::opengl3::NewFrame);
-        scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
+    scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
                        (scm_t_subr)im::opengl3::RenderDrawData);
 
+#if defined (HAVE_STB_IMAGE)
+    guile::define("load-image", 1, (scm_t_subr)im::loadimage);
+    guile::exports("load-image");
+#endif
   }
 }

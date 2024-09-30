@@ -170,5 +170,9 @@ namespace guile {
   {
     return define(name, req, 0, v,document);
   }
+  template<typename... T>
+  inline void exports(T...arg) {
+    scm_c_export(arg...,nullptr);
+  };
 
 } // namespace guile

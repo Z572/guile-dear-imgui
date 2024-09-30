@@ -34,6 +34,10 @@ imgui_options = [
 ]
 
 cpp=meson.get_compiler('cpp')
+if cpp.has_header('stb_image.h',required: get_option('stb_image'))
+  lib_args+='-DHAVE_STB_IMAGE=ON'
+endif
+
 guile_dep=dependency('guile-3.0')
 dearimgui_dep = dependency('imgui',required: false)
 if (not dearimgui_dep.found())

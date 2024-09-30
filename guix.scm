@@ -24,6 +24,7 @@
  (gnu packages wm)
  (gnu packages gdb)
  (gnu packages toolkits)
+ (gnu packages stb)
  (gnu packages sdl)
  (gnu packages freedesktop))
 
@@ -63,6 +64,7 @@
            guile-3.0-latest))
     (inputs (list guile-3.0-latest imgui-1.91.2 sdl2 glfw-3.4
                   magic-enum
+                  stb-image ;; optional dependency
                   ;; for example
                   guile-sdl2 guile3.0-opengl))
     (arguments
