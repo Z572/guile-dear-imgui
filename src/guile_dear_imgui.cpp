@@ -854,8 +854,8 @@ extern "C" {
     guile::define("%mouse-double-clicked?", 1, (scm_t_subr)im::IsMouseDoubleClicked);
   }
   void init_imgui_window() {
-    guile::define("set-next-window-size", 2, (scm_t_subr)im::SetNextWindowSize);
-    guile::define("set-next-window-pos", 5,(scm_t_subr)im::SetNextWindowPos);
+    guile::define("%set-next-window-size!", 2, (scm_t_subr)im::SetNextWindowSize);
+    guile::define("set-next-window-position!", 5,(scm_t_subr)im::SetNextWindowPos);
 
     guile::define("window-appearing?", (scm_t_subr)im::IsWindowAppearing);
     guile::define("window-collapsed?", (scm_t_subr)im::IsWindowCollapsed);
