@@ -12,6 +12,7 @@
             new-frame
             io-display-size
             begin-window
+            image
             end-window
             begin-popup
             end-popup
@@ -291,6 +292,9 @@
   (make-procedure-with-setter
    %cursor-screen-position set-cursor-screen-position!))
 
+(define image
+  (case-lambda ((id vec) (%image id (first vec) (second vec)))
+               ((id x y) (%image id x y))))
 ;; Local Variables:
 ;; eval: (put 'with-window 'scheme-indent-function 1)
 ;; eval: (put 'with-child-window 'scheme-indent-function 1)
