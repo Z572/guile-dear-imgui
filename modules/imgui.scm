@@ -32,6 +32,7 @@
             color-picker3
             color-picker4
             sameline
+            dummy
             indent
             unindent
             text

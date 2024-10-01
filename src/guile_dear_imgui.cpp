@@ -460,7 +460,10 @@ value set_io_config_flags(value io,value flag) {
   value InvisibleButton(value id, value size) {
     return ImGui::InvisibleButton(LABEL(id), ImVec2(size[0], size[1]));
   }
-
+  value dummy(value size) {
+    ImGui::Dummy(ImVec2(size[0],size[1]));
+    return SCM_UNSPECIFIED;
+  }
   value Selectable(value label, value selected) {
     bool selectedp=false;
     if (selected.is_procedure_p())
@@ -762,6 +765,7 @@ extern "C" {
     scm_c_define_gsubr("color-picker3", 2, 1, 0, (scm_t_subr)im::ColorPicker3);
     scm_c_define_gsubr("color-picker4", 2, 1, 0, (scm_t_subr)im::ColorPicker4);
     scm_c_define_gsubr("sameline", 0, 2, 0, (scm_t_subr)im::SameLine);
+    guile::define("dummy", 1, (scm_t_subr)im::dummy);
     scm_c_define_gsubr("slider-int", 4, 1, 0, (scm_t_subr)im::SliderInt);
     scm_c_define_gsubr("drag-int", 2, 4, 0, (scm_t_subr)im::DragInt);
     scm_c_define_gsubr("open-popup", 1, 0, 0, (scm_t_subr)im::OpenPopup);
