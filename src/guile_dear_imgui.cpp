@@ -464,6 +464,11 @@ value set_io_config_flags(value io,value flag) {
     ImGui::Dummy(ImVec2(size[0],size[1]));
     return SCM_UNSPECIFIED;
   }
+
+  value CalcTextSize(value text){
+    auto c=ImGui::CalcTextSize(LABEL(text));
+    return guile::list(c.x,c.y);
+  }
   value Selectable(value label, value selected) {
     bool selectedp=false;
     if (selected.is_procedure_p())
@@ -854,6 +859,7 @@ extern "C" {
     guile::define("%set-cursor-screen-position!", 2, 0,
                   (scm_t_subr)im::SetCursorScreenPos);
     guile::define("%set-cursor-position!", 2, 0, (scm_t_subr)im::SetCursorPos);
+    guile::define("calc-text-size", 1, 0, (scm_t_subr)im::CalcTextSize);
   }
   void init_imgui_inputs() {
     guile::define("%key-down?", 1, (scm_t_subr)im::IsKeyDown);

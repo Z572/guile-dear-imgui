@@ -33,6 +33,7 @@
             color-picker4
             sameline
             dummy
+            calc-text-size
             indent
             unindent
             text
