@@ -21,10 +21,10 @@
 #define defconst(v)                                                            \
   std::cout << "define " #v;                                                   \
   scm_c_define(#v, scm_from_int(v));                                           \
-  scm_c_export(#v);                                                            \
+  scm_c_export(#v,nullptr);                                                    \
   std::cout << " done" << std::endl
 #else
-#define defconst(v) scm_c_define(#v,scm_from_int(v)); scm_c_export(#v)
+#define defconst(v) scm_c_define(#v,scm_from_int(v)); scm_c_export(#v,nullptr)
 #endif
 #define maybe_set(v, val)                                                      \
   if (v.unboundp()) {                                                          \
