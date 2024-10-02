@@ -676,6 +676,15 @@ value PushStyleColor(value idx, value col) {
   value GetScrollY() { return ImGui ::GetScrollY(); };
   value GetScrollMaxX() { return ImGui ::GetScrollMaxX(); };
   value GetScrollMaxY() { return ImGui ::GetScrollMaxY(); };
+  value SetScrollHereX() {
+    ImGui::SetScrollHereX();
+    return SCM_UNSPECIFIED;
+  }
+  value SetScrollHereY() {
+    ImGui::SetScrollHereY();
+    return SCM_UNSPECIFIED;
+  }
+
 
   value GetCursorStartPos() {
     auto v = ImGui::GetCursorStartPos();
@@ -1160,6 +1169,8 @@ extern "C" {
     guile::define("scroll-y", 0, 0, (scm_t_subr)im::GetScrollY);
     guile::define("scroll-max-x", 0, 0, (scm_t_subr)im::GetScrollMaxX);
     guile::define("scroll-max-y", 0, 0, (scm_t_subr)im::GetScrollMaxY);
+    guile::define("set-scroll-x!", 0, 0, (scm_t_subr)im::SetScrollHereX);
+    guile::define("set-scroll-y!", 0, 0, (scm_t_subr)im::SetScrollHereY);
 
     guile::define("cursor-start-position", 0, 0,
                   (scm_t_subr)im::GetCursorStartPos);

@@ -91,6 +91,8 @@
 
             scroll-x
             scroll-y
+            set-scroll-x!
+            set-scroll-y!
             scroll-max-x
             scroll-max-y
 
