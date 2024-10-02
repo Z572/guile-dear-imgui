@@ -107,6 +107,11 @@
             get-time
             get-frame-height
             get-frame-height-with-spacing
+            list-clipper
+            list-clipper-begin
+            list-clipper-step
+            list-clipper-display-start
+            list-clipper-display-end
             assert-context)
   #:export-syntax (group
                    with-window

@@ -790,7 +790,46 @@ value PushStyleColor(value idx, value col) {
   value GetMainViewport() {
     return scm_from_pointer(ImGui::GetMainViewport(),nullptr);
   }
-
+  value listClipper() {
+    auto v = new ImGuiListClipper();
+    return scm_from_pointer(v, [](void *v) {
+      ImGuiListClipper *c = static_cast<ImGuiListClipper *>(v);
+      delete c;
+    });
+  }
+  value clipper_begin(value clipper,value count,value item_height) {
+    scm_gc_protect_object(clipper);
+    maybe_set(item_height, -1.0f);
+    ImGuiListClipper *c =
+        static_cast<ImGuiListClipper *>(scm_to_pointer(clipper));
+    c->Begin(count, item_height);
+    scm_gc_unprotect_object(clipper);
+    return SCM_UNSPECIFIED;
+  }
+    value clipper_step(value clipper) {
+    scm_gc_protect_object(clipper);
+    ImGuiListClipper *c =
+        static_cast<ImGuiListClipper *>(scm_to_pointer(clipper));
+    auto ret=c->Step();
+    scm_gc_unprotect_object(clipper);
+    return ret;
+    }
+  value clipper_display_start(value clipper) {
+    scm_gc_protect_object(clipper);
+    ImGuiListClipper *c =
+        static_cast<ImGuiListClipper *>(scm_to_pointer(clipper));
+    auto ret=c->DisplayStart;
+    scm_gc_unprotect_object(clipper);
+    return ret;
+  }
+  value clipper_display_end(value clipper) {
+    scm_gc_protect_object(clipper);
+    ImGuiListClipper *c =
+        static_cast<ImGuiListClipper *>(scm_to_pointer(clipper));
+    auto ret=c->DisplayEnd;
+    scm_gc_unprotect_object(clipper);
+    return ret;
+  }
 
 } // namespace im
 
@@ -1134,6 +1173,13 @@ extern "C" {
     guile::define("%set-cursor-position!", 2, 0, (scm_t_subr)im::SetCursorPos);
     guile::define("calc-text-size", 1, 0, (scm_t_subr)im::CalcTextSize);
     guile::define("calc-item-width", (scm_t_subr)im::CalcItemWidth);
+    guile::define("list-clipper", (scm_t_subr)im::listClipper);
+    guile::define("list-clipper-begin", 2, 1, (scm_t_subr)im::clipper_begin);
+    guile::define("list-clipper-step", 1, (scm_t_subr)im::clipper_step);
+    guile::define("list-clipper-display-start", 1,
+                  (scm_t_subr)im::clipper_display_start);
+    guile::define("list-clipper-display-end", 1,
+                  (scm_t_subr)im::clipper_display_end);
   }
   void init_imgui_inputs() {
     guile::define("%key-down?", 1, (scm_t_subr)im::IsKeyDown);
