@@ -42,6 +42,7 @@
             indent
             unindent
             text
+            label-text
             text-colored
             newline
             get-font-size

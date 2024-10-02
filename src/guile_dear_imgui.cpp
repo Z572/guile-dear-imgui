@@ -356,6 +356,10 @@ value set_io_config_flags(value io,value flag) {
     ImGui::TextUnformatted(LABEL(str));
     return SCM_UNSPECIFIED;
   }
+  value LabelText(value label,value str) {
+    ImGui::LabelText(LABEL(label), "%s", LABEL(str));
+    return SCM_UNSPECIFIED;
+  }
   value TextColored(value col, value str) {
     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col[0],col[1],col[2],col[3]));
     text(str);
@@ -1074,6 +1078,7 @@ extern "C" {
     scm_c_define_gsubr("render", 0, 0, 0, (scm_t_subr)im::Render);
     scm_c_define_gsubr("new-frame", 0, 0, 0, (scm_t_subr)im::new_frame);
     scm_c_define_gsubr("text", 1, 0, 0, (scm_t_subr)im::text);
+    scm_c_define_gsubr("label-text", 2, 0, 0, (scm_t_subr)im::LabelText);
     scm_c_define_gsubr("text-colored", 2, 0, 0, (scm_t_subr)im::TextColored);
     scm_c_define_gsubr("%image", 3, 0, 0, (scm_t_subr)im::Image);
     scm_c_define_gsubr("indent", 0, 1, 0, (scm_t_subr)im::Indent);
