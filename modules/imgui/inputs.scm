@@ -7,6 +7,8 @@
             key-name
 
             set-item-key-owner!
+            set-next-item-shortcut!
+            shortcut
 
             mouse-down?
             mouse-released?

@@ -738,9 +738,18 @@ value PushStyleColor(value idx, value col) {
   value IsMouseReleased(value button) {
     return ImGui::IsMouseReleased(button);
   };
-    value IsMouseDoubleClicked(value button) {
+  value IsMouseDoubleClicked(value button) {
     return ImGui::IsMouseDoubleClicked(button);
-    };
+  };
+  value SetNextItemShortcut(value key_chord,value flags) {
+    maybe_set(flags, 0);
+    ImGui::SetNextItemShortcut(key_chord, flags);
+    return SCM_UNSPECIFIED;
+  }
+  value Shortcut(value key_chord,value flags) {
+    maybe_set(flags, 0);
+    return ImGui::Shortcut(key_chord, flags);;
+  }
   value IsItemHovered(value flags) {
     maybe_set(flags, 0);
     return ImGui::IsItemHovered(flags);
@@ -1136,7 +1145,12 @@ extern "C" {
     guile::define("%mouse-down?", 1, (scm_t_subr)im::IsMouseDown);
     guile::define("%mouse-released?", 1, (scm_t_subr)im::IsMouseReleased);
     guile::define("%mouse-clicked?", 1, 1, (scm_t_subr)im::IsMouseClicked);
-    guile::define("%mouse-double-clicked?", 1, (scm_t_subr)im::IsMouseDoubleClicked);
+    guile::define("%mouse-double-clicked?", 1,
+                  (scm_t_subr)im::IsMouseDoubleClicked);
+    guile::define("set-next-item-shortcut!", 1, 1,
+                  (scm_t_subr)im::SetNextItemShortcut);
+    guile::define("shortcut", 1, 1,
+                  (scm_t_subr)im::Shortcut);
   }
   void init_imgui_window() {
     guile::define("%set-next-window-size!", 2, (scm_t_subr)im::SetNextWindowSize);
