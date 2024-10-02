@@ -12,6 +12,9 @@
             new-frame
             io-display-size
             begin-window
+            show-metrics-window
+            show-style-editor
+            show-user-guide
             image
             end-window
             begin-popup

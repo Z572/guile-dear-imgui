@@ -405,6 +405,18 @@ value set_io_config_flags(value io,value flag) {
     }
     return SCM_UNSPECIFIED;
   }
+  value ShowMetricsWindow() {
+      ImGui::ShowMetricsWindow();
+    return SCM_UNSPECIFIED;
+  }
+  value ShowStyleEditor() {
+    ImGui::ShowStyleEditor();
+    return SCM_UNSPECIFIED;
+  }
+  value ShowUserGuide() {
+    ImGui::ShowUserGuide();
+    return SCM_UNSPECIFIED;
+  }
   value OpenPopup(value id) {
     if (scm_to_bool(scm_string_p(id)))
       ImGui::OpenPopup(scm_to_locale_string(id));
@@ -992,6 +1004,9 @@ extern "C" {
     scm_c_define_gsubr("%image", 3, 0, 0, (scm_t_subr)im::Image);
     scm_c_define_gsubr("indent", 0, 1, 0, (scm_t_subr)im::Indent);
     scm_c_define_gsubr("unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
+    guile::define("show-metrics-window", (scm_t_subr)im::ShowMetricsWindow);
+    guile::define("show-style-editor", (scm_t_subr)im::ShowStyleEditor);
+    guile::define("show-user-guide", (scm_t_subr)im::ShowUserGuide);
     scm_c_define_gsubr("checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
     scm_c_define_gsubr("input-int", 4, 0, 0, (scm_t_subr)im::InputInt);
     scm_c_define_gsubr("input-float", 4, 0, 0, (scm_t_subr)im::InputFloat);
