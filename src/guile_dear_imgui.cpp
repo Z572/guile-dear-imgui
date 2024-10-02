@@ -715,7 +715,45 @@ value PushStyleColor(value idx, value col) {
   };
     value IsMouseDoubleClicked(value button) {
     return ImGui::IsMouseDoubleClicked(button);
+    };
+  value IsItemHovered(value flags) {
+    maybe_set(flags, 0);
+    return ImGui::IsItemHovered(flags);
   };
+  value IsItemActive() { return ImGui::IsItemActive(); };
+  value IsItemFocused() { return ImGui::IsItemFocused(); };
+  value IsItemClicked(value flags) {
+    maybe_set(flags, 0);
+    return ImGui::IsItemClicked(flags);
+  };
+  value IsItemVisible() { return ImGui::IsItemVisible(); };
+  value IsItemEdited() { return ImGui::IsItemEdited(); };
+  value IsItemActivated() { return ImGui::IsItemActivated(); };
+  value IsItemDeactivated() { return ImGui::IsItemDeactivated(); };
+  value IsItemDeactivatedAfterEdit() {
+    return ImGui::IsItemDeactivatedAfterEdit();
+  };
+
+  value IsItemToggledOpen() { return ImGui::IsItemToggledOpen(); };
+  value IsAnyItemHovered() { return ImGui::IsAnyItemHovered(); };
+  value IsAnyItemActive() { return ImGui::IsAnyItemActive(); };
+  value IsAnyItemFocused() { return ImGui::IsAnyItemFocused(); };
+  value GetItemID() { return ImGui::GetItemID(); };
+  value GetItemRectMin() {
+    auto v = ImGui::GetItemRectMin();
+    return guile::list(v.x,v.y);
+  };
+
+  value GetItemRectMax() {
+    auto v = ImGui::GetItemRectMax();
+    return guile::list(v.x,v.y);
+  };
+
+    value GetItemRectSize() {
+    auto v = ImGui::GetItemRectSize();
+    return guile::list(v.x,v.y);
+  };
+
 
 } // namespace im
 
@@ -1074,5 +1112,25 @@ extern "C" {
     guile::define("window-collapsed?", (scm_t_subr)im::IsWindowCollapsed);
     guile::define("window-focused?",0,1, (scm_t_subr)im::IsWindowFocused);
     guile::define("window-hovered?", 0, 1, (scm_t_subr)im::IsWindowHovered);
+  }
+  void init_imgui_item() {
+    guile::define("item-hovered?", 0, 1, (scm_t_subr)im::IsItemHovered);
+    guile::define("item-active?", 0, (scm_t_subr)im::IsItemActive);
+    guile::define("item-focused?", 0, (scm_t_subr)im::IsItemFocused);
+    guile::define("item-clicked?", 0, 1, (scm_t_subr)im::IsItemClicked);
+    guile::define("item-visible?", 0, (scm_t_subr)im::IsItemVisible);
+    guile::define("item-edited?", 0,  (scm_t_subr)im::IsItemEdited);
+    guile::define("item-activated?", 0,  (scm_t_subr)im::IsItemActivated);
+    guile::define("item-deactivated?", 0,  (scm_t_subr)im::IsItemDeactivated);
+    guile::define("item-deactivated-after-edit?", 0,
+                  (scm_t_subr)im::IsItemDeactivatedAfterEdit);
+    guile::define("item-toggle-open?", 0,  (scm_t_subr)im::IsItemToggledOpen);
+    guile::define("any-item-hovered?", 0,  (scm_t_subr)im::IsAnyItemActive);
+    guile::define("any-item-active?", 0, (scm_t_subr)im::IsAnyItemActive);
+    guile::define("any-item-focused?", 0, (scm_t_subr)im::IsAnyItemFocused);
+    guile::define("item-id", 0, (scm_t_subr)im::GetItemID);
+    guile::define("item-rect-min", 0, (scm_t_subr)im::GetItemRectMin);
+    guile::define("item-rect-max", 0, (scm_t_subr)im::GetItemRectMax);
+    guile::define("item-rect-size", 0, (scm_t_subr)im::GetItemRectSize);
   }
 }
