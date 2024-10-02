@@ -13,6 +13,7 @@
             io-display-size
             begin-window
             show-metrics-window
+            show-demo-window
             show-style-editor
             show-user-guide
             image

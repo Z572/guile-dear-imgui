@@ -409,6 +409,10 @@ value set_io_config_flags(value io,value flag) {
       ImGui::ShowMetricsWindow();
     return SCM_UNSPECIFIED;
   }
+  value ShowDemoWindow() {
+      ImGui::ShowDemoWindow();
+    return SCM_UNSPECIFIED;
+  }
   value ShowStyleEditor() {
     ImGui::ShowStyleEditor();
     return SCM_UNSPECIFIED;
@@ -1017,6 +1021,7 @@ extern "C" {
     scm_c_define_gsubr("indent", 0, 1, 0, (scm_t_subr)im::Indent);
     scm_c_define_gsubr("unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
     guile::define("show-metrics-window", (scm_t_subr)im::ShowMetricsWindow);
+    guile::define("show-demo-window", (scm_t_subr)im::ShowDemoWindow);
     guile::define("show-style-editor", (scm_t_subr)im::ShowStyleEditor);
     guile::define("show-user-guide", (scm_t_subr)im::ShowUserGuide);
     scm_c_define_gsubr("checkbox", 2, 0, 0, (scm_t_subr)im::Checkbox);
