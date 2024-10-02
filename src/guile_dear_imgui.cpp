@@ -770,10 +770,13 @@ value PushStyleColor(value idx, value col) {
     return guile::list(v.x,v.y);
   };
 
-    value GetItemRectSize() {
+  value GetItemRectSize() {
     auto v = ImGui::GetItemRectSize();
     return guile::list(v.x,v.y);
   };
+  value GetMainViewport() {
+    return scm_from_pointer(ImGui::GetMainViewport(),nullptr);
+  }
 
 
 } // namespace im
@@ -1158,5 +1161,8 @@ extern "C" {
     guile::define("item-rect-min", 0, (scm_t_subr)im::GetItemRectMin);
     guile::define("item-rect-max", 0, (scm_t_subr)im::GetItemRectMax);
     guile::define("item-rect-size", 0, (scm_t_subr)im::GetItemRectSize);
+  }
+  void init_imgui_viewport() {
+        guile::define("%get-main-viewport", (scm_t_subr)im::GetMainViewport);
   }
 }
