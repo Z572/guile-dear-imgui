@@ -6,6 +6,8 @@
             key-released?
             key-name
 
+            set-item-key-owner!
+
             mouse-down?
             mouse-released?
             mouse-clicked?

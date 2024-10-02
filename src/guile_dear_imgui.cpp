@@ -718,6 +718,12 @@ value PushStyleColor(value idx, value col) {
     return ImGui::GetKeyName(v);
   };
 
+  value SetItemKeyOwner(value key) {
+    ImGuiKey k=ImGuiKey(scm_to_int(key));
+    ImGui::SetItemKeyOwner(k);
+    return SCM_UNSPECIFIED;
+  }
+
   value IsMouseDown(value key) {
     return ImGui::IsMouseDown(key);
   };
@@ -1117,6 +1123,7 @@ extern "C" {
     guile::define("%key-pressed?", 1, 1, (scm_t_subr)im::IsKeyPressed);
     guile::define("%key-released?", 1, (scm_t_subr)im::IsKeyReleased);
     guile::define("%key-name", 1, (scm_t_subr)im::GetKeyName);
+    guile::define("set-item-key-owner!", 1, (scm_t_subr)im::SetItemKeyOwner);
 
     guile::define("%mouse-down?", 1, (scm_t_subr)im::IsMouseDown);
     guile::define("%mouse-released?", 1, (scm_t_subr)im::IsMouseReleased);
