@@ -5,6 +5,7 @@
 #include <exception>
 #include <guile.hpp>
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <libguile.h>
 #include <functional>
@@ -647,9 +648,9 @@ value PushStyleColor(value idx, value col) {
     return ImGui::IsKeyDown(v);
   };
   value IsKeyPressed(value key, value repeat) {
-    maybe_set(repeat, true)
+    int flags = (scm_to_bool(repeat)) ? ImGuiInputFlags_Repeat : ImGuiInputFlags_None;
     auto v = ImGuiKey(scm_to_int(key));
-    return ImGui::IsKeyPressed(v,repeat);
+    return ImGui::IsKeyPressed(v,flags);
   };
   value IsKeyReleased(value key) {
     auto v = ImGuiKey(scm_to_int(key));
@@ -664,8 +665,8 @@ value PushStyleColor(value idx, value col) {
     return ImGui::IsMouseDown(key);
   };
   value IsMouseClicked(value button, value repeat) {
-    maybe_set(repeat, false)
-    return ImGui::IsMouseClicked(button,repeat);
+    int flags = (scm_to_bool(repeat)) ? ImGuiInputFlags_Repeat : ImGuiInputFlags_None;
+    return ImGui::IsMouseClicked(button,flags);
   };
   value IsMouseReleased(value button) {
     return ImGui::IsMouseReleased(button);
