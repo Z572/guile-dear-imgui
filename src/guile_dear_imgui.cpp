@@ -533,12 +533,13 @@ value set_io_config_flags(value io,value flag) {
   }
   value Selectable(value label, value selected) {
     bool selectedp=false;
-    if (selected.is_procedure_p())
+    if (selected.is_procedure_p()) {
       selectedp = selected();
-    auto ret = ImGui::Selectable(LABEL(label), &selectedp);
-    if (selected.is_procedure_p())
+      auto ret = ImGui::Selectable(LABEL(label), &selectedp);
       selected(selectedp);
-    return value(ret);
+      return value(ret);
+    }
+    return ImGui::Selectable(LABEL(label), selected);
   }
   value BeginTable(value id, value column) {
     return ImGui::BeginTable(LABEL(id), column,
@@ -1115,7 +1116,7 @@ extern "C" {
                "flexible button behavior without the visuals, frequently "
                "useful to build custom behaviors using the public api (along "
                "with IsItemActive, IsItemHovered, etc.)");
-    scm_c_define_gsubr("selectable", 2, 0, 0, (scm_t_subr)im::Selectable);
+    guile::define("selectable", 2,(scm_t_subr)im::Selectable);
     scm_c_define_gsubr("%create-context", 0, 0, 0,
                        (scm_t_subr)im::create_context);
     scm_c_define_gsubr("%destroy-context", 0, 1, 0,
