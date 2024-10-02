@@ -231,11 +231,16 @@
 (define* (input-text label buf #:optional (flags 0)
                      #:key
                      (hint #f)
-                     (callback #f))
-  (if callback (error "callback no impl!"))
-  (if hint
-      (input-text-with-hint label hint buf flags)
-      (%input-text label buf flags)))
+                     (callback #f)
+                     (multiline #f))
+
+  (when hint
+    (assert (string? hint)))
+  (when callback
+    (assert (procedure? callback)))
+  (when multiline
+    (assert (= 2 (length multiline))))
+  (%inputex label buf hint flags multiline callback))
 
 (define* (add-font-from-file! f filename size
                               #:key

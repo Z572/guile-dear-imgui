@@ -273,20 +273,62 @@ value set_io_config_flags(value io,value flag) {
     ImGui::Spacing();
     return SCM_UNSPECIFIED;
   }
-  value InputText(value label,value buf,value flags) {
-    std::string buff = buf();
-    auto ret=ImGui::InputText(LABEL(label),&buff,flags);
-    buf(buff);
-    return ret;
+  struct InputTextCallback_UserData
+  {
+    std::string*            Str;
+    ImGuiInputTextCallback  ChainCallback;
+    void*                   ChainCallbackUserData;
+  };
+
+  static int InputTextCallback(ImGuiInputTextCallbackData* data)
+  {
+    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+      {
+        // Resize string callback
+        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+        std::string* str = user_data->Str;
+        IM_ASSERT(data->Buf == str->c_str());
+        str->resize(data->BufTextLen);
+        data->Buf = (char*)str->c_str();
+    } else if (user_data->ChainCallback) {
+        // Forward to user callback, if any
+        data->UserData = user_data->ChainCallbackUserData;
+        return user_data->ChainCallback(data);
+      }
+    return 0;
   }
-  value InputTextWithHint(value label,value hint,value buf,value flags) {
-    std::string buff = buf();
-    auto ret = ImGui::InputTextWithHint(LABEL(label),
-                                        LABEL(hint),
-                                        &buff,flags);
-    buf(buff);
-    return ret;
+
+  static int InputTextSCMCallback(ImGuiInputTextCallbackData* data)
+  {
+    value scm_callback = (SCM)data->UserData;
+    return scm_to_int(scm_callback(scm_from_utf8_keyword("flags"), value(data->Flags),
+                                   scm_from_utf8_keyword("cursor-position"), value(data->CursorPos)));
   }
+
+  value InputTextEx(value label, value str,value hint, value sflags ,value multiline_p,value callback)
+  {
+    ImGuiInputTextFlags flags=sflags;
+    bool multiline= scm_is_true(multiline_p.get());
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+    if (multiline)
+      flags |= ImGuiInputTextFlags_Multiline;
+    std::string cpp_str=str();
+    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = &cpp_str;
+    if (callback.is_procedure_p()) {
+      cb_user_data.ChainCallback = InputTextSCMCallback;
+      cb_user_data.ChainCallbackUserData = callback.get();
+    }
+    auto ret = ImGui::InputTextEx(
+        LABEL(label), hint.string_p() ? LABEL(hint) : nullptr,
+        (char *)cpp_str.c_str(), cpp_str.capacity() + 1,
+        multiline ? ImVec2(multiline_p[0], multiline_p[1]) : ImVec2(0, 0),
+        flags, InputTextCallback, &cb_user_data);
+    str(cpp_str);
+    return ret;
+}
   value SliderInt(value label, value v, value v_min, value v_max, value flags) {
     maybe_set(flags, 0);
     int n = v();
@@ -936,8 +978,7 @@ extern "C" {
     scm_c_define_gsubr("get-font-size", 0, 0, 0, (scm_t_subr)im::GetFontSize);
     guile::define("separator", 0, 1, (scm_t_subr)im::Separator);
     scm_c_define_gsubr("spacing", 0, 0, 0, (scm_t_subr)im::Spacing);
-    scm_c_define_gsubr("%input-text", 3, 0, 0, (scm_t_subr)im::InputText);
-    scm_c_define_gsubr("input-text-with-hint", 4, 0, 0, (scm_t_subr)im::InputTextWithHint);
+    scm_c_define_gsubr("%inputex", 6, 0, 0, (scm_t_subr)im::InputTextEx);
     scm_c_define_gsubr("newline", 0, 0, 0, (scm_t_subr)im::NewLine);
     scm_c_define_gsubr("bullet", 0, 0, 0, (scm_t_subr)im::Bullet);
     scm_c_define_gsubr("button", 1, 0, 0, (scm_t_subr)im::Button);
