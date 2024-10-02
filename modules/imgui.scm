@@ -37,6 +37,7 @@
             sameline
             dummy
             calc-text-size
+            calc-item-width
             indent
             unindent
             text
