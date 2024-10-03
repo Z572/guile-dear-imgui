@@ -859,6 +859,16 @@ value PushStyleColor(value idx, value col) {
     scm_gc_unprotect_object(clipper);
     return ret;
   }
+  value GetWindowDrawList() {
+    return scm_from_pointer(ImGui::GetWindowDrawList(),nullptr);
+  }
+  value draw_AddLine(value draw, value p1, value p2, value col,
+                     value thickness) {
+    ImDrawList *D = static_cast<ImDrawList *>(scm_to_pointer(draw));
+    D->AddLine(ImVec2(p1[0], p1[1]), ImVec2(p2[0], p2[1]),
+               ImColor((float)col[0], col[1], col[2], col[3]), thickness);
+    return SCM_UNSPECIFIED;
+  }
 
 } // namespace im
 
@@ -1267,5 +1277,9 @@ extern "C" {
   }
   void init_imgui_viewport() {
         guile::define("%get-main-viewport", (scm_t_subr)im::GetMainViewport);
+  }
+  void init_imgui_draw() {
+    guile::define("%window-draw-list", (scm_t_subr)im::GetWindowDrawList);
+    guile::define("%add-line",5,(scm_t_subr)im::draw_AddLine);
   }
 }

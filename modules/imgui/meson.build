@@ -1,4 +1,4 @@
-foreach src : ['inputs.scm','window.scm','item.scm','viewport.scm']
+foreach src : ['inputs.scm','window.scm','item.scm','viewport.scm','draw.scm']
   obj = fs.replace_suffix(src,'.go')
   module_objects += custom_target(
     obj,
