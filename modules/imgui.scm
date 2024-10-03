@@ -76,6 +76,7 @@
             table-next-column
             table-column-index
             table-setup-column
+            table-setup-scroll-freeze
             table-headers-row
             table-header
             textlink

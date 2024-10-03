@@ -593,7 +593,11 @@ value set_io_config_flags(value io,value flag) {
   value TableHeader(value label){
     ImGui::TableHeader(LABEL(label));
     return SCM_UNSPECIFIED;
-}
+  }
+  value TableSetupScrollFreeze(value cols, value rows) {
+    ImGui::TableSetupScrollFreeze(cols, rows);
+    return SCM_UNSPECIFIED;
+  }
 value PushStyleColor(value idx, value col) {
   std::string str="ImGuiCol_" + std::string(idx);
     auto is_p = magic_enum::enum_cast<ImGuiCol_>(str);
@@ -1068,7 +1072,10 @@ extern "C" {
     scm_c_define_gsubr("table-next-column", 0, 2, 0, (scm_t_subr)im::TableNextColumn);
     scm_c_define_gsubr("set-table-column-index!",1,0,0,(scm_t_subr)im::TableSetColumnIndex);
     scm_c_define_gsubr("get-table-column-index",0,0,0,(scm_t_subr)im::TableGetColumnIndex);
-    scm_c_define_gsubr("table-setup-column",1,3,0,(scm_t_subr)im::TableSetupColumn);
+    scm_c_define_gsubr("table-setup-column", 1, 3, 0,
+                       (scm_t_subr)im::TableSetupColumn);
+    guile::define("table-setup-scroll-freeze", 2,
+                  (scm_t_subr)im::TableSetupScrollFreeze);
     scm_c_define_gsubr("table-headers-row",0,0,0,(scm_t_subr)im::TableHeadersRow);
     scm_c_define_gsubr("table-header",1,0,0,(scm_t_subr)im::TableHeader);
 
