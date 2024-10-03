@@ -24,11 +24,12 @@
 (define (foreground-draw-list)
   (wrap-draw-list (%foreground-draw-list)))
 
-(define* (add-line draw-list p1 p2 color #:optional (thickness 1.0))
+(define* (add-line draw-list p1 p2 #:key color (thickness 1.0))
   (%add-line (unwrap-draw-list draw-list) p1 p2 color thickness))
 
-(define* (add-rect draw-list pmin pmax color
-                   #:optional
+(define* (add-rect draw-list pmin pmax
+                   #:key
+                   color
                    (rounding 0.0)
                    (flags 0)
                    (thickness 1.0))
