@@ -862,6 +862,12 @@ value PushStyleColor(value idx, value col) {
   value GetWindowDrawList() {
     return scm_from_pointer(ImGui::GetWindowDrawList(),nullptr);
   }
+  value GetBackgroundDrawList() {
+    return scm_from_pointer(ImGui::GetBackgroundDrawList(),nullptr);
+  }
+  value GetForegroundDrawList() {
+    return scm_from_pointer(ImGui::GetForegroundDrawList(),nullptr);
+  }
   value draw_AddLine(value draw, value p1, value p2, value col,
                      value thickness) {
     ImDrawList *D = static_cast<ImDrawList *>(scm_to_pointer(draw));
@@ -1287,6 +1293,8 @@ extern "C" {
   }
   void init_imgui_draw() {
     guile::define("%window-draw-list", (scm_t_subr)im::GetWindowDrawList);
+    guile::define("%background-draw-list", (scm_t_subr)im::GetBackgroundDrawList);
+    guile::define("%foreground-draw-list", (scm_t_subr)im::GetForegroundDrawList);
     guile::define("%add-line", 5, (scm_t_subr)im::draw_AddLine);
     guile::define("%add-rect", 7, (scm_t_subr)im::draw_AddRect);
   }

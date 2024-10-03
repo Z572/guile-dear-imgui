@@ -1,6 +1,8 @@
 (define-module (imgui draw)
   #:use-module (system foreign)
   #:export (window-draw-list
+            background-draw-list
+            foreground-draw-list
             add-line
             add-rect))
 
@@ -15,6 +17,12 @@
 
 (define (window-draw-list)
   (wrap-draw-list (%window-draw-list)))
+
+(define (background-draw-list)
+  (wrap-draw-list (%background-draw-list)))
+
+(define (foreground-draw-list)
+  (wrap-draw-list (%foreground-draw-list)))
 
 (define* (add-line draw-list p1 p2 color #:optional (thickness 1.0))
   (%add-line (unwrap-draw-list draw-list) p1 p2 color thickness))
