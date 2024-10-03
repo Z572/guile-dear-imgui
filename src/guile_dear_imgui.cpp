@@ -882,6 +882,13 @@ value PushStyleColor(value idx, value col) {
                ImColor((float)col[0], col[1], col[2], col[3]), rounding,flags,thickness);
     return SCM_UNSPECIFIED;
   }
+  value draw_AddTriangle(value draw, value p1, value p2, value p3, value col,
+                         value thickness) {
+    ImDrawList *D = static_cast<ImDrawList *>(scm_to_pointer(draw));
+    D->AddTriangle(ImVec2(p1[0], p1[1]), ImVec2(p2[0], p2[1]),ImVec2(p3[0], p3[1]),
+               ImColor((float)col[0], col[1], col[2], col[3]), thickness);
+    return SCM_UNSPECIFIED;
+  }
 
 } // namespace im
 
@@ -1297,5 +1304,6 @@ extern "C" {
     guile::define("%foreground-draw-list", (scm_t_subr)im::GetForegroundDrawList);
     guile::define("%add-line", 5, (scm_t_subr)im::draw_AddLine);
     guile::define("%add-rect", 7, (scm_t_subr)im::draw_AddRect);
+    guile::define("%add-triangle", 6, (scm_t_subr)im::draw_AddTriangle);
   }
 }

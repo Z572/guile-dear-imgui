@@ -12,4 +12,6 @@
                #:rounding 2)
      (add-rect f '(300 300) '(600 600)
                #:color '(255 255 255 255)
-               #:rounding 20))))
+               #:rounding 20)
+     (add-triangle f '(200 200) '(300 300) '(600 200)
+                   #:color '(255 255 255 255)))))

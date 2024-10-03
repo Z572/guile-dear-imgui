@@ -4,7 +4,8 @@
             background-draw-list
             foreground-draw-list
             add-line
-            add-rect))
+            add-rect
+            add-triangle))
 
 (define-wrapped-pointer-type <draw-list>
   draw-list?
@@ -34,3 +35,6 @@
                    (flags 0)
                    (thickness 1.0))
   (%add-rect (unwrap-draw-list draw-list) pmin pmax color rounding flags thickness))
+
+(define* (add-triangle draw-list p1 p2 p3 #:key color (thickness 1.0))
+  (%add-triangle (unwrap-draw-list draw-list) p1 p2 p3 color thickness))
