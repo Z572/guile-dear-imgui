@@ -44,6 +44,9 @@
             text
             label-text
             text-colored
+            text-wrapped
+            text-disabled
+            bullet-text
             newline
             get-font-size
             bullet

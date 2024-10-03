@@ -365,6 +365,18 @@ value set_io_config_flags(value io,value flag) {
                        LABEL(str));
     return SCM_UNSPECIFIED;
   }
+  value TextWrapped(value str) {
+    ImGui::TextWrapped("%s",LABEL(str));
+    return SCM_UNSPECIFIED;
+  }
+  value TextDisabled(value str) {
+    ImGui::TextDisabled("%s",LABEL(str));
+    return SCM_UNSPECIFIED;
+  }
+  value BulletText(value str) {
+    ImGui::BulletText("%s",LABEL(str));
+    return SCM_UNSPECIFIED;
+  }
   value Image(value image, value x, value y) {
     auto id=scm_to_unsigned_integer(image,0,10000);
     ImGui::Image((void*)(intptr_t)id,ImVec2(x,y));
@@ -1079,6 +1091,9 @@ extern "C" {
     scm_c_define_gsubr("text", 1, 0, 0, (scm_t_subr)im::text);
     scm_c_define_gsubr("label-text", 2, 0, 0, (scm_t_subr)im::LabelText);
     scm_c_define_gsubr("text-colored", 2, 0, 0, (scm_t_subr)im::TextColored);
+    guile::define("text-disabled", 1, (scm_t_subr)im::TextDisabled);
+    guile::define("text-wrapped", 1, (scm_t_subr)im::TextWrapped);
+    guile::define("bullet-text", 1, (scm_t_subr)im::BulletText);
     scm_c_define_gsubr("%image", 3, 0, 0, (scm_t_subr)im::Image);
     scm_c_define_gsubr("indent", 0, 1, 0, (scm_t_subr)im::Indent);
     scm_c_define_gsubr("unindent", 0, 1, 0, (scm_t_subr)im::Unindent);
