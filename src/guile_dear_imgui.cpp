@@ -361,9 +361,8 @@ value set_io_config_flags(value io,value flag) {
     return SCM_UNSPECIFIED;
   }
   value TextColored(value col, value str) {
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col[0],col[1],col[2],col[3]));
-    text(str);
-    ImGui::PopStyleColor();
+    ImGui::TextColored(ImVec4(col[0], col[1], col[2], col[3]), "%s",
+                       LABEL(str));
     return SCM_UNSPECIFIED;
   }
   value Image(value image, value x, value y) {
