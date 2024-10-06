@@ -243,7 +243,9 @@ value set_io_config_flags(value io,value flag) {
     ImGui::EndGroup();
     return SCM_UNSPECIFIED;
   }
-  value BeginListBox(value label, value width,value height) {
+  value BeginListBox(value label, value width, value height) {
+    maybe_set(width, 0);
+    maybe_set(height, 0);
     return ImGui::BeginListBox(LABEL(label),ImVec2(width, height));
   }
   value EndListBox() {
@@ -1090,7 +1092,7 @@ extern "C" {
     scm_c_define_gsubr("begin-group", 0, 0, 0, (scm_t_subr)im::BeginGroup);
     scm_c_define_gsubr("end-group", 0, 0, 0, (scm_t_subr)im::EndGroup);
 
-    scm_c_define_gsubr("begin-list-box", 3, 0, 0, (scm_t_subr)im::BeginListBox);
+    scm_c_define_gsubr("begin-list-box", 1, 2, 0, (scm_t_subr)im::BeginListBox);
     scm_c_define_gsubr("end-list-box", 0, 0, 0, (scm_t_subr)im::EndListBox);
 
     scm_c_define_gsubr("begin-menu", 2, 0, 0, (scm_t_subr)im::BeginMenu);
