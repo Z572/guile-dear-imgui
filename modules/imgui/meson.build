@@ -7,7 +7,7 @@ foreach src : ['inputs.scm','window.scm','item.scm','viewport.scm','draw.scm']
     install: true,
     install_dir: libdir / guile_compiled_module_dir / 'imgui',
     output: obj,
-    depends: [shlib,gglfw],
+    depends: [shlib],
     env: bulid_GUILE_EXTENSIONS_PATH
   )
 endforeach
