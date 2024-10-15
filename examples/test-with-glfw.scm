@@ -76,7 +76,7 @@
       (tab-item ("bar0")
         (color-picker4 "color:" color)
         (progress-bar 0.5 (cons 0 0) "hov")))))
-(when (glfwinit)
+(when (init)
   (window-hint GLFW_CONTEXT_VERSION_MAJOR 3)
   (window-hint GLFW_CONTEXT_VERSION_MINOR 0)
   (window-hint GLFW_TRANSPARENT_FRAMEBUFFER 1)

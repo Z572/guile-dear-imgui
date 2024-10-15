@@ -2,7 +2,7 @@
   #:use-module (ice-9 match)
   #:use-module (system foreign)
   #:use-module (srfi srfi-1)
-  #:export (glfwinit
+  #:export (init
             window-hint
             default-window-hint
             GLFW_CONTEXT_VERSION_MAJOR

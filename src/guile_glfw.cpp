@@ -108,7 +108,7 @@ void init_glfw() {
   // defconst(GLFW_WAYLAND_PREFER_LIBDECOR);
   // defconst(GLFW_WAYLAND_DISABLE_LIBDECOR);
   // defconst(GLFW_CENTER_CURSOR);
-  scm_c_define_gsubr("glfwinit", 0, 0, 0, (scm_t_subr)GGLFW::init);
+  scm_c_define_gsubr("init", 0, 0, 0, (scm_t_subr)GGLFW::init);
   scm_c_define_gsubr("terminate", 0, 0, 0, (scm_t_subr)GGLFW::Terminate);
   scm_c_define_gsubr("glfwcreatewindow", 3, 0, 0,
                        (scm_t_subr)GGLFW::CreateWindow);

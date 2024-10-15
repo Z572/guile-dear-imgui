@@ -23,7 +23,7 @@
    #t)
   (impl:opengl3:init))
 
-(when (glfwinit)
+(when (init)
   (window-hint GLFW_VISIBLE 0)
   (window-hint GLFW_CONTEXT_VERSION_MAJOR 3)
   (window-hint GLFW_CONTEXT_VERSION_MINOR 0)
