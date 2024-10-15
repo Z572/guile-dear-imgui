@@ -33,6 +33,10 @@ using guile::value;
     glfwMakeContextCurrent(o);
     return SCM_UNSPECIFIED;
   }
+  value DefaultWindowHints() {
+    glfwDefaultWindowHints();
+    return SCM_UNSPECIFIED;
+  }
   value WindowHint(value hint,value val) {
     glfwWindowHint(hint, val);
     return SCM_UNSPECIFIED;
@@ -120,6 +124,8 @@ void init_glfw() {
                        (scm_t_subr)GGLFW::SwapInterval);
     scm_c_define_gsubr("glfwwindowhint", 2, 0, 0,
                        (scm_t_subr)GGLFW::WindowHint);
+    guile::define("default-window-hint",
+                  (scm_t_subr)GGLFW::DefaultWindowHints);
     scm_c_define_gsubr("glfwwindowshouldclose", 1, 0, 0,
                        (scm_t_subr)GGLFW::WindowShouldClose);
     scm_c_define_gsubr("%get-window-size", 1, 0, 0,

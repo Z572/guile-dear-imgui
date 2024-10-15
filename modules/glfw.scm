@@ -4,6 +4,7 @@
   #:use-module (srfi srfi-1)
   #:export (glfwinit
             glfwwindowhint
+            default-window-hint
             GLFW_CONTEXT_VERSION_MAJOR
             GLFW_CONTEXT_VERSION_MINOR
             make-window
