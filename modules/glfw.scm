@@ -3,7 +3,7 @@
   #:use-module (system foreign)
   #:use-module (srfi srfi-1)
   #:export (glfwinit
-            glfwwindowhint
+            window-hint
             default-window-hint
             GLFW_CONTEXT_VERSION_MAJOR
             GLFW_CONTEXT_VERSION_MINOR

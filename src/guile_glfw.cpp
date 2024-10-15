@@ -122,7 +122,7 @@ void init_glfw() {
                        (scm_t_subr)GGLFW::MakeContextCurrent);
     scm_c_define_gsubr("swap-interval", 1, 0, 0,
                        (scm_t_subr)GGLFW::SwapInterval);
-    scm_c_define_gsubr("glfwwindowhint", 2, 0, 0,
+    scm_c_define_gsubr("window-hint", 2, 0, 0,
                        (scm_t_subr)GGLFW::WindowHint);
     guile::define("default-window-hint",
                   (scm_t_subr)GGLFW::DefaultWindowHints);

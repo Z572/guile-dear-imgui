@@ -77,9 +77,9 @@
         (color-picker4 "color:" color)
         (progress-bar 0.5 (cons 0 0) "hov")))))
 (when (glfwinit)
-  (glfwwindowhint GLFW_CONTEXT_VERSION_MAJOR 3)
-  (glfwwindowhint GLFW_CONTEXT_VERSION_MINOR 0)
-  (glfwwindowhint GLFW_TRANSPARENT_FRAMEBUFFER 1)
+  (window-hint GLFW_CONTEXT_VERSION_MAJOR 3)
+  (window-hint GLFW_CONTEXT_VERSION_MINOR 0)
+  (window-hint GLFW_TRANSPARENT_FRAMEBUFFER 1)
   (let ((w (make-window
             #:size '(1280 720)
             #:title "GLFW+OpenGL3 example")))
