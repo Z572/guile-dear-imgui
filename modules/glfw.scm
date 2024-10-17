@@ -31,7 +31,7 @@
   window?
   wrap-window unwrap-window
   (lambda (window port)
-    (format port "#<window size: ~s>"
+    (format port "#<<glfw-window> size: ~s>"
             (window-size window))))
 
 (load-extension "libguile_glfw.so" "init_glfw")
