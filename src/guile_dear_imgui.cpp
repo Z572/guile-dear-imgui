@@ -1226,7 +1226,7 @@ extern "C" {
 
     scm_c_define_gsubr("tree-node", 1, 1, 0, (scm_t_subr)im::TreeNode);
     scm_c_define_gsubr("tree-push", 1, 0, 0, (scm_t_subr)im::TreePush);
-    scm_c_define_gsubr("tree-pop", 1, 0, 0, (scm_t_subr)im::TreePop);
+    scm_c_define_gsubr("tree-pop", 0, 0, 0, (scm_t_subr)im::TreePop);
     scm_c_define_gsubr("collapsing-header", 1, 1, 0,
                        (scm_t_subr)im::CollapsingHeader);
 
