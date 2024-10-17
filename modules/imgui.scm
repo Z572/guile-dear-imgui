@@ -119,6 +119,7 @@
             list-clipper-step
             list-clipper-display-start
             list-clipper-display-end
+            draw-data
             assert-context)
   #:export-syntax (group
                    with-window
@@ -319,6 +320,11 @@
 (define image
   (case-lambda ((id vec) (%image id (first vec) (second vec)))
                ((id x y) (%image id x y))))
+
+(define (draw-data)
+  ((@@ (imgui draw) wrap-draw-data)
+   (%draw-data)))
+
 ;; Local Variables:
 ;; eval: (put 'with-window 'scheme-indent-function 1)
 ;; eval: (put 'with-child-window 'scheme-indent-function 1)

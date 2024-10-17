@@ -59,8 +59,9 @@ namespace im {
         ImGui_ImplOpenGL3_NewFrame();
         return SCM_UNSPECIFIED;
       }
-      value RenderDrawData() {
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+      value RenderDrawData(value sdata) {
+        auto data=static_cast<ImDrawData*>(scm_to_pointer(sdata));
+        ImGui_ImplOpenGL3_RenderDrawData(data);
         return SCM_UNSPECIFIED;
       }
     }
@@ -75,8 +76,8 @@ extern "C" {
                        (scm_t_subr)im::opengl3::Shutdown);
     scm_c_define_gsubr("new-frame", 0, 0, 0,
                        (scm_t_subr)im::opengl3::NewFrame);
-    scm_c_define_gsubr("render-draw-data", 0, 0, 0,
-                       (scm_t_subr)im::opengl3::RenderDrawData);
+    guile::define("%render-draw-data", 1,
+                  (scm_t_subr)im::opengl3::RenderDrawData);
 
 #if defined (HAVE_STB_IMAGE)
     guile::define("load-image", 1, (scm_t_subr)im::loadimage);

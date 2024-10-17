@@ -5,7 +5,15 @@
             foreground-draw-list
             add-line
             add-rect
-            add-triangle))
+            add-triangle
+            unwrap-draw-data))
+
+(define-wrapped-pointer-type <draw-data>
+  draw-data?
+  wrap-draw-data unwrap-draw-data
+  (lambda (b p)
+    (format p "#<draw-data ~x>"
+            (pointer-address (unwrap-draw-data b)))))
 
 (define-wrapped-pointer-type <draw-list>
   draw-list?

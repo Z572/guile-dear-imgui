@@ -870,6 +870,11 @@ value PushStyleColor(value idx, value col) {
   value GetForegroundDrawList() {
     return scm_from_pointer(ImGui::GetForegroundDrawList(),nullptr);
   }
+
+  value GetDrawData() {
+    return scm_from_pointer(ImGui::GetDrawData(),nullptr);
+  }
+
   value draw_AddLine(value draw, value p1, value p2, value col,
                      value thickness) {
     ImDrawList *D = static_cast<ImDrawList *>(scm_to_pointer(draw));
@@ -1180,6 +1185,7 @@ extern "C" {
     scm_c_define_gsubr("%destroy-context", 0, 1, 0,
                        (scm_t_subr)im::destroy_context);
     guile::define("%current-context", (scm_t_subr)im::GetCurrentContext);
+    guile::define("%draw-data", (scm_t_subr)im::GetDrawData);
     scm_c_define_gsubr("get-io", 0, 0, 0, (scm_t_subr)im::getio);
     scm_c_define_gsubr("get-style", 0, 0, 0, (scm_t_subr)im::GetStyle);
     scm_c_define_gsubr("style-scale-all-sizes", 2, 0, 0, (scm_t_subr)im::ScaleAllSizes);
