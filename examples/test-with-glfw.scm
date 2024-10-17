@@ -3,8 +3,8 @@
 (use-modules
  (system repl server)
  (imgui)
- (imgui backends glfw3)
- (imgui backends gl)
+ ((imgui backends glfw3) #:prefix impl:glfw3:)
+ ((imgui backends gl) #:prefix impl:opengl3:)
  (glfw)
  (gl)
  (srfi srfi-71))
@@ -18,7 +18,7 @@
   (gl-clear (clear-buffer-mask color-buffer depth-buffer))
   (impl:opengl3:render-draw-data))
 
-(define (init w)
+(define (init-glfw+opengl w)
   (impl:glfw3:init-opengl
    (unwrap-window w)
    #t)
@@ -86,7 +86,7 @@
     (make-context-current w)
     (set-swap-interval! 'vsync)
     (create-context)
-    (init w)
+    (init-glfw+opengl w)
     (spawn-server)
     (while (not (window-should-close? w))
       (poll-events)

@@ -23,12 +23,12 @@ namespace im {
 
 extern "C" {
   void init_imgui_glfw() {
-    scm_c_define_gsubr("impl:glfw3:init-opengl", 2, 0, 0,
+    scm_c_define_gsubr("init-opengl", 2, 0, 0,
                        (scm_t_subr)im::glfw::InitForOpenGl);
 
-    scm_c_define_gsubr("impl:glfw3:shutdown", 0, 0, 0,
+    scm_c_define_gsubr("shutdown", 0, 0, 0,
                        (scm_t_subr)im::glfw::Shutdown);
-    scm_c_define_gsubr("impl:glfw3:new-frame", 0, 0, 0,
+    scm_c_define_gsubr("new-frame", 0, 0, 0,
                        (scm_t_subr)im::glfw::NewFrame);
   }
 }

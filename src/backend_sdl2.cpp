@@ -39,16 +39,16 @@ namespace im {
 
 extern "C" {
   void init_imgui_sdl() {
-    scm_c_define_gsubr("impl:sdl2:init-vulkan", 0, 0, 0,
+    scm_c_define_gsubr("init-vulkan", 0, 0, 0,
                        (scm_t_subr)im::sdl2::InitForVulkan);
-    scm_c_define_gsubr("impl:sdl2:init-opengl", 2, 0, 0,
+    scm_c_define_gsubr("init-opengl", 2, 0, 0,
                        (scm_t_subr)im::sdl2::InitForOpenGl);
 
-    scm_c_define_gsubr("impl:sdl2:shutdown", 0, 0, 0,
+    scm_c_define_gsubr("shutdown", 0, 0, 0,
                        (scm_t_subr)im::sdl2::Shutdown);
-    scm_c_define_gsubr("impl:sdl2:process-event", 1, 0, 0,
+    scm_c_define_gsubr("process-event", 1, 0, 0,
                        (scm_t_subr)im::sdl2::ProcessEvent);
-    scm_c_define_gsubr("impl:sdl2:new-frame", 0, 0, 0,
+    scm_c_define_gsubr(":new-frame", 0, 0, 0,
                        (scm_t_subr)im::sdl2::NewFrame);
 
   }

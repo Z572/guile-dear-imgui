@@ -4,8 +4,8 @@
   (exit 77))
 (use-modules
  (imgui)
- (imgui backends sdl2)
- (imgui backends gl)
+ ((imgui backends sdl2) #:prefix backend:sdl2:)
+ ((imgui backends gl) #:prefix backend:opengl:)
  (sdl2)
  ((sdl2 bindings) #:prefix bind:)
  ((system foreign) #:prefix ffi:)
@@ -36,10 +36,10 @@
 (set-gl-attribute! 'stencil-size 8)
 (set-gl-swap-interval! 'vsync)
 
-(impl:sdl2:init-opengl
+(backend:sdl2:init-opengl
  ((@@ (sdl2 video) unwrap-window) s-window)
  ((@@ (sdl2 video) unwrap-gl-context) s-context))
-(impl:opengl3:init)
+(backend:opengl:init)
 
 
 
@@ -48,11 +48,11 @@
 (define %sdl-event ((@@ (sdl2 events) make-sdl-event)))
 (define sdl-event-ptr (ffi:bytevector->pointer %sdl-event))
 (let loop ((event (bind:sdl-poll-event sdl-event-ptr)))
-  (impl:sdl2:process-event sdl-event-ptr)
+  (backend:sdl2:process-event sdl-event-ptr)
   (unless (= 1 event)
     (loop (bind:sdl-poll-event sdl-event-ptr))))
-(impl:opengl3:new-frame)
-(impl:sdl2:new-frame)
+(backend:opengl:new-frame)
+(backend:sdl2:new-frame)
 (new-frame)
 (let ((n (io-display-size (get-io))))
   (set-next-window-size
@@ -86,11 +86,11 @@
   (gl-viewport 0 0 (car w) (cdr w)))
 (set-gl-clear-color 0 0 0 240)
 (gl-clear (clear-buffer-mask color-buffer depth-buffer))
-(impl:opengl3:render-draw-data)
+(backend:opengl:render-draw-data)
 (swap-gl-window s-window)
 
 
-(impl:opengl3:shutdown)
-(impl:sdl2:shutdown)
+(backend:opengl:shutdown)
+(backend:sdl2:shutdown)
 (destroy-context)
 (sdl-quit)

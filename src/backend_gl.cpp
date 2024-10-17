@@ -68,14 +68,14 @@ namespace im {
 
 extern "C" {
   void init_imgui_gl() {
-    scm_c_define_gsubr("impl:opengl3:init", 0, 1, 0,
+    scm_c_define_gsubr("init", 0, 1, 0,
                        (scm_t_subr)im::opengl3::init);
 
-    scm_c_define_gsubr("impl:opengl3:shutdown", 0, 0, 0,
+    scm_c_define_gsubr("shutdown", 0, 0, 0,
                        (scm_t_subr)im::opengl3::Shutdown);
-    scm_c_define_gsubr("impl:opengl3:new-frame", 0, 0, 0,
+    scm_c_define_gsubr("new-frame", 0, 0, 0,
                        (scm_t_subr)im::opengl3::NewFrame);
-    scm_c_define_gsubr("impl:opengl3:render-draw-data", 0, 0, 0,
+    scm_c_define_gsubr("render-draw-data", 0, 0, 0,
                        (scm_t_subr)im::opengl3::RenderDrawData);
 
 #if defined (HAVE_STB_IMAGE)
