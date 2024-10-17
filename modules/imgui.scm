@@ -193,8 +193,8 @@
         body ...))
     end-child))
 
-(define-syntax-rule (with-list-box (name x y) body ...)
-  (im-catch (begin-list-box name x y)
+(define-syntax-rule (with-list-box (name args ...) body ...)
+  (im-catch (begin-list-box name args ...)
             (end-list-box)
             body ...))
 
