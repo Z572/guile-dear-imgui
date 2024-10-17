@@ -3,6 +3,7 @@
               (resolve-interface '(gl))))
   (exit 77))
 (use-modules
+ (srfi srfi-1)
  (imgui)
  ((imgui backends sdl2) #:prefix backend:sdl2:)
  ((imgui backends gl) #:prefix backend:opengl:)
@@ -13,13 +14,14 @@
  (srfi srfi-71)
  (sdl2 render)
  (sdl2 surface)
+ (imgui window)
  (sdl2 events)
  (sdl2 video))
 
 
 (sdl-init)
 (create-context)
-(style-scaleallsizes (get-style) 2)
+(style-scale-all-sizes (get-style) 2)
 
 (define s-window (make-window #:opengl? #t
                               #:resizable? #t
@@ -55,16 +57,14 @@
 (backend:sdl2:new-frame)
 (new-frame)
 (let ((n (io-display-size (get-io))))
-  (set-next-window-size
-   (car n)
-   (cdr n)))
+  (set-next-window-size! n))
 (with-window ("aba" #f ImGuiWindowFlags_AlwaysAutoResize)
   (with-popup ("a-popup")
     (text "select1")
     (selectable "1" #f)
     (selectable "3" #f))
-  (with-child-window "bb"
-    (with-list-box ("select" 50 0)
+  (with-child-window ("bb")
+    (with-list-box ("select")
       (selectable "2" #f)
       (selectable "2" #f)))
   (sameline)
@@ -83,10 +83,10 @@
 (render)
 
 (let* ((w (io-display-size (get-io))))
-  (gl-viewport 0 0 (car w) (cdr w)))
+  (gl-viewport 0 0 (inexact->exact (first w)) (inexact->exact (second w))))
 (set-gl-clear-color 0 0 0 240)
 (gl-clear (clear-buffer-mask color-buffer depth-buffer))
-(backend:opengl:render-draw-data)
+(backend:opengl:render-draw-data (draw-data))
 (swap-gl-window s-window)
 
 

@@ -1,4 +1,4 @@
-(unless (false-if-exception(resolve-interface '(gl)))
+(unless (false-if-exception (resolve-interface '(gl)))
   (exit 77))
 (use-modules
  (imgui)
@@ -15,9 +15,8 @@
 (define (do-render)
   (set-gl-clear-color 0 0 0 0.5)
   (gl-clear (clear-buffer-mask color-buffer depth-buffer))
-  (backend:gl:render-draw-data))
-
-(define (init w)
+  (backend:gl:render-draw-data (draw-data)))
+(define (init-glfw+gl w)
   (backend:glfw3:init-opengl
    (unwrap-window w)
    #t)
@@ -39,9 +38,9 @@
     (make-context-current w)
     (set-swap-interval! 'vsync)
     (create-context)
-    (init w)
+    (init-glfw+gl w)
 
-    (while #f
+    (begin
       (poll-events)
       (do-new-frame)
       (new-frame)

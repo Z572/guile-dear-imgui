@@ -5,8 +5,11 @@ foreach t : tests
        args: [
          guile,
          '--no-auto-compile', '-c',
-         '(primitive-load "'  + meson.current_source_dir() /  'helper.scm")',
-         meson.current_source_dir() / t
+         '(begin (primitive-load "'  + meson.current_source_dir() /
+                                       'helper.scm")'
+
+         +     ' (primitive-load "' +    meson.current_source_dir() / t + '"))',
+
        ],
        env :['SDL_VIDEODRIVER=offscreen','HOME=/tmp'])
 endforeach

@@ -16,7 +16,7 @@
 (define (do-render)
   (set-gl-clear-color 0 0 0 0.5)
   (gl-clear (clear-buffer-mask color-buffer depth-buffer))
-  (impl:opengl3:render-draw-data))
+  (impl:opengl3:render-draw-data (draw-data)))
 
 (define (init-glfw+opengl w)
   (impl:glfw3:init-opengl
