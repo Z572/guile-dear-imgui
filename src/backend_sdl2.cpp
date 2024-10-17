@@ -48,7 +48,7 @@ extern "C" {
                        (scm_t_subr)im::sdl2::Shutdown);
     scm_c_define_gsubr("process-event", 1, 0, 0,
                        (scm_t_subr)im::sdl2::ProcessEvent);
-    scm_c_define_gsubr(":new-frame", 0, 0, 0,
+    scm_c_define_gsubr("new-frame", 0, 0, 0,
                        (scm_t_subr)im::sdl2::NewFrame);
 
   }
