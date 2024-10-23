@@ -92,7 +92,7 @@ void init_glfw() {
     },
     nullptr
   };
-  glfwInitAllocator(&allocator);
+  // glfwInitAllocator(&allocator);
   defconst(GLFW_TRANSPARENT_FRAMEBUFFER);
   defconst(GLFW_CONTEXT_VERSION_MAJOR);
   defconst(GLFW_CONTEXT_CREATION_API);
