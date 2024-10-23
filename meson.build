@@ -15,9 +15,6 @@ bindir = get_option('bindir')
 libdir = get_option('libdir')
 datadir = get_option('datadir')
 
-guile_module_dir= 'guile' / 'site' / '3.0'
-guile_compiled_module_dir = 'guile' / '3.0' / 'site-ccache'
-
 imgui_options = [
   'default_library=shared',
   'werror=false',
@@ -61,6 +58,12 @@ endif
 
 guild = guile_dep.get_pkgconfig_variable('guild')
 guile = guile_dep.get_pkgconfig_variable('guile')
+
+guile_effective_version=run_command(guile,'-c','(display (effective-version))',
+                                    check: true)
+
+guile_module_dir= 'guile' / 'site' / guile_effective_version.stdout()
+guile_compiled_module_dir = 'guile' / guile_effective_version.stdout() / 'site-ccache'
 
 guile_warnings = [
   '-Warity-mismatch',
