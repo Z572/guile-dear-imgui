@@ -381,7 +381,7 @@ value set_io_config_flags(value io,value flag) {
   }
   value Image(value image, value x, value y) {
     auto id=scm_to_unsigned_integer(image,0,10000);
-    ImGui::Image((void*)(intptr_t)id,ImVec2(x,y));
+    ImGui::Image((ImTextureID)(intptr_t)id,ImVec2(x,y));
     return SCM_UNSPECIFIED;
   }
   value ProgressBar(value fraction, value size_arg, value overlay) {
