@@ -31,11 +31,11 @@
 (define %srcdir
   (dirname (current-filename)))
 
-(define-public imgui-1.91.2
+(define-public imgui-1.91
   (package
     (inherit imgui)
     (name "imgui")
-    (version "1.91.0")
+    (version "1.91.4")
     (arguments (substitute-keyword-arguments (package-arguments imgui)
                  ((#:make-flags make-flags #~())
                   #~(cons "-lfreetype" #$make-flags))))
@@ -48,7 +48,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "01l9lwvlyx5ag41avk940vphf7sdfwikkd74bz5mplhiiib6hq0g"))))))
+                "1lqcsyqj5m4d4g390x7n3jvjanrnsf64fgjxn51v1kc02dw28gpa"))))))
 
 (define-public guile-dear-imgui
   (package
@@ -62,7 +62,7 @@
     (native-inputs
      (list pkg-config
            guile-3.0-latest))
-    (inputs (list guile-3.0-latest imgui-1.91.2 sdl2 glfw-3.4
+    (inputs (list guile-3.0-latest imgui-1.91 sdl2 glfw-3.4
                   magic-enum
                   stb-image ;; optional dependency
                   ;; for example
