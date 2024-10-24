@@ -36,9 +36,32 @@
     (inherit imgui)
     (name "imgui")
     (version "1.91.4")
-    (arguments (substitute-keyword-arguments (package-arguments imgui)
-                 ((#:make-flags make-flags #~())
-                  #~(cons "-lfreetype" #$make-flags))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments imgui)
+       ((#:make-flags make-flags #~())
+        #~(cons "-lfreetype" #$make-flags))
+       ((#:phases phases #~%standard-phases)
+        #~(modify-phases #$phases
+            (replace 'build
+              (lambda* (#:key make-flags #:allow-other-keys)
+                ;; Build main library.
+                (apply invoke #$(cxx-for-target)
+                       (append make-flags
+                               `("imgui.cpp"
+                                 "imgui_draw.cpp"
+                                 "imgui_tables.cpp"
+                                 "imgui_demo.cpp"
+                                 "imgui_widgets.cpp"
+                                 ;; Include the supported backends.
+                                 "backends/imgui_impl_glfw.cpp"
+                                 ,(if (file-exists? "backends/imgui_impl_sdl2.cpp")
+                                      "backends/imgui_impl_sdl2.cpp"
+                                      "backends/imgui_impl_sdl.cpp")
+                                 "backends/imgui_impl_opengl2.cpp"
+                                 "backends/imgui_impl_opengl3.cpp"
+                                 ;; Include wrappers for C++ standard library (STL) and
+                                 ;; fontconfig.
+                                 ,@(find-files "misc" "\\.cpp$"))))))))))
     (source (origin
               (inherit (package-source imgui))
               (method git-fetch)
