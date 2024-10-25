@@ -70,6 +70,8 @@
             small-button
             invisible-button
             progress-bar
+            begin-tooltip
+            end-tooltip
             begin-table
             end-table
             table-next-row
