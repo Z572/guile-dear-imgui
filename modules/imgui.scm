@@ -71,6 +71,7 @@
             invisible-button
             progress-bar
             begin-tooltip
+            begin-item-tooltip
             end-tooltip
             begin-table
             end-table
