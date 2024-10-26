@@ -176,8 +176,10 @@
          (lambda ()
            (when begin
              (set! r #t)
-             body
-             ...))
+             (let ()
+               *unspecified*
+               body
+               ...)))
          (lambda ()
            (when r
              end)))))))
@@ -189,7 +191,9 @@
        (lambda () #t)
        (lambda ()
          (when (begin-window name args ...)
-           body ...))
+           (let ()
+             *unspecified*
+             body ...)))
        end-window))))
 
 (define-syntax-rule (with-child-window (name args ...) body ...)
@@ -199,7 +203,9 @@
        (lambda () #t)
        (lambda ()
          (when (begin-child name args ...)
-           body ...))
+           (let ()
+             *unspecified*
+             body ...)))
        end-child))))
 
 (define-syntax-rule (with-list-box (name args ...) body ...)
