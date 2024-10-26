@@ -169,32 +169,38 @@
 
 (define-syntax-rule (im-catch begin end body ...)
   (let ((r #f))
-    (dynamic-wind
-      (lambda () #t)
-      (lambda ()
-        (when begin
-          (set! r #t)
-          body
-          ...))
-      (lambda ()
-        (when r
-          end)))))
+    (call-with-blocked-asyncs
+     (lambda ()
+       (dynamic-wind
+         (lambda () #t)
+         (lambda ()
+           (when begin
+             (set! r #t)
+             body
+             ...))
+         (lambda ()
+           (when r
+             end)))))))
 
 (define-syntax-rule (with-window (name args ...) body ...)
-  (dynamic-wind
-    (lambda () #t)
-    (lambda ()
-      (when (begin-window name args ...)
-        body ...))
-    end-window))
+  (call-with-blocked-asyncs
+   (lambda ()
+     (dynamic-wind
+       (lambda () #t)
+       (lambda ()
+         (when (begin-window name args ...)
+           body ...))
+       end-window))))
 
 (define-syntax-rule (with-child-window (name args ...) body ...)
-  (dynamic-wind
-    (lambda () #t)
-    (lambda ()
-      (when (begin-child name args ...)
-        body ...))
-    end-child))
+  (call-with-blocked-asyncs
+   (lambda ()
+     (dynamic-wind
+       (lambda () #t)
+       (lambda ()
+         (when (begin-child name args ...)
+           body ...))
+       end-child))))
 
 (define-syntax-rule (with-list-box (name args ...) body ...)
   (im-catch (begin-list-box name args ...)
