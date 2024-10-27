@@ -44,7 +44,7 @@
       (poll-events)
       (do-new-frame)
       (new-frame)
-      (with-window ("main" #f ImGuiWindowFlags_AlwaysAutoResize)
+      (with-window ("main" #:flags ImGuiWindowFlags_AlwaysAutoResize)
         (text-colored '(1 0 0 1) "R:"))
 
       (gl-viewport 0 0 100 100)

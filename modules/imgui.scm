@@ -184,6 +184,16 @@
            (when r
              end)))))))
 
+(define* (begin-window name #:key
+                       (open? #f)
+                       (flags 0))
+  (when open?
+    (assert (procedure? open?)))
+  (%begin-window
+   name
+   open?
+   flags))
+
 (define-syntax-rule (with-window (name args ...) body ...)
   (call-with-blocked-asyncs
    (lambda ()

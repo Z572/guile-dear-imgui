@@ -160,7 +160,7 @@ value set_io_config_flags(value io,value flag) {
       n = p_open();
     if (flags.boundp())
       flag=flags;
-    auto ret = ImGui::Begin(LABEL(label), nullptr, flag);
+    auto ret = ImGui::Begin(LABEL(label), &n, flag);
     if (p_open_boundp)
       p_open(n);
     return ret;
@@ -1081,7 +1081,7 @@ extern "C" {
     init_enums();
 
     scm_c_define_gsubr("ImFontAtlasAddFontFromFileTTF", 5, 0, 0, (scm_t_subr)im::ImFontAtlasAddFontFromFileTTF);
-    scm_c_define_gsubr("begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
+    scm_c_define_gsubr("%begin-window", 1, 2, 0, (scm_t_subr)im::Begin);
     scm_c_define_gsubr("end-window", 0, 0, 0, (scm_t_subr)im::End);
     scm_c_define_gsubr("begin-child", 1, 0, 0, (scm_t_subr)im::BeginChild);
     scm_c_define_gsubr("end-child", 0, 0, 0, (scm_t_subr)im::EndChild);

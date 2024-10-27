@@ -58,7 +58,9 @@
 (new-frame)
 (let ((n (io-display-size (get-io))))
   (set-next-window-size! n))
-(with-window ("aba" #f ImGuiWindowFlags_AlwaysAutoResize)
+(with-window ("aba"
+              #:open? #f
+              #:flags ImGuiWindowFlags_AlwaysAutoResize)
   (with-popup ("a-popup")
     (text "select1")
     (selectable "1" #f)
