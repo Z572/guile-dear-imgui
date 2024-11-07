@@ -168,21 +168,23 @@
   (and=> (%current-context) wrap-context))
 
 (define-syntax-rule (im-catch begin end body ...)
-  (let ((r #f))
-    (call-with-blocked-asyncs
-     (lambda ()
-       (dynamic-wind
-         (lambda () #t)
-         (lambda ()
-           (when begin
-             (set! r #t)
-             (let ()
-               *unspecified*
-               body
-               ...)))
-         (lambda ()
-           (when r
-             end)))))))
+  (let ((yes #f)
+        (ended? #f))
+    (assert-context)
+    (catch #t
+      (lambda ()
+        (when begin
+          (set! yes #t)
+          (let ()
+            *unspecified*
+            body
+            ...
+            end
+            (set! ended? #t))))
+      (lambda (key . args)
+        (when (and yes (not ended?))
+          end)
+        (apply throw key args)))))
 
 (define* (begin-window name #:key
                        (open? #f)
@@ -195,28 +197,40 @@
    flags))
 
 (define-syntax-rule (with-window (name args ...) body ...)
-  (call-with-blocked-asyncs
-   (lambda ()
-     (dynamic-wind
-       (lambda () #t)
-       (lambda ()
-         (when (begin-window name args ...)
-           (let ()
-             *unspecified*
-             body ...)))
-       end-window))))
+  (let ((ended? #f))
+    (assert-context)
+    (catch #t
+      (lambda ()
+        (when (begin-window name args ...)
+          (let ()
+            *unspecified*
+            body ...))
+        (unless ended?
+          (end-window)
+          (set! ended? #t)))
+      (lambda (key . _args)
+        (unless ended?
+          (end-window)
+          (set! ended? #t))
+        (apply throw key _args)))))
 
 (define-syntax-rule (with-child-window (name args ...) body ...)
-  (call-with-blocked-asyncs
-   (lambda ()
-     (dynamic-wind
-       (lambda () #t)
-       (lambda ()
-         (when (begin-child name args ...)
-           (let ()
-             *unspecified*
-             body ...)))
-       end-child))))
+  (let ((ended? #f))
+    (assert-context)
+    (catch #t
+      (lambda ()
+        (when (begin-child name args ...)
+          (let ()
+            *unspecified*
+            body ...))
+        (unless ended?
+          (end-child)
+          (set! ended? #t)))
+      (lambda (key . _args)
+        (unless ended?
+          (end-child)
+          (set! ended? #t))
+        (apply throw key _args)))))
 
 (define-syntax-rule (with-list-box (name args ...) body ...)
   (im-catch (begin-list-box name args ...)
